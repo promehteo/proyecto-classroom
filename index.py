@@ -1,12 +1,12 @@
+#biblioteca de encriptación
+from cryptography.fernet import Fernet
+import time
+#se usa para borrar el archivo sin encriptar
+import os
+
 # las funciones presentadas a continuacion no esta siendo usada dentro del codigo, se deben implementar.
 ################!!!!!!!!!!!!!
 # deben almacenar la funcion dentro de la variable para poder octener el valor retornado
-
-#biblioteca de encriptación
-from cryptography.fernet import Fernet
-
-#se usa para borrar el archivo sin encriptar
-import os
 
 #validar_alfanumerico fue creado en caso de que se necesite en un futuro
 def validar_alfanumerico(dato_input):
@@ -17,7 +17,7 @@ def validar_alfanumerico(dato_input):
     #esta es la parte encargada de detectar numeros y letras 
     tipo = dato_input.isalnum()
     if tipo == True:
-        if caracteres > 2 and caracteres < 12:
+        if caracteres >= 2 and caracteres <= 12:
             dato_valido_input = True
             return dato_valido_input
 
@@ -30,7 +30,7 @@ def validar_nombre(dato_input):
     #esta es la parte encargada de detectar letras 
     tipo = dato_input.isalpha()
     if tipo == True:
-        if caracteres > 3 and caracteres < 20:
+        if caracteres >= 3 and caracteres <= 20:
             dato_valido_input = True
             return dato_valido_input
 
@@ -52,30 +52,48 @@ def validar_cedula(dato_input):
 
 def inicio_seccion ():
     print('''Bienvenido al proyecto classroom, para iniciar primero inserte sus datos''')
-    
-    nombre_ususario = input('nombre: ')
-    validar_nombre_usuario = validar_nombre(nombre_ususario)
 
-    while validar_nombre_usuario != True:
-        print("por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras")
-        nombre_ususario = input('nombre: ')
-        validar_nombre_usuario = nombre_ususario
-    
-    apellido_usuario = input('apellido: ')
-    validar_nombre_apellido = apellido_usuario
+    sertificar_nombre = "0"
+    while sertificar_nombre == "0" :
+        nombre_ususario = input('por favor ingrese nombre: ')
+        validar_nombre_usuario = validar_nombre(nombre_ususario)
 
-    while validar_nombre_apellido != True:
-        print("por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras")
-        apellido_usuario = input('apellido: ')
+        while validar_nombre_usuario != True:
+            print("por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras")
+            nombre_ususario = input('por favor ingrese nuevamente su nombre: ')
+            validar_nombre_usuario = validar_nombre(nombre_ususario)
+        
+        sertificar_nombre = input ('''el nombre que a ingresiado es: '''+ nombre_ususario+ ''' .
+        si este no es su nombre o se a esquibocado al escribirlo pulse "0", 
+        si el nombre que ingreso es valido pulse una tecla que no sea "0"''')
+    
+    sertificar_apellido = "0"
+    while sertificar_apellido == "0" :
+        apellido_usuario = input('por favor ingrese apellido: ')
         validar_nombre_apellido = validar_nombre(apellido_usuario)
 
-    cedula_ususario = input('cedula: ')
-    validar_nombre_cedula = cedula_ususario
+        while validar_nombre_apellido != True:
+            print("por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras")
+            apellido_usuario = input('por favor ingrese nuevamene su apellido: ')
+            validar_nombre_apellido = validar_nombre(apellido_usuario)
 
-    while validar_nombre_cedula != True:
-        print("por favor vuelva a ingresar su cedula, su cedula debe contar con 8 numeros")
-        cedula_ususario = input('cedula: ')
+        sertificar_apellido = input ('''el apellido que a ingresiado es: '''+ apellido_usuario+ ''' .
+        si este no es su apellido o se a esquibocado al escribirlo pulse "0", 
+        si el apellido que ingreso es valido pulse una tecla que no sea "0"''')
+
+    sertificar_cedula = "0"
+    while sertificar_cedula == "0" :
+        cedula_ususario = input('por favor ingrese cedula: ')
         validar_nombre_cedula = validar_cedula(cedula_ususario)
+
+        while validar_nombre_cedula != True:
+            print("por favor vuelva a ingresar su cedula, su cedula debe contar con 8 numeros")
+            cedula_ususario = input('por favor ingrese nuevamente su cedula: ')
+            validar_nombre_cedula = validar_cedula(cedula_ususario)
+        
+        sertificar_cedula = input ('''el apellido que a ingresiado es: '''+ cedula_ususario+ ''' 
+        .si esta no es su cedula o se a esquibocado al escribirla pulse 0, 
+        si la cedula que ingreso es valido pulse una tecla que no sea 0''')
 
 #crea un archivo de texto con el nombre "datos de usuario", en donde almacena los datos dados por los alumnos
     with open('datos_usuario.txt', 'w') as file:
