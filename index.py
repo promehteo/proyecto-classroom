@@ -1,5 +1,6 @@
 #biblioteca para comprimir los datos con contraseña (similiar a la encriptacion)
 import pyzipper
+#biblioteca que se usará para controlar el tiempo
 import time
 
 # las funciones presentadas a continuacion no esta siendo usada dentro del codigo, se deben implementar.
@@ -53,45 +54,45 @@ def inicio_seccion ():
 
     sertificar_nombre = "0"
     while sertificar_nombre == "0" :
-        nombre_ususario = input('por favor ingrese nombre: ')
+        nombre_ususario = input('Por favor ingrese su nombre (solo primer nombre): ')
         validar_nombre_usuario = validar_nombre(nombre_ususario)
 
         while validar_nombre_usuario != True:
-            print("por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras")
-            nombre_ususario = input('por favor ingrese nuevamente su nombre: ')
+            print("Por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras")
+            nombre_ususario = input('Por favor ingrese nuevamente su nombre (solo primer nombre): ')
             validar_nombre_usuario = validar_nombre(nombre_ususario)
         
-        sertificar_nombre = input ('''el nombre que a ingresiado es: '''+ nombre_ususario+ ''' .
-        si este no es su nombre o se a esquibocado al escribirlo pulse "0", 
-        si el nombre que ingreso es valido pulse una tecla que no sea "0"''')
+        sertificar_nombre = input ('''El nombre que ha ingresado es: '''+ nombre_ususario+'''.
+        Si este no es su nombre o ha cometido un error al escribirlo presione "0", 
+        si el nombre que ingreso es valido pulse una tecla que no sea "0" ''')
     
     sertificar_apellido = "0"
     while sertificar_apellido == "0" :
-        apellido_usuario = input('por favor ingrese apellido: ')
+        apellido_usuario = input('Por favor ingrese su apellido: ')
         validar_nombre_apellido = validar_nombre(apellido_usuario)
 
         while validar_nombre_apellido != True:
-            print("por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras")
+            print("Por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras")
             apellido_usuario = input('por favor ingrese nuevamene su apellido: ')
             validar_nombre_apellido = validar_nombre(apellido_usuario)
 
-        sertificar_apellido = input ('''el apellido que a ingresiado es: '''+ apellido_usuario+ ''' .
-        si este no es su apellido o se a esquibocado al escribirlo pulse "0", 
-        si el apellido que ingreso es valido pulse una tecla que no sea "0"''')
+        sertificar_apellido = input ('''El apellido que ha ingresado es: '''+ apellido_usuario+'''.
+       Si este no es su apellido o ha cometido un error al escribirlo presione "0", 
+       si el apellido que ingresó es valido pulse una tecla que no sea "0" ''' )
 
     sertificar_cedula = "0"
     while sertificar_cedula == "0" :
-        cedula_ususario = input('por favor ingrese cedula: ')
+        cedula_ususario = input('Por favor ingrese su cédula: ')
         validar_nombre_cedula = validar_cedula(cedula_ususario)
 
         while validar_nombre_cedula != True:
-            print("por favor vuelva a ingresar su cedula, su cedula debe contar con 8 numeros")
-            cedula_ususario = input('por favor ingrese nuevamente su cedula: ')
+            print("Por favor vuelva a ingresar su cédula, su cédula debe contar con 8 números")
+            cedula_ususario = input('Por favor ingrese nuevamente su cedula: ')
             validar_nombre_cedula = validar_cedula(cedula_ususario)
         
-        sertificar_cedula = input ('''el apellido que a ingresiado es: '''+ cedula_ususario+ ''' 
-        .si esta no es su cedula o se a esquibocado al escribirla pulse 0, 
-        si la cedula que ingreso es valido pulse una tecla que no sea 0''')
+        sertificar_cedula = input ('''La cédula que ha ingresiado es: '''+ cedula_ususario+'''.
+        Si esta no es su cédula o ha cometido un error al escribirla presione "0", 
+        si la cedula que ingresó es valida pulse una tecla que no sea "0" ''' )
 
     #se crea el archivo con los datos del usuario
         nombre_archivo = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.zip"
