@@ -1,8 +1,6 @@
-#biblioteca de encriptación
-from cryptography.fernet import Fernet
+#biblioteca para comprimir los datos con contraseña (similiar a la encriptacion)
+import pyzipper
 import time
-#se usa para borrar el archivo sin encriptar
-import os
 
 # las funciones presentadas a continuacion no esta siendo usada dentro del codigo, se deben implementar.
 ################!!!!!!!!!!!!!
@@ -95,9 +93,24 @@ def inicio_seccion ():
         .si esta no es su cedula o se a esquibocado al escribirla pulse 0, 
         si la cedula que ingreso es valido pulse una tecla que no sea 0''')
 
-#crea un archivo de texto con el nombre "datos de usuario", en donde almacena los datos dados por los alumnos
-    with open('datos_usuario.txt', 'w') as file:
-        file.write(f"Nombre: {nombre_ususario}, Apellido: {apellido_usuario}, Cédula: {cedula_ususario}")
+    #se crea el archivo con los datos del usuario
+        nombre_archivo = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.zip"
+
+    # se obtienen las respuestas del usuario
+        respuestas = ["respuesta1", "respuesta2", "respuesta3", "respuesta4"]  # Aquí debes colocar las respuestas del usuario
+
+    # Guardar respuestas en el archivo ZIP con contraseña
+        with pyzipper.AESZipFile(nombre_archivo, 'w', compression=pyzipper.ZIP_LZMA, encryption=pyzipper.WZ_AES) as zf:
+
+        #Contraseña proporcionada por el profesor
+            contraseña_profesor = b"profemirtha123"
+            zf.setpassword(contraseña_profesor)
+    
+        # Concatenar todas las respuestas en una sola cadena
+            respuestas_concatenadas = "\n".join(respuestas)
+    
+        # Escribir todas las respuestas en un solo archivo dentro del ZIP
+            zf.writestr(f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.txt", respuestas_concatenadas)
 
 def menu_principal ():
     print("!aqui va algo no se que poner!")
