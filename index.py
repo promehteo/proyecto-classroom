@@ -2,7 +2,13 @@
 ################!!!!!!!!!!!!!
 # deben almacenar la funcion dentro de la variable para poder octener el valor retornado
 
-#validar_alfanumerico fue creado en caso de que se nesecite en un futuro
+#biblioteca de encriptación
+from cryptography.fernet import Fernet
+
+#se usa para borrar el archivo sin encriptar
+import os
+
+#validar_alfanumerico fue creado en caso de que se necesite en un futuro
 def validar_alfanumerico(dato_input):
 
     #extrae la longitud del dato
@@ -42,12 +48,10 @@ def validar_cedula(dato_input):
             dato_valido_input = True
             return dato_valido_input
 
-
 #############!!!!!!!!!!!!!!!!!!!
 
 def inicio_seccion ():
-    print('''bienbenido a proyecto classroom
-          para iniciar primero inserte sus datos''')
+    print('''Bienvenido al proyecto classroom, para iniciar primero inserte sus datos''')
     
     nombre_ususario = input('nombre: ')
     validar_nombre_usuario = validar_nombre(nombre_ususario)
@@ -73,7 +77,10 @@ def inicio_seccion ():
         cedula_ususario = input('cedula: ')
         validar_nombre_cedula = validar_cedula(cedula_ususario)
 
-    
+#crea un archivo de texto con el nombre "datos de usuario", en donde almacena los datos dados por los alumnos
+    with open('datos_usuario.txt', 'w') as file:
+        file.write(f"Nombre: {nombre_ususario}, Apellido: {apellido_usuario}, Cédula: {cedula_ususario}")
+
 def menu_principal ():
     print("!aqui va algo no se que poner!")
     print('''para corte 1, pulse 1
@@ -94,7 +101,7 @@ def menu_principal ():
     else:
         print("por favor selecione una opcion valida")
 
-menu_principal()
+inicio_seccion ()
 
 def primer_corte ():
     print("selecciono primer corte")
