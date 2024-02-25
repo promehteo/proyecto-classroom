@@ -94,6 +94,10 @@ def inicio_seccion ():
         Si esta no es su cédula o ha cometido un error al escribirla presione "0", 
         si la cedula que ingresó es valida pulse una tecla que no sea "0" ''' )
 
+        return nombre_ususario, apellido_usuario, cedula_ususario 
+
+def encriptacion (nombre_ususario, apellido_usuario, cedula_ususario):
+        
     #se crea el archivo con los datos del usuario
         nombre_archivo = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.zip"
 
