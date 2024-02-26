@@ -96,13 +96,10 @@ def inicio_seccion ():
 
         return nombre_ususario, apellido_usuario, cedula_ususario 
 
-def encriptacion (nombre_ususario, apellido_usuario, cedula_ususario):
+def encriptacion (nombre_ususario, apellido_usuario, cedula_ususario, respuestas):
         
     #se crea el archivo con los datos del usuario
         nombre_archivo = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.zip"
-
-    # se obtienen las respuestas del usuario
-        respuestas = ["respuesta1", "respuesta2", "respuesta3", "respuesta4"]  # Aquí debes colocar las respuestas del usuario
 
     # Guardar respuestas en el archivo ZIP con contraseña
         with pyzipper.AESZipFile(nombre_archivo, 'w', compression=pyzipper.ZIP_LZMA, encryption=pyzipper.WZ_AES) as zf:
@@ -116,6 +113,19 @@ def encriptacion (nombre_ususario, apellido_usuario, cedula_ususario):
     
         # Escribir todas las respuestas en un solo archivo dentro del ZIP
             zf.writestr(f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.txt", respuestas_concatenadas)
+
+def main():
+    #obtiene los datos personales del usuario
+    nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
+
+    #obtiene las respuestas del usuario
+    respuestas = ["respuesta1", "respuesta2", "respuesta3", "respuesta4"]
+
+    #comprime/encripta los datos
+    encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas)
+
+if __name__ == "__main__":
+    main()
 
 def menu_principal ():
     print("!aqui va algo no se que poner!")
@@ -136,8 +146,6 @@ def menu_principal ():
 
     else:
         print("por favor selecione una opcion valida")
-
-inicio_seccion ()
 
 def primer_corte ():
     print("selecciono primer corte")
