@@ -2,7 +2,8 @@
 import pyzipper
 #biblioteca que se usará para controlar el tiempo
 import time
-
+#libreria para enviar los correos de forma automatica
+import smtplib
 # las funciones presentadas a continuacion no esta siendo usada dentro del codigo, se deben implementar.
 ################!!!!!!!!!!!!!
 # deben almacenar la funcion dentro de la variable para poder octener el valor retornado
@@ -127,6 +128,25 @@ def main():
 if __name__ == "__main__":
     main()
 
+def enviarCorreo ():
+    
+    #mensaje que se enviara
+    mensaje = 'colocar aqui el mensaje'
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+
+    #datos para que la libreria pueda acceder a el correo del remitente
+    server.login('correo','contraseña')
+
+    # remitente, destinatario, mensaje
+    server.send_message('correo del remitente','correo del destinatario',mensaje)
+
+    #cierra secion
+    server.quit()
+    
+
+######################
 def menu_principal ():
     print("!aqui va algo no se que poner!")
     print('''para corte 1, pulse 1
