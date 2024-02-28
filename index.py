@@ -4,6 +4,8 @@ import pyzipper
 import time
 #libreria para enviar los correos de forma automatica
 import smtplib
+#libreria para quitar los acentos
+from unidecode import unidecode
 # las funciones presentadas a continuacion no esta siendo usada dentro del codigo, se deben implementar.
 ################!!!!!!!!!!!!!
 # deben almacenar la funcion dentro de la variable para poder octener el valor retornado
@@ -125,8 +127,8 @@ def main():
     #comprime/encripta los datos
     encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas)
 
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+    #main()
 
 def enviarCorreo ():
     
@@ -148,27 +150,97 @@ def enviarCorreo ():
 
 ######################
 def menu_principal ():
-    print("!aqui va algo no se que poner!")
-    print('''para corte 1, pulse 1
-    para corte 2, pulse 2
-    para corte 3, pulse 3
-    para corte 4, pulse 4    ''')
-    corte_selecionado = int(input(""))
+    validar_corte = "no"
+    while validar_corte == "no":
+        print("!SELECCIONE EL CORTE QUE VA A PRESENTAR!")
+        print('''para corte 1, pulse 1
+        para corte 2, pulse 2
+        para corte 3, pulse 3
+        para corte 4, pulse 4    ''')
+        corte_selecionado = int(input(""))
 
-    if corte_selecionado == 1:
-        primer_corte()
-    elif corte_selecionado == 2:
-        segundo_corte()
-    elif corte_selecionado == 3:
-        terecer_corte()
-    elif corte_selecionado == 4:
-        cuarto_corte()
+        if corte_selecionado == 1:
+            while True:
+                validar_corte_info = input("Esta seguro que este es el corte que va a presentar? si/no").lower()
+                validar_corte = unidecode(validar_corte_info)
+                if validar_corte == "si":
+                    primer_corte()
+                    break
 
-    else:
-        print("por favor selecione una opcion valida")
+                elif validar_corte == "no":
+                    break
+
+                else:
+                    print("por favor selecciones una occion valida, solo se pernite si o no")
+                    validar_corte = False
+                
+        elif corte_selecionado == 2:
+            segundo_corte()
+        elif corte_selecionado == 3:
+            terecer_corte()
+        elif corte_selecionado == 4:
+            cuarto_corte()
+
+        else:
+            print("por favor selecione una opcion valida")
 
 def primer_corte ():
     print("selecciono primer corte")
+    print("tiene X tiempo para terminar esta prueba. Si sale de esta prueva su nota sera perjudicada")
+
+    divicion_estetica = input("pulse cualquier tecla para iniciar la evaluacion")
+
+    print("enunciado")
+    print("la respuesta correcta es:")
+    print("pregunta 1")
+    print("pregunta 2")
+    print("pregunta 3")
+    print("pregunta 4")
+    while True:
+        respuesta_uno_corte_uno = int(input(""))
+        validar_respuesta_uno_corte_uno = input(f"su respuesta fue: {respuesta_uno_corte_uno} . esta seguro de su respues? si/no")
+        if validar_respuesta_uno_corte_uno == "no":
+            print("porfavor vuelva a insertar su respues")
+        elif validar_respuesta_uno_corte_uno == "si":
+            break
+        else:
+            print("por favor selecciones una occion valida, solo se pernite si o no")
+
+    print("enunciado")
+    print("la respuesta correcta es:")
+    print("pregunta 1")
+    print("pregunta 2")
+    print("pregunta 3")
+    print("pregunta 4")
+    respuesta_uno_corte_uno = input("")
+
+    print("enunciado")
+    print("la respuesta correcta es:")
+    print("pregunta 1")
+    print("pregunta 2")
+    print("pregunta 3")
+    print("pregunta 4")
+    respuesta_uno_corte_uno = input("")
+
+    print("enunciado")
+    print("la respuesta correcta es:")
+    print("pregunta 1")
+    print("pregunta 2")
+    print("pregunta 3")
+    print("pregunta 4")
+    respuesta_uno_corte_uno = input("")
+
+    print("enunciado")
+    print("la respuesta correcta es:")
+    print("pregunta 1")
+    print("pregunta 2")
+    print("pregunta 3")
+    print("pregunta 4")
+    respuesta_uno_corte_uno = input("")
+
+    print("la evaluacion a finalizado")
+
+
 
 def segundo_corte ():
     print("selecciono segundo corte")
@@ -178,3 +250,5 @@ def terecer_corte ():
 
 def cuarto_corte ():
     print("selecciono cuarto corte")
+
+menu_principal()
