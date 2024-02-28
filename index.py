@@ -359,4 +359,4 @@ if __name__ == "__main__":
 
 #La función "main()" nos ayuda a hacer que cada una de las demás funciones se ejecute en el orden que deben y en la forma
 #en la que deben hacerlo ya que "if __name__ == "__main__"" nos permite hacer seguir a las funciones el orden de ejecución
-#pautado por el programador, activandose cuando el script se ejecuta como el programa principal
+#pautado por el programador, activandose cuando el script se ejecuta como el programa principala
