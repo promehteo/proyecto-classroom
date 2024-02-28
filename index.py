@@ -1,49 +1,45 @@
-#biblioteca para comprimir los datos con contraseña (similiar a la encriptacion)
+#Librería para comprimir los datos con contraseña (similiar a la encriptacion)
 import pyzipper
-#biblioteca que se usará para controlar el tiempo
+#Librería que se usará para controlar el tiempo
 import time
-#libreria para enviar los correos de forma automatica
+#Librería para enviar los correos de forma automática
 import smtplib
-#libreria para quitar los acentos
+#Librería para quitar los acentos
 from unidecode import unidecode
-# las funciones presentadas a continuacion no esta siendo usada dentro del codigo, se deben implementar.
-################!!!!!!!!!!!!!
-# deben almacenar la funcion dentro de la variable para poder octener el valor retornado
 
-#validar_alfanumerico fue creado en caso de que se necesite en un futuro
+#Validar_alfanumerico
 def validar_alfanumerico(dato_input):
 
-    #extrae la longitud del dato
+    #Extrae la longitud del dato
     caracteres = len(dato_input)
 
-    #esta es la parte encargada de detectar numeros y letras 
+    #Esta es la parte encargada de detectar números y letras 
     tipo = dato_input.isalnum()
     if tipo == True:
         if caracteres >= 2 and caracteres <= 12:
             dato_valido_input = True
             return dato_valido_input
 
-#validar_nombre fue creado para validar el nombre 
+#Validar_nombre fue creado para validar el nombre 
 def validar_nombre(dato_input):
 
-    #extrae la longitud del dato
+    #Extrae la longitud del dato
     caracteres = len(dato_input)
 
-    #esta es la parte encargada de detectar letras 
+    #Esta es la parte encargada de detectar letras 
     tipo = dato_input.isalpha()
     if tipo == True:
         if caracteres >= 3 and caracteres <= 20:
             dato_valido_input = True
             return dato_valido_input
 
-
-#validar_cedula fue creado para validar la cedula
+#Validar_cedula fue creado para validar la cedula
 def validar_cedula(dato_input):
         
-    #extrae la longitud del dato
+    #Extrae la longitud del dato
     caracteres = len(dato_input)
 
-    #esta es la parte encargada de detectar numeros
+    #Esta es la parte encargada de detectar números
     tipo = dato_input.isdigit()
     if tipo == True:
         if caracteres == 8:
@@ -53,15 +49,18 @@ def validar_cedula(dato_input):
 #############!!!!!!!!!!!!!!!!!!!
 
 def inicio_seccion ():
-    print('''Bienvenido al proyecto classroom, para iniciar primero inserte sus datos''')
+    print('''Bienvenido al PROYECTO CLASSROOM, para iniciar primero inserte sus datos''')
 
+    #Esta parte del codigo es la encargada de pedirle los datos personales al usuario y hacerlo CERTIFICAR
+    #que estén correctos (Alejandro escribe mal la variables a proposito para que se vean más originales)
     sertificar_nombre = "0"
     while sertificar_nombre == "0" :
         nombre_ususario = input('Por favor ingrese su nombre (solo primer nombre): ')
         validar_nombre_usuario = validar_nombre(nombre_ususario)
-
+        #Con el "while" hacemos los bucles para que se le vuelva a preguntar al usuario por alguno de sus
+        #datos en caso de algún error
         while validar_nombre_usuario != True:
-            print("Por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras")
+            print("Por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras ")
             nombre_ususario = input('Por favor ingrese nuevamente su nombre (solo primer nombre): ')
             validar_nombre_usuario = validar_nombre(nombre_ususario)
         
@@ -75,7 +74,7 @@ def inicio_seccion ():
         validar_nombre_apellido = validar_nombre(apellido_usuario)
 
         while validar_nombre_apellido != True:
-            print("Por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras")
+            print("Por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras ")
             apellido_usuario = input('por favor ingrese nuevamene su apellido: ')
             validar_nombre_apellido = validar_nombre(apellido_usuario)
 
@@ -89,7 +88,7 @@ def inicio_seccion ():
         validar_nombre_cedula = validar_cedula(cedula_ususario)
 
         while validar_nombre_cedula != True:
-            print("Por favor vuelva a ingresar su cédula, su cédula debe contar con 8 números")
+            print("Por favor vuelva a ingresar su cédula, su cédula debe contar con 8 números ")
             cedula_ususario = input('Por favor ingrese nuevamente su cedula: ')
             validar_nombre_cedula = validar_cedula(cedula_ususario)
         
@@ -97,71 +96,66 @@ def inicio_seccion ():
         Si esta no es su cédula o ha cometido un error al escribirla presione "0", 
         si la cedula que ingresó es valida pulse una tecla que no sea "0" ''' )
 
+        #El "return" nos permite usar las variables de "nombre_ususario, apellido_usuario, cedula_ususario"
+        #en la siguiente función
         return nombre_ususario, apellido_usuario, cedula_ususario 
 
 def encriptacion (nombre_ususario, apellido_usuario, cedula_ususario, respuestas):
         
-    #se crea el archivo con los datos del usuario
+     #Se crea el archivo que lleva por nombre los datos del usuario
         nombre_archivo = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.zip"
 
-    # Guardar respuestas en el archivo ZIP con contraseña
+    #Guarda las respuestas en el archivo ZIP con contraseña
         with pyzipper.AESZipFile(nombre_archivo, 'w', compression=pyzipper.ZIP_LZMA, encryption=pyzipper.WZ_AES) as zf:
 
-        #Contraseña proporcionada por el profesor
+        #Contraseña de los archivos ZIP (se puede cambiar)
             contraseña_profesor = b"profemirtha123"
             zf.setpassword(contraseña_profesor)
     
-        # Concatenar todas las respuestas en una sola cadena
+        #Pone todas las respuestas en una sola cadena
             respuestas_concatenadas = "\n".join(respuestas)
     
-        # Escribir todas las respuestas en un solo archivo dentro del ZIP
+        #Escribe todas las respuestas en un solo archivo dentro del ZIP
             zf.writestr(f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.txt", respuestas_concatenadas)
 
-def main():
-    #obtiene los datos personales del usuario
-    nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
-
-    #obtiene las respuestas del usuario
-    respuestas = ["respuesta1", "respuesta2", "respuesta3", "respuesta4"]
-
-    #comprime/encripta los datos
-    encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas)
-
-#if __name__ == "__main__":
-    #main()
+    #Aún hay cosas que cambiar en esta función, debido a que para acabarla necesitamos terminar otras funciones
+    #del proyecto
 
 def enviarCorreo ():
     
-    #mensaje que se enviara
+    #Mensaje que se enviará
     mensaje = 'colocar aqui el mensaje'
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
 
-    #datos para que la libreria pueda acceder a el correo del remitente
+    #Datos para que la librería pueda acceder a el correo del remitente
     server.login('correo','contraseña')
 
-    # remitente, destinatario, mensaje
+    #Remitente, destinatario, mensaje
     server.send_message('correo del remitente','correo del destinatario',mensaje)
 
-    #cierra secion
-    server.quit()
-    
+    #Cierra sesión
+    server.quit()  
+    #Mismo caso aquí, aún faltan algunas cosas por cambiar ya que debemos terminar con otras cosas primero, pero como
+    #resumen rápido, esta función hará que cada que un alumno termine un examen, sus respuestas junto con sus datos
+    #personales lleguen a su correo (al de usted)
 
-######################
+#Aquí empezamos con el menú de los exámenes
 def menu_principal ():
     validar_corte = "no"
     while validar_corte == "no":
-        print("!SELECCIONE EL CORTE QUE VA A PRESENTAR!")
-        print('''para corte 1, pulse 1
-        para corte 2, pulse 2
-        para corte 3, pulse 3
-        para corte 4, pulse 4    ''')
+        print("!SELECCIONE EL COHORTE QUE VA A PRESENTAR!")
+        print('''        Para corte 1, pulse 1
+        Para corte 2, pulse 2
+        Para corte 3, pulse 3
+        Para corte 4, pulse 4 ''')
         corte_selecionado = int(input(""))
 
         if corte_selecionado == 1:
             while True:
-                validar_corte_info = input("Esta seguro que este es el corte que va a presentar? si/no").lower()
+                #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
+                validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
                 validar_corte = unidecode(validar_corte_info)
                 if validar_corte == "si":
                     primer_corte()
@@ -171,7 +165,7 @@ def menu_principal ():
                     break
 
                 else:
-                    print("por favor selecciones una occion valida, solo se pernite si o no")
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
                     validar_corte = False
                 
         elif corte_selecionado == 2:
@@ -182,13 +176,31 @@ def menu_principal ():
             cuarto_corte()
 
         else:
-            print("por favor selecione una opcion valida")
-
+            print("Por favor selecione una opción válida ")
+        #Se le da a escoger al usuario qué cohorte va a presentar, se le hace que valide por si se equivoca
+        #y lo manda a corregir si no selecciona ninguno
+            
 def primer_corte ():
-    print("selecciono primer corte")
-    print("tiene X tiempo para terminar esta prueba. Si sale de esta prueva su nota sera perjudicada")
+    print("Seleccionó el primer cohorte")
+    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes finalizar su nota será perjudicada")
 
-    divicion_estetica = input("pulse cualquier tecla para iniciar la evaluacion")
+    divicion_estetica = input("Pulse cualquier tecla para iniciar la evaluación ")
+
+    print("enunciado")
+    print("¿Cuál de las respuestas es la correcta?:")
+    print("Respuesta 1")
+    print("Respuesta 2")
+    print("Respuesta 3")
+    print("Respuesta 4")
+    while True:
+        respuesta_uno_corte_uno = int(input(""))
+        validar_respuesta_uno_corte_uno = input(f"Su respuesta fue: {respuesta_uno_corte_uno} . esta seguro de su respuesta? si/no ")
+        if validar_respuesta_uno_corte_uno == "no":
+            print("Por favor vuelva a seleccionar su respuesta ")
+        elif validar_respuesta_uno_corte_uno == "si":
+            break
+        else:
+            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
 
     print("enunciado")
     print("la respuesta correcta es:")
@@ -197,14 +209,14 @@ def primer_corte ():
     print("pregunta 3")
     print("pregunta 4")
     while True:
-        respuesta_uno_corte_uno = int(input(""))
-        validar_respuesta_uno_corte_uno = input(f"su respuesta fue: {respuesta_uno_corte_uno} . esta seguro de su respues? si/no")
-        if validar_respuesta_uno_corte_uno == "no":
-            print("porfavor vuelva a insertar su respues")
-        elif validar_respuesta_uno_corte_uno == "si":
+        respuesta_dos_corte_uno = int(input(""))
+        validar_respuesta_dos_corte_uno = input(f"Su respuesta fue: {respuesta_dos_corte_uno} . esta seguro de su respuesta? si/no ")
+        if validar_respuesta_dos_corte_uno == "no":
+            print("Por favor vuelva a seleccionar su respuesta ")
+        elif validar_respuesta_dos_corte_uno == "si":
             break
         else:
-            print("por favor selecciones una occion valida, solo se pernite si o no")
+            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
 
     print("enunciado")
     print("la respuesta correcta es:")
@@ -212,7 +224,15 @@ def primer_corte ():
     print("pregunta 2")
     print("pregunta 3")
     print("pregunta 4")
-    respuesta_uno_corte_uno = input("")
+    while True:
+        respuesta_tres_corte_uno = int(input(""))
+        validar_respuesta_tres_corte_uno = input(f"Su respuesta fue: {respuesta_tres_corte_uno} . esta seguro de su respuesta? si/no ")
+        if validar_respuesta_tres_corte_uno == "no":
+            print("Por favor vuelva a seleccionar su respuesta ")
+        elif validar_respuesta_tres_corte_uno == "si":
+            break
+        else:
+            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
 
     print("enunciado")
     print("la respuesta correcta es:")
@@ -220,7 +240,15 @@ def primer_corte ():
     print("pregunta 2")
     print("pregunta 3")
     print("pregunta 4")
-    respuesta_uno_corte_uno = input("")
+    while True:
+        respuesta_cuatro_corte_uno = int(input(""))
+        validar_respuesta_cuatro_corte_uno = input(f"Su respuesta fue: {respuesta_cuatro_corte_uno} . esta seguro de su respuesta? si/no ")
+        if validar_respuesta_cuatro_corte_uno == "no":
+            print("Por favor vuelva a seleccionar su respuesta ")
+        elif validar_respuesta_cuatro_corte_uno == "si":
+            break
+        else:
+            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
 
     print("enunciado")
     print("la respuesta correcta es:")
@@ -228,19 +256,17 @@ def primer_corte ():
     print("pregunta 2")
     print("pregunta 3")
     print("pregunta 4")
-    respuesta_uno_corte_uno = input("")
-
-    print("enunciado")
-    print("la respuesta correcta es:")
-    print("pregunta 1")
-    print("pregunta 2")
-    print("pregunta 3")
-    print("pregunta 4")
-    respuesta_uno_corte_uno = input("")
+    while True:
+        respuesta_cinco_corte_uno = int(input(""))
+        validar_respuesta_cinco_corte_uno = input(f"Su respuesta fue: {respuesta_cinco_corte_uno} . esta seguro de su respuesta? si/no ")
+        if validar_respuesta_cinco_corte_uno == "no":
+            print("Por favor vuelva a seleccionar su respuesta ")
+        elif validar_respuesta_cinco_corte_uno == "si":
+            break
+        else:
+            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
 
     print("la evaluacion a finalizado")
-
-
 
 def segundo_corte ():
     print("selecciono segundo corte")
@@ -250,5 +276,27 @@ def terecer_corte ():
 
 def cuarto_corte ():
     print("selecciono cuarto corte")
+#En esta función (menu_principal ()) estarán definidos los 4 cohortes/examenes que podrán presentar los alumnos,
+#esta parte aún no está terminada así que es probable que tenga errores, así como también puede estar
+#sujeta a cambios, actualmente es en esta función en la que estamos trabajando
 
-menu_principal()
+def main():
+
+    #obtiene los datos personales del usuario
+    nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
+
+    #lleva al usuario a seleccionar el corte a presentar
+    menu_principal()
+
+    #obtiene las respuestas del usuario
+    respuestas = ["respuesta1", "respuesta2", "respuesta3", "respuesta4"]
+
+    #comprime/encripta los datos
+    encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas)
+
+if __name__ == "__main__":
+     main()
+
+#La función "main()" nos ayuda a hacer que cada una de las demás funciones se ejecute en el orden que deben y en la forma
+#en la que deben hacerlo ya que "if __name__ == "__main__"" nos permite hacer seguir a las funciones el orden de ejecución
+#pautado por el programador, activandose cuando el script se ejecuta como el programa principal
