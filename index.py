@@ -139,7 +139,7 @@ def enviarCorreo ():
     server.quit()  
     #Mismo caso aquí, aún faltan algunas cosas por cambiar ya que debemos terminar con otras cosas primero, pero como
     #resumen rápido, esta función hará que cada que un alumno termine un examen, sus respuestas junto con sus datos
-    #personales lleguen a su correo (al de usted) de forma instantanea
+    #personales lleguen a su correo (al de usted)
 
 #Aquí empezamos con el menú de los exámenes
 def menu_principal ():
@@ -192,8 +192,6 @@ def primer_corte ():
     print("Respuesta 2")
     print("Respuesta 3")
     print("Respuesta 4")
-
-    #este bucle while sertifica que la repuesta sea un numero y que el usuario este seguro de su decicion
     while True:
         respuesta_uno_corte_uno_procesado = input("")
         if respuesta_uno_corte_uno_procesado.isdigit():
