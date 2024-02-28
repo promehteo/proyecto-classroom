@@ -193,14 +193,26 @@ def primer_corte ():
     print("Respuesta 3")
     print("Respuesta 4")
     while True:
-        respuesta_uno_corte_uno = int(input(""))
-        validar_respuesta_uno_corte_uno = input(f"Su respuesta fue: {respuesta_uno_corte_uno} . esta seguro de su respuesta? si/no ")
-        if validar_respuesta_uno_corte_uno == "no":
-            print("Por favor vuelva a seleccionar su respuesta ")
-        elif validar_respuesta_uno_corte_uno == "si":
-            break
+        respuesta_uno_corte_uno_procesado = input("")
+        if respuesta_uno_corte_uno_procesado.isdigit():
+            respuesta_uno_corte_uno = int(respuesta_uno_corte_uno_procesado)
+            print(f"Su respuesta fue: {respuesta_uno_corte_uno}")
+            while True:
+                validar_respuesta_uno_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
+                validar_respuesta_uno_corte_uno = unidecode(validar_respuesta_uno_corte_uno_procesado)
+
+                if validar_respuesta_uno_corte_uno == "no":
+                    print("Por favor vuelva a seleccionar su respuesta ")
+                    break
+                elif validar_respuesta_uno_corte_uno == "si":
+                    break
+                else:
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+                
+            if validar_respuesta_uno_corte_uno == "si":
+                break
         else:
-            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+            print("por favor seleccione una opcion valida")
 
     print("enunciado")
     print("la respuesta correcta es:")
@@ -209,14 +221,26 @@ def primer_corte ():
     print("pregunta 3")
     print("pregunta 4")
     while True:
-        respuesta_dos_corte_uno = int(input(""))
-        validar_respuesta_dos_corte_uno = input(f"Su respuesta fue: {respuesta_dos_corte_uno} . esta seguro de su respuesta? si/no ")
-        if validar_respuesta_dos_corte_uno == "no":
-            print("Por favor vuelva a seleccionar su respuesta ")
-        elif validar_respuesta_dos_corte_uno == "si":
-            break
+        respuesta_dos_corte_uno_procesado = input("")
+        if respuesta_dos_corte_uno_procesado.isdigit():
+            respuesta_dos_corte_uno = int(respuesta_dos_corte_uno_procesado)
+            print(f"Su respuesta fue: {respuesta_dos_corte_uno}")
+            while True:
+                validar_respuesta_dos_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
+                validar_respuesta_dos_corte_uno = unidecode(validar_respuesta_dos_corte_uno_procesado)
+
+                if validar_respuesta_dos_corte_uno == "no":
+                    print("Por favor vuelva a seleccionar su respuesta ")
+                    break
+                elif validar_respuesta_dos_corte_uno == "si":
+                    break
+                else:
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+                
+            if validar_respuesta_dos_corte_uno == "si":
+                break
         else:
-            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+            print("por favor seleccione una opcion valida")
 
     print("enunciado")
     print("la respuesta correcta es:")
@@ -225,14 +249,26 @@ def primer_corte ():
     print("pregunta 3")
     print("pregunta 4")
     while True:
-        respuesta_tres_corte_uno = int(input(""))
-        validar_respuesta_tres_corte_uno = input(f"Su respuesta fue: {respuesta_tres_corte_uno} . esta seguro de su respuesta? si/no ")
-        if validar_respuesta_tres_corte_uno == "no":
-            print("Por favor vuelva a seleccionar su respuesta ")
-        elif validar_respuesta_tres_corte_uno == "si":
-            break
+        respuesta_tres_corte_uno_procesado = input("")
+        if respuesta_tres_corte_uno_procesado.isdigit():
+            respuesta_tres_corte_uno = int(respuesta_tres_corte_uno_procesado)
+            print(f"Su respuesta fue: {respuesta_tres_corte_uno}")
+            while True:
+                validar_respuesta_tres_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
+                validar_respuesta_tres_corte_uno = unidecode(validar_respuesta_tres_corte_uno_procesado)
+
+                if validar_respuesta_tres_corte_uno == "no":
+                    print("Por favor vuelva a seleccionar su respuesta ")
+                    break
+                elif validar_respuesta_tres_corte_uno == "si":
+                    break
+                else:
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+                
+            if validar_respuesta_tres_corte_uno == "si":
+                break
         else:
-            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+            print("por favor seleccione una opcion valida")
 
     print("enunciado")
     print("la respuesta correcta es:")
@@ -241,14 +277,26 @@ def primer_corte ():
     print("pregunta 3")
     print("pregunta 4")
     while True:
-        respuesta_cuatro_corte_uno = int(input(""))
-        validar_respuesta_cuatro_corte_uno = input(f"Su respuesta fue: {respuesta_cuatro_corte_uno} . esta seguro de su respuesta? si/no ")
-        if validar_respuesta_cuatro_corte_uno == "no":
-            print("Por favor vuelva a seleccionar su respuesta ")
-        elif validar_respuesta_cuatro_corte_uno == "si":
-            break
+        respuesta_cuatro_corte_uno_procesado = input("")
+        if respuesta_cuatro_corte_uno_procesado.isdigit():
+            respuesta_cuatro_corte_uno = int(respuesta_cuatro_corte_uno_procesado)
+            print(f"Su respuesta fue: {respuesta_cuatro_corte_uno}")
+            while True:
+                validar_respuesta_cuatro_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
+                validar_respuesta_cuatro_corte_uno = unidecode(validar_respuesta_cuatro_corte_uno_procesado)
+
+                if validar_respuesta_cuatro_corte_uno == "no":
+                    print("Por favor vuelva a seleccionar su respuesta ")
+                    break
+                elif validar_respuesta_cuatro_corte_uno == "si":
+                    break
+                else:
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+                
+            if validar_respuesta_cuatro_corte_uno == "si":
+                break
         else:
-            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+            print("por favor seleccione una opcion valida")
 
     print("enunciado")
     print("la respuesta correcta es:")
@@ -257,14 +305,26 @@ def primer_corte ():
     print("pregunta 3")
     print("pregunta 4")
     while True:
-        respuesta_cinco_corte_uno = int(input(""))
-        validar_respuesta_cinco_corte_uno = input(f"Su respuesta fue: {respuesta_cinco_corte_uno} . esta seguro de su respuesta? si/no ")
-        if validar_respuesta_cinco_corte_uno == "no":
-            print("Por favor vuelva a seleccionar su respuesta ")
-        elif validar_respuesta_cinco_corte_uno == "si":
-            break
+        respuesta_cinco_corte_uno_procesado = input("")
+        if respuesta_cinco_corte_uno_procesado.isdigit():
+            respuesta_cinco_corte_uno = int(respuesta_cinco_corte_uno_procesado)
+            print(f"Su respuesta fue: {respuesta_cinco_corte_uno}")
+            while True:
+                validar_respuesta_cinco_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
+                validar_respuesta_cinco_corte_uno = unidecode(validar_respuesta_cinco_corte_uno_procesado)
+
+                if validar_respuesta_cinco_corte_uno == "no":
+                    print("Por favor vuelva a seleccionar su respuesta ")
+                    break
+                elif validar_respuesta_cinco_corte_uno == "si":
+                    break
+                else:
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+                
+            if validar_respuesta_cinco_corte_uno == "si":
+                break
         else:
-            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+            print("por favor seleccione una opcion valida")
 
     print("la evaluacion a finalizado")
 
