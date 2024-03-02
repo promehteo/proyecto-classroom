@@ -53,8 +53,7 @@ def inicio_seccion ():
 
     #Esta parte del codigo es la encargada de pedirle los datos personales al usuario y hacerlo CERTIFICAR
     #que estén correctos (Alejandro escribe mal la variables a proposito para que se vean más originales)
-    sertificar_nombre = "0"
-    while sertificar_nombre == "0" :
+    while True:
         nombre_ususario = input('Por favor ingrese su nombre (solo primer nombre): ')
         validar_nombre_usuario = validar_nombre(nombre_ususario)
         #Con el "while" hacemos los bucles para que se le vuelva a preguntar al usuario por alguno de sus
@@ -63,42 +62,65 @@ def inicio_seccion ():
             print("Por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras ")
             nombre_ususario = input('Por favor ingrese nuevamente su nombre (solo primer nombre): ')
             validar_nombre_usuario = validar_nombre(nombre_ususario)
-        
-        sertificar_nombre = input ('''El nombre que ha ingresado es: '''+ nombre_ususario+'''.
-        Si este no es su nombre o ha cometido un error al escribirlo presione "0", 
-        si el nombre que ingreso es valido pulse una tecla que no sea "0" ''')
-    
-    sertificar_apellido = "0"
-    while sertificar_apellido == "0" :
-        apellido_usuario = input('Por favor ingrese su apellido: ')
-        validar_nombre_apellido = validar_nombre(apellido_usuario)
 
-        while validar_nombre_apellido != True:
+        sertificar_nombre = input ('''El nombre que ha ingresado es: '''+ nombre_ususario +'''.
+        esta seguro que este es su nombre? si/no ''').lower()
+        sertificar_nombre_procesado = unidecode(sertificar_nombre)
+
+        while sertificar_nombre_procesado != "no" and sertificar_nombre_procesado != "si":
+            sertificar_nombre = input('''Por favor seleccione una opción válida, solo se pemite "si" o "no"''').lower()
+            sertificar_nombre_procesado = unidecode(sertificar_nombre)
+
+        if sertificar_nombre_procesado == "si":
+            break
+    
+    while True :
+        apellido_usuario = input('Por favor ingrese su apellido: ')
+        validar_apellido_usuario = validar_nombre(apellido_usuario)
+
+        while validar_apellido_usuario != True:
             print("Por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras ")
             apellido_usuario = input('por favor ingrese nuevamene su apellido: ')
-            validar_nombre_apellido = validar_nombre(apellido_usuario)
+            validar_apellido_usuario = validar_nombre(apellido_usuario)
 
-        sertificar_apellido = input ('''El apellido que ha ingresado es: '''+ apellido_usuario+'''.
-       Si este no es su apellido o ha cometido un error al escribirlo presione "0", 
-       si el apellido que ingresó es valido pulse una tecla que no sea "0" ''' )
+        sertificar_apellido = input ('''El apellido que ha ingresado es: '''+ apellido_usuario +'''.
+        esta seguro que este es su apellido? si/no ''').lower()
+        sertificar_apellido_procesado = unidecode(sertificar_apellido)
 
-    sertificar_cedula = "0"
-    while sertificar_cedula == "0" :
+        while sertificar_apellido_procesado != "no" and sertificar_apellido_procesado != "si":
+            sertificar_apellido = input('''Por favor seleccione una opción válida, solo se pemite "si" o "no"''').lower()
+            sertificar_apellido_procesado = unidecode(sertificar_apellido)
+
+        if sertificar_apellido_procesado == "si":
+            break
+        
+
+    while True :
         cedula_ususario = input('Por favor ingrese su cédula: ')
-        validar_nombre_cedula = validar_cedula(cedula_ususario)
+        validar_cedula_usuario = validar_cedula(cedula_ususario)
 
-        while validar_nombre_cedula != True:
+        while validar_cedula_usuario != True:
             print("Por favor vuelva a ingresar su cédula, su cédula debe contar con 8 números ")
             cedula_ususario = input('Por favor ingrese nuevamente su cedula: ')
-            validar_nombre_cedula = validar_cedula(cedula_ususario)
+            validar_cedula_usuario = validar_cedula(cedula_ususario)
         
-        sertificar_cedula = input ('''La cédula que ha ingresiado es: '''+ cedula_ususario+'''.
-        Si esta no es su cédula o ha cometido un error al escribirla presione "0", 
-        si la cedula que ingresó es valida pulse una tecla que no sea "0" ''' )
+        sertificar_cedula = input ('''El cedula que ha ingresado es: '''+ cedula_ususario +'''.
+        esta seguro que este es su cedula? si/no ''').lower()
+        sertificar_cedula_procesado = unidecode(sertificar_cedula)
+        
+        while sertificar_cedula_procesado != "no" and sertificar_cedula_procesado != "si":
+            sertificar_cedula = input('''Por favor seleccione una opción válida, solo se pemite "si" o "no"''').lower()
+            sertificar_cedula_procesado = unidecode(sertificar_cedula)
 
-        #El "return" nos permite usar las variables de "nombre_ususario, apellido_usuario, cedula_ususario"
-        #en la siguiente función
-        return nombre_ususario, apellido_usuario, cedula_ususario 
+        if sertificar_cedula_procesado == "si":
+            break
+
+    #El "return" nos permite usar las variables de "nombre_ususario, apellido_usuario, cedula_ususario"
+    #en la siguiente función
+    
+    print("usuario registrado: ",nombre_ususario, apellido_usuario)
+
+    return nombre_ususario, apellido_usuario, cedula_ususario 
 
 def encriptacion (nombre_ususario, apellido_usuario, cedula_ususario, respuestas):
         
