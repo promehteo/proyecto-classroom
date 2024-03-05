@@ -122,23 +122,25 @@ def inicio_seccion ():
 
     return nombre_ususario, apellido_usuario, cedula_ususario 
 
-def encriptacion (nombre_ususario, apellido_usuario, cedula_ususario, respuestas):
+def encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen):
+    # Se crea el nombre del archivo .txt
+    nombre_archivo_txt = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.txt"
+    # Se crea el nombre del archivo .zip
+    nombre_archivo_zip = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.zip"
+
+    # Guarda las respuestas en el archivo de texto
+    with open(nombre_archivo_txt, 'w') as archivo_txt:
+        for i, respuesta in enumerate(respuestas_examen, start=1):
+            archivo_txt.write(f"Pregunta {i}: {respuesta}\n")
+
+    # Guarda el archivo de texto en un archivo ZIP con contraseña
+    with pyzipper.AESZipFile(nombre_archivo_zip, 'w', compression=pyzipper.ZIP_LZMA, encryption=pyzipper.WZ_AES) as zf:
+        # Contraseña del archivo ZIP (se puede cambiar)
+        contraseña_profesor = b"profemirtha123"
+        zf.setpassword(contraseña_profesor)
         
-     #Se crea el archivo que lleva por nombre los datos del usuario
-        nombre_archivo = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.zip"
-
-    #Guarda las respuestas en el archivo ZIP con contraseña
-        with pyzipper.AESZipFile(nombre_archivo, 'w', compression=pyzipper.ZIP_LZMA, encryption=pyzipper.WZ_AES) as zf:
-
-        #Contraseña de los archivos ZIP (se puede cambiar)
-            contraseña_profesor = b"profemirtha123"
-            zf.setpassword(contraseña_profesor)
-    
-        #Pone todas las respuestas en una sola cadena
-            respuestas_concatenadas = "\n".join(respuestas)
-    
-        #Escribe todas las respuestas en un solo archivo dentro del ZIP
-            zf.writestr(f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.txt", respuestas_concatenadas)
+        # Escribe el archivo de texto en el archivo ZIP
+        zf.write(nombre_archivo_txt)
 
     #Aún hay cosas que cambiar en esta función, debido a que para acabarla necesitamos terminar otras funciones
     #del proyecto
@@ -168,10 +170,10 @@ def menu_principal ():
     validar_corte = "no"
     while validar_corte == "no":
         print("!SELECCIONE EL COHORTE QUE VA A PRESENTAR!")
-        print('''        Para corte 1, pulse 1
-        Para corte 2, pulse 2
-        Para corte 3, pulse 3
-        Para corte 4, pulse 4 ''')
+        print('''        Para cohorte 1, pulse 1
+        Para cohorte 2, pulse 2
+        Para cohorte 3, pulse 3
+        Para cohorte 4, pulse 4 ''')
         corte_selecionado = int(input(""))
 
         if corte_selecionado == 1:
@@ -191,175 +193,175 @@ def menu_principal ():
                     validar_corte = False
                 
         elif corte_selecionado == 2:
-            segundo_corte()
+             while True:
+                #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
+                validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
+                validar_corte = unidecode(validar_corte_info)
+                if validar_corte == "si":
+                    segundo_corte()
+                    break
+
+                elif validar_corte == "no":
+                    break
+
+                else:
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+                    validar_corte = False
+            
         elif corte_selecionado == 3:
-            terecer_corte()
+             while True:
+                #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
+                validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
+                validar_corte = unidecode(validar_corte_info)
+                if validar_corte == "si":
+                    terecer_corte()
+                    break
+
+                elif validar_corte == "no":
+                    break
+
+                else:
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+                    validar_corte = False
+            
         elif corte_selecionado == 4:
-            cuarto_corte()
+             while True:
+                #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
+                validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
+                validar_corte = unidecode(validar_corte_info)
+                if validar_corte == "si":
+                    cuarto_corte()
+                    break
+
+                elif validar_corte == "no":
+                    break
+
+                else:
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
+                    validar_corte = False
 
         else:
             print("Por favor selecione una opción válida ")
         #Se le da a escoger al usuario qué cohorte va a presentar, se le hace que valide por si se equivoca
         #y lo manda a corregir si no selecciona ninguno
             
+def presentar_pregunta(enunciado, opciones):
+    print(enunciado)
+    for i, opcion in enumerate(opciones, start=1):
+        print(f"{i}. {opcion}")
+
+def validar_respuesta():
+    while True:
+        respuesta = input("Seleccione su respuesta (ingrese el número correspondiente): ")
+        if respuesta.isdigit():
+            return int(respuesta)
+        else:
+            print("Por favor, ingrese un número válido.")
+
+respuestas_examen = []
+
+def realizar_examen(preguntas):
+    global respuestas_examen
+    for pregunta in preguntas:
+        presentar_pregunta(pregunta["enunciado"], pregunta["opciones"])
+        respuesta = validar_respuesta()
+        print(f"Su respuesta fue: {respuesta}")
+        confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
+        if confirmacion == "no":
+            print("Por favor, vuelva a seleccionar su respuesta.")
+            # No necesitas llamar realizar_examen() de nuevo aquí
+            # Realiza cualquier acción adicional si el usuario quiere cambiar su respuesta
+        respuestas_examen.append(respuesta)  # Agrega la respuesta a la lista de respuestas
+    print("La evaluación ha finalizado.")
+    return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
+
 def primer_corte ():
-    print("Seleccionó el primer cohorte")
-    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes finalizar su nota será perjudicada")
+    print("Bienvenido al primer cohorte.")
+    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+    input("Pulse cualquier tecla para iniciar la evaluación.")
 
-    divicion_estetica = input("Pulse cualquier tecla para iniciar la evaluación ")
-
-    print("enunciado")
-    print("¿Cuál de las respuestas es la correcta?:")
-    print("Respuesta 1")
-    print("Respuesta 2")
-    print("Respuesta 3")
-    print("Respuesta 4")
-
-    #verifica que la respuesta del usuario se numerica, pregunta al usuario si esta seguro de su respuesta
-    while True:
-        respuesta_uno_corte_uno_procesado = input("")
-        if respuesta_uno_corte_uno_procesado.isdigit():
-            respuesta_uno_corte_uno = int(respuesta_uno_corte_uno_procesado)
-            print(f"Su respuesta fue: {respuesta_uno_corte_uno}")
-            while True:
-                validar_respuesta_uno_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
-                validar_respuesta_uno_corte_uno = unidecode(validar_respuesta_uno_corte_uno_procesado)
-
-                if validar_respuesta_uno_corte_uno == "no":
-                    print("Por favor vuelva a seleccionar su respuesta ")
-                    break
-                elif validar_respuesta_uno_corte_uno == "si":
-                    break
-                else:
-                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
-                
-            if validar_respuesta_uno_corte_uno == "si":
-                break
-        else:
-            print("por favor seleccione una opcion valida")
-
-    print("enunciado")
-    print("la respuesta correcta es:")
-    print("pregunta 1")
-    print("pregunta 2")
-    print("pregunta 3")
-    print("pregunta 4")
-    while True:
-        respuesta_dos_corte_uno_procesado = input("")
-        if respuesta_dos_corte_uno_procesado.isdigit():
-            respuesta_dos_corte_uno = int(respuesta_dos_corte_uno_procesado)
-            print(f"Su respuesta fue: {respuesta_dos_corte_uno}")
-            while True:
-                validar_respuesta_dos_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
-                validar_respuesta_dos_corte_uno = unidecode(validar_respuesta_dos_corte_uno_procesado)
-
-                if validar_respuesta_dos_corte_uno == "no":
-                    print("Por favor vuelva a seleccionar su respuesta ")
-                    break
-                elif validar_respuesta_dos_corte_uno == "si":
-                    break
-                else:
-                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
-                
-            if validar_respuesta_dos_corte_uno == "si":
-                break
-        else:
-            print("por favor seleccione una opcion valida")
-
-    print("enunciado")
-    print("la respuesta correcta es:")
-    print("pregunta 1")
-    print("pregunta 2")
-    print("pregunta 3")
-    print("pregunta 4")
-    while True:
-        respuesta_tres_corte_uno_procesado = input("")
-        if respuesta_tres_corte_uno_procesado.isdigit():
-            respuesta_tres_corte_uno = int(respuesta_tres_corte_uno_procesado)
-            print(f"Su respuesta fue: {respuesta_tres_corte_uno}")
-            while True:
-                validar_respuesta_tres_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
-                validar_respuesta_tres_corte_uno = unidecode(validar_respuesta_tres_corte_uno_procesado)
-
-                if validar_respuesta_tres_corte_uno == "no":
-                    print("Por favor vuelva a seleccionar su respuesta ")
-                    break
-                elif validar_respuesta_tres_corte_uno == "si":
-                    break
-                else:
-                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
-                
-            if validar_respuesta_tres_corte_uno == "si":
-                break
-        else:
-            print("por favor seleccione una opcion valida")
-
-    print("enunciado")
-    print("la respuesta correcta es:")
-    print("pregunta 1")
-    print("pregunta 2")
-    print("pregunta 3")
-    print("pregunta 4")
-    while True:
-        respuesta_cuatro_corte_uno_procesado = input("")
-        if respuesta_cuatro_corte_uno_procesado.isdigit():
-            respuesta_cuatro_corte_uno = int(respuesta_cuatro_corte_uno_procesado)
-            print(f"Su respuesta fue: {respuesta_cuatro_corte_uno}")
-            while True:
-                validar_respuesta_cuatro_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
-                validar_respuesta_cuatro_corte_uno = unidecode(validar_respuesta_cuatro_corte_uno_procesado)
-
-                if validar_respuesta_cuatro_corte_uno == "no":
-                    print("Por favor vuelva a seleccionar su respuesta ")
-                    break
-                elif validar_respuesta_cuatro_corte_uno == "si":
-                    break
-                else:
-                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
-                
-            if validar_respuesta_cuatro_corte_uno == "si":
-                break
-        else:
-            print("por favor seleccione una opcion valida")
-
-    print("enunciado")
-    print("la respuesta correcta es:")
-    print("pregunta 1")
-    print("pregunta 2")
-    print("pregunta 3")
-    print("pregunta 4")
-    while True:
-        respuesta_cinco_corte_uno_procesado = input("")
-        if respuesta_cinco_corte_uno_procesado.isdigit():
-            respuesta_cinco_corte_uno = int(respuesta_cinco_corte_uno_procesado)
-            print(f"Su respuesta fue: {respuesta_cinco_corte_uno}")
-            while True:
-                validar_respuesta_cinco_corte_uno_procesado = input("Esta seguro de su respuesta? si/no ").lower()
-                validar_respuesta_cinco_corte_uno = unidecode(validar_respuesta_cinco_corte_uno_procesado)
-
-                if validar_respuesta_cinco_corte_uno == "no":
-                    print("Por favor vuelva a seleccionar su respuesta ")
-                    break
-                elif validar_respuesta_cinco_corte_uno == "si":
-                    break
-                else:
-                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no" ''')
-                
-            if validar_respuesta_cinco_corte_uno == "si":
-                break
-        else:
-            print("por favor seleccione una opcion valida")
-
-    print("la evaluacion a finalizado")
+    preguntas = [
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            
+        },
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+        },
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]}
+        # Agregar más preguntas aquí
+    ]
+    return realizar_examen(preguntas)
 
 def segundo_corte ():
-    print("selecciono segundo corte")
+    print("Bienvenido al segundo cohorte.")
+    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+    input("Pulse cualquier tecla para iniciar la evaluación.")
+
+    preguntas = [
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            
+        },
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+        },
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]}
+        # Agregar más preguntas aquí
+    ]
+    return realizar_examen(preguntas)
 
 def terecer_corte ():
-    print("selecciono tercero corte")
+    print("Bienvenido al tercer cohorte.")
+    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+    input("Pulse cualquier tecla para iniciar la evaluación.")
+
+    preguntas = [
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            
+        },
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+        },
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]}
+        # Agregar más preguntas aquí
+    ]
+    return realizar_examen(preguntas)
 
 def cuarto_corte ():
-    print("selecciono cuarto corte")
+    print("Bienvenido al cuarto cohorte.")
+    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+    input("Pulse cualquier tecla para iniciar la evaluación.")
+
+    preguntas = [
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            
+        },
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+        },
+        {
+            "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
+            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]}
+        # Agregar más preguntas aquí
+    ]
+    return realizar_examen(preguntas)
 #En esta función (menu_principal ()) estarán definidos los 4 cohortes/examenes que podrán presentar los alumnos,
 #esta parte aún no está terminada así que es probable que tenga errores, así como también puede estar
 #sujeta a cambios, actualmente es en esta función en la que estamos trabajando
@@ -372,11 +374,8 @@ def main():
     #lleva al usuario a seleccionar el corte a presentar
     menu_principal()
 
-    #obtiene las respuestas del usuario
-    respuestas = ["respuesta1", "respuesta2", "respuesta3", "respuesta4"]
-
-    #comprime/encripta los datos
-    encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas)
+    #Comprime/encripta los datos
+    encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
 
 if __name__ == "__main__":
      main()
