@@ -152,9 +152,6 @@ esta seguro que este es su cedula? si/no ''')
 
         if sertificar_cedula_procesado == "si":
             break
-
-    #El "return" nos permite usar las variables de "nombre_ususario, apellido_usuario, cedula_ususario"
-    #en la siguiente función
     
     print("usuario registrado: ",nombre_ususario, apellido_usuario)
 
@@ -163,6 +160,8 @@ esta seguro que este es su cedula? si/no ''')
     borrar_pantalla()
 
     return nombre_ususario, apellido_usuario, cedula_ususario 
+    #El "return" nos permite usar las variables de "nombre_ususario, apellido_usuario, cedula_ususario"
+    #en la siguiente función
 
 def encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen):
     # Se crea el nombre del archivo .txt
@@ -184,6 +183,7 @@ def encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_
         # Escribe el archivo de texto en el archivo ZIP
         zf.write(nombre_archivo_txt)
 
+    os.remove(nombre_archivo_txt) #borra el txt para que sea inaccesible para el alumno
     #Aún hay cosas que cambiar en esta función, debido a que para acabarla necesitamos terminar otras funciones
     #del proyecto
 
@@ -441,7 +441,7 @@ def main():
     #obtiene los datos personales del usuario
     nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
 
-    #lleva al usuario a seleccionar el corte a presentar
+    #lleva al usuario a seleccionar el cohorte a presentar
     menu_principal()
 
     #Comprime/encripta los datos
