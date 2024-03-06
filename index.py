@@ -8,6 +8,8 @@ import smtplib
 from unidecode import unidecode
 #Libreria empleada para interactuar con el sistema opertivo a nivel de consola
 import os
+#Librería usada para activar la funcion que le pregunta al usuario si quiere salir del programa
+import signal
 
 def borrar_pantalla():
     sistema_operativo = os.name
@@ -18,7 +20,8 @@ def borrar_pantalla():
         os.system('cls')
     else:
         print("Error, no se pudo determinar cual es el sistema operativo de sus ordenador")
-
+    #Esto es para limpiar la pantalla
+        
 def temporizador(segundos):
     while segundos: 
         mins = segundos // 60
@@ -32,6 +35,8 @@ def temporizador(segundos):
 
         elif segundos == 60:
             print("se te esta acabando el tiempo")
+    #el temporizardor que será usado más adelante
+
 
 #validar solo numeros
 def validar_solo_numeros(dato_input):
@@ -155,9 +160,6 @@ esta seguro que este es su cedula? si/no ''')
         if sertificar_cedula_procesado == "si":
             break
 
-    #El "return" nos permite usar las variables de "nombre_ususario, apellido_usuario, cedula_ususario"
-    #en la siguiente función
-    
     print("usuario registrado: ",nombre_ususario, apellido_usuario)
 
     borrar_pantalla()
@@ -165,23 +167,23 @@ esta seguro que este es su cedula? si/no ''')
     return nombre_ususario, apellido_usuario, cedula_ususario 
 
 def encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen):
-    # Se crea el nombre del archivo .txt
+    #se crea el nombre del archivo .txt
     nombre_archivo_txt = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.txt"
-    # Se crea el nombre del archivo .zip
+    #Se crea el nombre del archivo .zip
     nombre_archivo_zip = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.zip"
 
-    # Guarda las respuestas en el archivo de texto
+    #se guardan las respuestas en el archivo de texto
     with open(nombre_archivo_txt, 'w') as archivo_txt:
         for i, respuesta in enumerate(respuestas_examen, start=1):
             archivo_txt.write(f"Pregunta {i}: {respuesta}\n")
 
-    # Guarda el archivo de texto en un archivo ZIP con contraseña
+    #guarda el archivo de texto en un archivo ZIP con contraseña
     with pyzipper.AESZipFile(nombre_archivo_zip, 'w', compression=pyzipper.ZIP_LZMA, encryption=pyzipper.WZ_AES) as zf:
-        # Contraseña del archivo ZIP (se puede cambiar)
+        #Contraseña del archivo ZIP (se puede cambiar)
         contraseña_profesor = b"profemirtha123"
         zf.setpassword(contraseña_profesor)
         
-        # Escribe el archivo de texto en el archivo ZIP
+        #Escribe el archivo de texto en el archivo ZIP
         zf.write(nombre_archivo_txt)
 
     #Aún hay cosas que cambiar en esta función, debido a que para acabarla necesitamos terminar otras funciones
@@ -327,11 +329,10 @@ def realizar_examen(preguntas):
         confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
         if confirmacion == "no":
             print("Por favor, vuelva a seleccionar su respuesta.")
-            # No necesitas llamar realizar_examen() de nuevo aquí
-            # Realiza cualquier acción adicional si el usuario quiere cambiar su respuesta
-        respuestas_examen.append(respuesta)  # Agrega la respuesta a la lista de respuestas
+            #Pide al usuario validar su respuesta
+        respuestas_examen.append(respuesta)  #Agrega la respuesta a la lista de respuestas
     print("La evaluación ha finalizado.")
-    return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
+    return respuestas_examen  #devuelve todas las respuestas al finalizar el examen
 
 def primer_corte ():
     print("Bienvenido al primer cohorte.")
@@ -351,7 +352,7 @@ def primer_corte ():
         {
             "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
             "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]}
-        # Agregar más preguntas aquí
+        #Agrega mas preguntas aquí
     ]
     return realizar_examen(preguntas)
 
@@ -373,7 +374,7 @@ def segundo_corte ():
         {
             "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
             "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]}
-        # Agregar más preguntas aquí
+        #Agrega mas preguntas aquí
     ]
     return realizar_examen(preguntas)
 
@@ -395,7 +396,7 @@ def terecer_corte ():
         {
             "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
             "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]}
-        # Agregar más preguntas aquí
+        #Agrega mas preguntas aquí
     ]
     return realizar_examen(preguntas)
 
@@ -417,12 +418,27 @@ def cuarto_corte ():
         {
             "enunciado": "¿Cuál de las siguientes opciones es la correcta?",
             "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]}
-        # Agregar más preguntas aquí
+        #Gracias a las demás funciones (realizar_examen y presentar_pregunta) se nos hizo más sencillo hacer los examenes
+        #tambien el poderle agregar más preguntas a estos (que de momento no lo hemos hecho), y que todas las respuestas
+        #sean anotas en un .txt con contraseña (que se enviará a su correo con los datos de cada alumno para cuando
+        #el programa esté listo)
     ]
     return realizar_examen(preguntas)
-#En esta función (menu_principal ()) estarán definidos los 4 cohortes/examenes que podrán presentar los alumnos,
-#esta parte aún no está terminada así que es probable que tenga errores, así como también puede estar
-#sujeta a cambios, actualmente es en esta función en la que estamos trabajando
+
+#def handler(signal, frame):
+    try:
+        respuesta = input("¿Está seguro que quiere salir del programa? (si/no): ")
+        if respuesta.lower() == 'si':
+            print("Saliendo del programa...")
+            exit(0)
+        else:
+            print("Continuando la ejecución.")
+    except EOFError:
+        print("\nContinuando la ejecución.")
+
+    signal.signal(signal.SIGINT, handler)
+#esta función hará que se le pida al usuario que confirme su salida del programa, en caso de que este quiera salir
+#(aún no lo terminamos)
 
 def main():
 
