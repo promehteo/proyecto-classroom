@@ -8,6 +8,11 @@ import smtplib
 from unidecode import unidecode
 #Libreria empleada para interactuar con el sistema opertivo a nivel de consola
 import os
+#Libreria que nos ayuda a crear el modal del temporizador
+import tkinter as tk
+#Libreria que nos permitio integrar el relog al codigo, permite que el relog se ejecute "aparte" del menu
+import threading
+
 
 def borrar_pantalla():
     sistema_operativo = os.name
@@ -17,19 +22,42 @@ def borrar_pantalla():
     elif sistema_operativo == 'nt':
         os.system('cls')
 
-def temporizador(segundos):
+def salir_programa():
+    borrar_pantalla()
+    print("Terminando el programa...")
+    exit()
+    
+def temporizador(segundos, label, root):
     while segundos: 
         mins = segundos // 60
         secs = segundos % 60
-        tiempo_restante = f'{mins: 02d}:{secs:02d}'
-        print(tiempo_restante, end='\r')
+        tiempo_restante = f'{mins:02d}:{secs:02d}'
+        label.config(text=tiempo_restante)
         time.sleep(1)
         segundos -= 1
         if segundos == 80:
             print("se te esta acabando el tiempo")
-
         elif segundos == 60:
             print("se te esta acabando el tiempo")
+    salir_programa()
+    root.destroy()
+
+def iniciar_temporizador():
+    root = tk.Tk()
+    root.title("Temporizador")
+
+    # Deshabilitar el botón de cierre para que el alumno no cierre el cronometro por accidente
+    root.protocol("WM_DELETE_WINDOW", lambda: None)
+
+    label = tk.Label(root, text="", width=10)
+    label.pack()
+
+    segundos = 300
+    threading.Thread(target=temporizador, args=(segundos, label, root)).start()
+
+    root.mainloop()
+
+threading.Thread(target=iniciar_temporizador).start()
 
 #validar solo numeros
 def validar_solo_numeros(dato_input):
@@ -158,7 +186,6 @@ esta seguro que este es su cedula? si/no ''')
     time.sleep(1)
 
     borrar_pantalla()
-
     return nombre_ususario, apellido_usuario, cedula_ususario 
     #El "return" nos permite usar las variables de "nombre_ususario, apellido_usuario, cedula_ususario"
     #en la siguiente función
@@ -211,13 +238,14 @@ def enviarCorreo ():
 def menu_principal ():
     validar_corte = "no"
     
-    print("!SELECCIONE EL COHORTE QUE VA A PRESENTAR!")
+    print("!COHORTES DISPONIBLES!")
     print('''Para cohorte 1, pulse 1
 Para cohorte 2, pulse 2
 Para cohorte 3, pulse 3
 Para cohorte 4, pulse 4 ''')
 
     while validar_corte == "no":
+        print("Selecione el cote que va a precentar")
         corte_selecionado = input("")
         validar_numeros_corte=validar_solo_numeros(corte_selecionado)
 
