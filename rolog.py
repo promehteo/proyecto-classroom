@@ -1,24 +1,22 @@
-#libreria time se emplea para poder medir tiempo y crear cronometros
 import time
-
-import tkinter as tk
+import threading
 
 def temporizador(segundos):
     while segundos: 
         mins = segundos // 60
         secs = segundos % 60
         tiempo_restante = f'{mins: 02d}:{secs:02d}'
-        label.config(text=tiempo_restante)
+        print(tiempo_restante, end='\r')
         time.sleep(1)
         segundos -= 1
         if segundos == 80:
             print("se te esta acabando el tiempo")
+
         elif segundos == 60:
             print("se te esta acabando el tiempo")
-        root.update()
 
-root = tk.Tk()
-label = tk.Label(root, text="")
-label.pack()
-temporizador(120)  # Ejemplo con 120 segundos
-root.mainloop()
+# Crear un hilo para ejecutar el temporizador
+t = threading.Thread(target=temporizador, args=(100,))
+
+# Iniciar el hilo
+t.start()
