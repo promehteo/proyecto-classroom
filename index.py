@@ -13,6 +13,12 @@ import tkinter as tk
 #Libreria que nos permitio integrar el relog al codigo, permite que el relog se ejecute "aparte" del menu
 import threading
 
+import signal
+
+def signal_handler(sig, frame):
+    print('Ctrl+C fue presionado, pero no haré nada.')
+
+signal.signal(signal.SIGINT, signal_handler)
 
 def borrar_pantalla():
     sistema_operativo = os.name
@@ -119,79 +125,97 @@ def validar_cedula(dato_input):
 #############!!!!!!!!!!!!!!!!!!!
 
 def inicio_seccion ():
+
     borrar_pantalla()
     print('''Bienvenido al PROYECTO CLASSROOM, para iniciar primero inserte sus datos''')
 
-    #Esta parte del codigo es la encargada de pedirle los datos personales al usuario y hacerlo CERTIFICAR
-    #que estén correctos (Alejandro escribe mal la variables a proposito para que se vean más originales)
-    while True:
-        nombre_ususario = input('Por favor ingrese su nombre (solo primer nombre): ')
-        validar_nombre_usuario = validar_nombre(nombre_ususario)
-        #Con el "while" hacemos los bucles para que se le vuelva a preguntar al usuario por alguno de sus
-        #datos en caso de algún error
-        while validar_nombre_usuario != True:
-            print("Por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras ")
-            nombre_ususario = input('Por favor ingrese nuevamente su nombre (solo primer nombre): ')
-            validar_nombre_usuario = validar_nombre(nombre_ususario)
+    def inicio_seccion_nombre():
+        try:
+            #Esta parte del codigo es la encargada de pedirle los datos personales al usuario y hacerlo CERTIFICAR
+            #que estén correctos (Alejandro escribe mal la variables a proposito para que se vean más originales)
+            while True:
+                nombre_ususario = input('Por favor ingrese su nombre (solo primer nombre): ')
+                validar_nombre_usuario = validar_nombre(nombre_ususario)
+                #Con el "while" hacemos los bucles para que se le vuelva a preguntar al usuario por alguno de sus
+                #datos en caso de algún error
+                while validar_nombre_usuario != True:
+                    print("Por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras ")
+                    nombre_ususario = input('Por favor ingrese nuevamente su nombre (solo primer nombre): ')
+                    validar_nombre_usuario = validar_nombre(nombre_ususario)
+                    
+                print('''El nombre que ha ingresado es: '''+ nombre_ususario +'''.
+    esta seguro que este es su nombre? si/no ''')
+                sertificar_nombre = input ("").lower()
+                sertificar_nombre_procesado = unidecode(sertificar_nombre)
+
+                while sertificar_nombre_procesado != "no" and sertificar_nombre_procesado != "si":
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no"''')
+                    sertificar_nombre = input().lower()
+                    sertificar_nombre_procesado = unidecode(sertificar_nombre)
+
+                if sertificar_nombre_procesado == "si":
+                    break
+            return nombre_ususario
+        except EOFError:
+            return inicio_seccion_nombre()
+    nombre_ususario=inicio_seccion_nombre()
+
+    def inicio_seccion_apellido():
+        try:
+            while True :
+                apellido_usuario = input('Por favor ingrese su apellido: ')
+                validar_apellido_usuario = validar_nombre(apellido_usuario)
+
+                while validar_apellido_usuario != True:
+                    print("Por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras ")
+                    apellido_usuario = input('por favor ingrese nuevamene su apellido: ')
+                    validar_apellido_usuario = validar_nombre(apellido_usuario)
+
+                print('''El apellido que ha ingresado es: '''+ apellido_usuario +'''.
+    esta seguro que este es su apellido? si/no ''')
+                sertificar_apellido = input ("").lower()
+                sertificar_apellido_procesado = unidecode(sertificar_apellido)
+
+                while sertificar_apellido_procesado != "no" and sertificar_apellido_procesado != "si":
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no"''')
+                    sertificar_apellido = input().lower()
+                    sertificar_apellido_procesado = unidecode(sertificar_apellido)
+
+                if sertificar_apellido_procesado == "si":
+                    break
+            return apellido_usuario
+        except EOFError:
+            return inicio_seccion_apellido()
+    apellido_usuario = inicio_seccion_apellido()
+            
+    def inicio_seccion_cedula():
+        try:
+            while True :
+                cedula_ususario = input('Por favor ingrese su cédula: ')
+                validar_cedula_usuario = validar_cedula(cedula_ususario)
+
+                while validar_cedula_usuario != True:
+                    print("Por favor vuelva a ingresar su cédula, su cédula debe contar con 8 números ")
+                    cedula_ususario = input('Por favor ingrese nuevamente su cedula: ')
+                    validar_cedula_usuario = validar_cedula(cedula_ususario)
+
+                print('''El cedula que ha ingresado es: '''+ cedula_ususario +'''.
+    esta seguro que este es su cedula? si/no ''')
+                sertificar_cedula = input ().lower()
+                sertificar_cedula_procesado = unidecode(sertificar_cedula)
+                    
+                while sertificar_cedula_procesado != "no" and sertificar_cedula_procesado != "si":
+                    print('''Por favor seleccione una opción válida, solo se pemite "si" o "no"''')
+                    sertificar_cedula = input().lower()
+                    sertificar_cedula_procesado = unidecode(sertificar_cedula)
+
+                if sertificar_cedula_procesado == "si":
+                    break
+            return cedula_ususario
+        except EOFError:
+            return inicio_seccion_cedula()
+    cedula_ususario = inicio_seccion_cedula()
         
-        print('''El nombre que ha ingresado es: '''+ nombre_ususario +'''.
-esta seguro que este es su nombre? si/no ''')
-        sertificar_nombre = input ("").lower()
-        sertificar_nombre_procesado = unidecode(sertificar_nombre)
-
-        while sertificar_nombre_procesado != "no" and sertificar_nombre_procesado != "si":
-            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no"''')
-            sertificar_nombre = input().lower()
-            sertificar_nombre_procesado = unidecode(sertificar_nombre)
-
-        if sertificar_nombre_procesado == "si":
-            break
-    
-    while True :
-        apellido_usuario = input('Por favor ingrese su apellido: ')
-        validar_apellido_usuario = validar_nombre(apellido_usuario)
-
-        while validar_apellido_usuario != True:
-            print("Por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras ")
-            apellido_usuario = input('por favor ingrese nuevamene su apellido: ')
-            validar_apellido_usuario = validar_nombre(apellido_usuario)
-
-        print('''El apellido que ha ingresado es: '''+ apellido_usuario +'''.
-esta seguro que este es su apellido? si/no ''')
-        sertificar_apellido = input ("").lower()
-        sertificar_apellido_procesado = unidecode(sertificar_apellido)
-
-        while sertificar_apellido_procesado != "no" and sertificar_apellido_procesado != "si":
-            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no"''')
-            sertificar_apellido = input().lower()
-            sertificar_apellido_procesado = unidecode(sertificar_apellido)
-
-        if sertificar_apellido_procesado == "si":
-            break
-        
-
-    while True :
-        cedula_ususario = input('Por favor ingrese su cédula: ')
-        validar_cedula_usuario = validar_cedula(cedula_ususario)
-
-        while validar_cedula_usuario != True:
-            print("Por favor vuelva a ingresar su cédula, su cédula debe contar con 8 números ")
-            cedula_ususario = input('Por favor ingrese nuevamente su cedula: ')
-            validar_cedula_usuario = validar_cedula(cedula_ususario)
-
-        print('''El cedula que ha ingresado es: '''+ cedula_ususario +'''.
-esta seguro que este es su cedula? si/no ''')
-        sertificar_cedula = input ().lower()
-        sertificar_cedula_procesado = unidecode(sertificar_cedula)
-        
-        while sertificar_cedula_procesado != "no" and sertificar_cedula_procesado != "si":
-            print('''Por favor seleccione una opción válida, solo se pemite "si" o "no"''')
-            sertificar_cedula = input().lower()
-            sertificar_cedula_procesado = unidecode(sertificar_cedula)
-
-        if sertificar_cedula_procesado == "si":
-            break
-    
     print("usuario registrado: ",nombre_ususario, apellido_usuario)
 
     time.sleep(1)
@@ -200,6 +224,7 @@ esta seguro que este es su cedula? si/no ''')
     return nombre_ususario, apellido_usuario, cedula_ususario 
     #El "return" nos permite usar las variables de "nombre_ususario, apellido_usuario, cedula_ususario"
     #en la siguiente función
+
 
 def encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen, preguntas=None):
     # Se crea el nombre del archivo .txt
@@ -253,89 +278,92 @@ def enviarCorreo ():
 
 #Aquí empezamos con el menú de los exámenes
 def menu_principal():
-    validar_corte = "no"
-    
-    print("!COHORTES DISPONIBLES!")
-    print('''Para cohorte 1, pulse 1
-Para cohorte 2, pulse 2
-Para cohorte 3, pulse 3
-Para cohorte 4, pulse 4 ''')
+    try:
+        validar_corte = "no"
+        
+        print("!COHORTES DISPONIBLES!")
+        print('''Para cohorte 1, pulse 1
+    Para cohorte 2, pulse 2
+    Para cohorte 3, pulse 3
+    Para cohorte 4, pulse 4 ''')
 
-    while validar_corte == "no":
-        print("Selecione el cote que va a precentar")
-        corte_selecionado = input("")
-        validar_numeros_corte = validar_solo_numeros(corte_selecionado)
+        while validar_corte == "no":
+            print("Selecione el cote que va a precentar")
+            corte_selecionado = input("")
+            validar_numeros_corte = validar_solo_numeros(corte_selecionado)
 
-        if validar_numeros_corte:
-            corte_procesado = int(corte_selecionado)
-            if corte_procesado == 1:
-                while True:
-                    validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
-                    validar_corte = unidecode(validar_corte_info)
-                    if validar_corte == "si":
-                        borrar_pantalla()
-                        return primer_corte()  # Devolver las respuestas del examen
+            if validar_numeros_corte:
+                corte_procesado = int(corte_selecionado)
+                if corte_procesado == 1:
+                    while True:
+                        validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
+                        validar_corte = unidecode(validar_corte_info)
+                        if validar_corte == "si":
+                            borrar_pantalla()
+                            return primer_corte()  # Devolver las respuestas del examen
 
-                    elif validar_corte == "no":
-                        break
+                        elif validar_corte == "no":
+                            break
 
-                    else:
-                        print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                        validar_corte = "no"
+                        else:
+                            print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
+                            validar_corte = "no"
 
+                        
+                elif corte_procesado == 2:
+                    while True:
+                        #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
+                        validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
+                        validar_corte = unidecode(validar_corte_info)
+                        if validar_corte == "si":
+                            borrar_pantalla()
+                            return segundo_corte()  # Devolver las respuestas del examen
+
+                        elif validar_corte == "no":
+                            break
+
+                        else:
+                            print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
+                            validar_corte = "no"
                     
-            elif corte_procesado == 2:
-                while True:
-                    #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
-                    validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
-                    validar_corte = unidecode(validar_corte_info)
-                    if validar_corte == "si":
-                        borrar_pantalla()
-                        return segundo_corte()  # Devolver las respuestas del examen
+                elif corte_procesado == 3:
+                    while True:
+                        #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
+                        validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
+                        validar_corte = unidecode(validar_corte_info)
+                        if validar_corte == "si":
+                            borrar_pantalla()
+                            return terecer_corte()  # Devolver las respuestas del examen
 
-                    elif validar_corte == "no":
-                        break
+                        elif validar_corte == "no":
+                            break
 
-                    else:
-                        print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                        validar_corte = "no"
-                
-            elif corte_procesado == 3:
-                while True:
-                    #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
-                    validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
-                    validar_corte = unidecode(validar_corte_info)
-                    if validar_corte == "si":
-                        borrar_pantalla()
-                        return terecer_corte()  # Devolver las respuestas del examen
+                        else:
+                            print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
+                            validar_corte = "no"
+                    
+                elif corte_procesado == 4:
+                    while True:
+                        #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
+                        validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
+                        validar_corte = unidecode(validar_corte_info)
+                        if validar_corte == "si":
+                            borrar_pantalla()
+                            return cuarto_corte()  # Devolver las respuestas del examen
 
-                    elif validar_corte == "no":
-                        break
+                        elif validar_corte == "no":
+                            break
 
-                    else:
-                        print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                        validar_corte = "no"
-                
-            elif corte_procesado == 4:
-                while True:
-                    #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
-                    validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
-                    validar_corte = unidecode(validar_corte_info)
-                    if validar_corte == "si":
-                        borrar_pantalla()
-                        return cuarto_corte()  # Devolver las respuestas del examen
-
-                    elif validar_corte == "no":
-                        break
-
-                    else:
-                        print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                        validar_corte = "no"
-                print("Por favor selecione una opción válida ")
-            #Se le da a escoger al usuario qué cohorte va a presentar, se le hace que valide por si se equivoca
-            #y lo manda a corregir si no selecciona ninguno
-        else:
-            print("solo se permiten numeros")
+                        else:
+                            print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
+                            validar_corte = "no"
+                    print("Por favor selecione una opción válida ")
+                #Se le da a escoger al usuario qué cohorte va a presentar, se le hace que valide por si se equivoca
+                #y lo manda a corregir si no selecciona ninguno
+            else:
+                print("solo se permiten numeros")
+    except EOFError:
+        return menu_principal()
             
 def presentar_pregunta(enunciado, opciones):
     print(enunciado)
