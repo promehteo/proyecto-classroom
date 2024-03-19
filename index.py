@@ -374,16 +374,15 @@ def presentar_pregunta(enunciado, opciones):
 def validar_respuesta(opciones):
     while True:
         respuesta = input("Seleccione su respuesta (ingrese el número correspondiente o su respuesta): ")
-        if respuesta.isdigit():
-            # Si la respuesta es un número, verificar si está dentro del rango de opciones
+        try:
             respuesta_numero = int(respuesta)
             if 1 <= respuesta_numero <= len(opciones):
                 return respuesta_numero
             else:
                 print("Por favor, ingrese un número válido.")
-        else:
-            # Si la respuesta no es un número, puede ser una respuesta práctica
-            return respuesta.strip()
+        except ValueError:
+            # Si la conversión a entero falla, la respuesta no es un número
+            print("Por favor, ingrese un número válido.")
 
 def realizar_examen(preguntas):
     respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
@@ -398,7 +397,9 @@ def realizar_examen(preguntas):
             print(f"Su respuesta fue: {pregunta['opciones'][respuesta - 1]}")  # Mostrar la respuesta seleccionada
         else:
             # Pregunta práctica
-            respuesta = input("Ingrese su respuesta (copie y pegue su codigo): ")
+            print("Esta es una pregunta práctica. Por favor, responda en el espacio proporcionado.")
+            respuesta = input("Ingrese su respuesta: ")
+            print(f"Su respuesta fue: {respuesta}")
 
         while True:
             confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
