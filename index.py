@@ -414,11 +414,11 @@ def validar_respuesta(opciones):
             print("Por favor, ingrese un número válido.")
 
 def realizar_examen(preguntas):
-    try:
-        respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
+    respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
 
-        for pregunta in preguntas:
-            borrar_pantalla()
+    for pregunta in preguntas:
+        borrar_pantalla()
+        while True:
             presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
             
             if pregunta["opciones"]:
@@ -431,21 +431,17 @@ def realizar_examen(preguntas):
                 respuesta = input("Ingrese su respuesta: ")
                 print(f"Su respuesta fue: {respuesta}")
 
-            while True:
-                confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
-                if confirmacion == "si":
-                    respuestas_examen.append(respuesta)  # Agrega la respuesta a la lista de respuestas
-                    break
-                elif confirmacion == "no":
-                    print("Por favor, vuelva a seleccionar su respuesta.")
-                    break
-                else:
-                    print("Por favor seleccione una opción válida.")
+            confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
+            if confirmacion == "si":
+                respuestas_examen.append(respuesta)  # Agrega la respuesta a la lista de respuestas
+                break
+            elif confirmacion == "no":
+                print("Revisemos la pregunta nuevamente.")
+            else:
+                print("Por favor seleccione una opción válida.")
 
-        print("La evaluación ha finalizado.")
-        return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
-    except EOFError:
-        return realizar_examen(preguntas)    
+    print("La evaluación ha finalizado.")
+    return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
 
 def primer_corte():
     print("Bienvenido al primer cohorte.")
