@@ -12,11 +12,26 @@ import os
 import tkinter as tk
 #Libreria que nos permitio integrar el relog al codigo, permite que el relog se ejecute "aparte" del menu
 import threading
-
+#Libreria usada para crear el modal de cerrar seccion
+from tkinter import messagebox
+#Libreria empleada para detectar que teclas se precionan
 import signal
 
+def modal_salir():
+    window = tk.Tk()
+    window.withdraw()  # Ocultar la ventana principal
+
+    # Crear un cuadro de diálogo modal
+    result = messagebox.askokcancel("Finalisar evalucion", "salir de la evaluacion perjudicara tu nota ¿estas seguro que deseas salir?")
+    if result:
+        salir_programa()
+
+    window.mainloop()
+
 def signal_handler(sig, frame):
-    print('Ctrl+C fue presionado, pero no haré nada.')
+    print("")
+    t = threading.Thread(target=modal_salir)
+    t.start()
 
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -47,10 +62,18 @@ def temporizador(segundos, label, root):
         label.config(text=tiempo_restante)
         time.sleep(1)
         segundos -= 1
-        if segundos == 80:
-            print("se te esta acabando el tiempo")
-        elif segundos == 60:
-            print("se te esta acabando el tiempo")
+        if segundos == 290:
+            print("")
+            print("se te esta acabando el tiempo 1")
+        if segundos == 280:
+            print("")
+            print("se te esta acabando el tiempo 2")
+        if segundos == 270:
+            print("")
+            print("se te esta acabando el tiempo 3")
+        elif segundos == 10:
+            print("")
+            print("se te esta acabando el tiempo 4")
     root.destroy()
 
 def iniciar_temporizador():
@@ -63,7 +86,7 @@ def iniciar_temporizador():
     label = tk.Label(root, text="", width=10)
     label.pack()
 
-    segundos = 199
+    segundos = 300
     threading.Thread(target=temporizador, args=(segundos, label, root)).start()
 
     root.mainloop()
@@ -71,7 +94,7 @@ def iniciar_temporizador():
 threading.Thread(target=iniciar_temporizador).start()
 
 # Crear un hilo para ejecutar el temporizador
-t = threading.Thread(target=temporizador_asyncrono, args=(200,))
+t = threading.Thread(target=temporizador_asyncrono, args=(301,))
 
 # Iniciar el hilo
 t.start()
@@ -126,25 +149,27 @@ def validar_cedula(dato_input):
 
 def inicio_seccion ():
 
-    borrar_pantalla()
-    print('''Bienvenido al PROYECTO CLASSROOM, para iniciar primero inserte sus datos''')
-
     def inicio_seccion_nombre():
         try:
+            borrar_pantalla()
+            print('''Bienvenido al PROYECTO CLASSROOM, para iniciar primero inserte sus datos''')
+
             #Esta parte del codigo es la encargada de pedirle los datos personales al usuario y hacerlo CERTIFICAR
             #que estén correctos (Alejandro escribe mal la variables a proposito para que se vean más originales)
             while True:
-                nombre_ususario = input('Por favor ingrese su nombre (solo primer nombre): ')
+                print("Por favor ingrese su nombre (solo primer nombre): ")
+                nombre_ususario = input('')
                 validar_nombre_usuario = validar_nombre(nombre_ususario)
                 #Con el "while" hacemos los bucles para que se le vuelva a preguntar al usuario por alguno de sus
                 #datos en caso de algún error
                 while validar_nombre_usuario != True:
                     print("Por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras ")
-                    nombre_ususario = input('Por favor ingrese nuevamente su nombre (solo primer nombre): ')
+                    print("Por favor ingrese nuevamente su nombre (solo primer nombre):")
+                    nombre_ususario = input("")
                     validar_nombre_usuario = validar_nombre(nombre_ususario)
                     
                 print('''El nombre que ha ingresado es: '''+ nombre_ususario +'''.
-    esta seguro que este es su nombre? si/no ''')
+esta seguro que este es su nombre? si/no ''')
                 sertificar_nombre = input ("").lower()
                 sertificar_nombre_procesado = unidecode(sertificar_nombre)
 
@@ -163,16 +188,18 @@ def inicio_seccion ():
     def inicio_seccion_apellido():
         try:
             while True :
-                apellido_usuario = input('Por favor ingrese su apellido: ')
+                print("Por favor ingrese su apellido (solo primer apellido): ")
+                apellido_usuario = input('')
                 validar_apellido_usuario = validar_nombre(apellido_usuario)
 
                 while validar_apellido_usuario != True:
                     print("Por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras ")
-                    apellido_usuario = input('por favor ingrese nuevamene su apellido: ')
+                    print("por favor ingrese nuevamene su apellido (solo primer apellido): ")
+                    apellido_usuario = input("")
                     validar_apellido_usuario = validar_nombre(apellido_usuario)
 
                 print('''El apellido que ha ingresado es: '''+ apellido_usuario +'''.
-    esta seguro que este es su apellido? si/no ''')
+esta seguro que este es su apellido? si/no ''')
                 sertificar_apellido = input ("").lower()
                 sertificar_apellido_procesado = unidecode(sertificar_apellido)
 
@@ -191,16 +218,18 @@ def inicio_seccion ():
     def inicio_seccion_cedula():
         try:
             while True :
-                cedula_ususario = input('Por favor ingrese su cédula: ')
+                print("Por favor ingrese su cédula: ")
+                cedula_ususario = input('')
                 validar_cedula_usuario = validar_cedula(cedula_ususario)
 
                 while validar_cedula_usuario != True:
                     print("Por favor vuelva a ingresar su cédula, su cédula debe contar con 8 números ")
-                    cedula_ususario = input('Por favor ingrese nuevamente su cedula: ')
+                    print("Por favor ingrese nuevamente su cedula: ")
+                    cedula_ususario = input("")
                     validar_cedula_usuario = validar_cedula(cedula_ususario)
 
                 print('''El cedula que ha ingresado es: '''+ cedula_ususario +'''.
-    esta seguro que este es su cedula? si/no ''')
+esta seguro que este es su cedula? si/no ''')
                 sertificar_cedula = input ().lower()
                 sertificar_cedula_procesado = unidecode(sertificar_cedula)
                     
@@ -220,7 +249,6 @@ def inicio_seccion ():
 
     time.sleep(1)
 
-    borrar_pantalla()
     return nombre_ususario, apellido_usuario, cedula_ususario 
     #El "return" nos permite usar las variables de "nombre_ususario, apellido_usuario, cedula_ususario"
     #en la siguiente función
@@ -280,12 +308,12 @@ def enviarCorreo ():
 def menu_principal():
     try:
         validar_corte = "no"
-        
+        borrar_pantalla()
         print("!COHORTES DISPONIBLES!")
         print('''Para cohorte 1, pulse 1
-    Para cohorte 2, pulse 2
-    Para cohorte 3, pulse 3
-    Para cohorte 4, pulse 4 ''')
+Para cohorte 2, pulse 2
+Para cohorte 3, pulse 3
+Para cohorte 4, pulse 4 ''')
 
         while validar_corte == "no":
             print("Selecione el cote que va a precentar")
@@ -296,7 +324,8 @@ def menu_principal():
                 corte_procesado = int(corte_selecionado)
                 if corte_procesado == 1:
                     while True:
-                        validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
+                        print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
+                        validar_corte_info = input("").lower()
                         validar_corte = unidecode(validar_corte_info)
                         if validar_corte == "si":
                             borrar_pantalla()
@@ -385,40 +414,43 @@ def validar_respuesta(opciones):
             print("Por favor, ingrese un número válido.")
 
 def realizar_examen(preguntas):
-    respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
+    try:
+        respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
 
-    for pregunta in preguntas:
-        borrar_pantalla()
-        presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
-        
-        if pregunta["opciones"]:
-            # Pregunta de opción múltiple
-            respuesta = validar_respuesta(pregunta["opciones"])
-            print(f"Su respuesta fue: {pregunta['opciones'][respuesta - 1]}")  # Mostrar la respuesta seleccionada
-        else:
-            # Pregunta práctica
-            print("Esta es una pregunta práctica. Por favor, responda en el espacio proporcionado.")
-            respuesta = input("Ingrese su respuesta: ")
-            print(f"Su respuesta fue: {respuesta}")
-
-        while True:
-            confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
-            if confirmacion == "si":
-                respuestas_examen.append(respuesta)  # Agrega la respuesta a la lista de respuestas
-                break
-            elif confirmacion == "no":
-                print("Por favor, vuelva a seleccionar su respuesta.")
-                break
+        for pregunta in preguntas:
+            borrar_pantalla()
+            presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
+            
+            if pregunta["opciones"]:
+                # Pregunta de opción múltiple
+                respuesta = validar_respuesta(pregunta["opciones"])
+                print(f"Su respuesta fue: {pregunta['opciones'][respuesta - 1]}")  # Mostrar la respuesta seleccionada
             else:
-                print("Por favor seleccione una opción válida.")
+                # Pregunta práctica
+                print("Esta es una pregunta práctica. Por favor, responda en el espacio proporcionado.")
+                respuesta = input("Ingrese su respuesta: ")
+                print(f"Su respuesta fue: {respuesta}")
 
-    print("La evaluación ha finalizado.")
-    return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
+            while True:
+                confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
+                if confirmacion == "si":
+                    respuestas_examen.append(respuesta)  # Agrega la respuesta a la lista de respuestas
+                    break
+                elif confirmacion == "no":
+                    print("Por favor, vuelva a seleccionar su respuesta.")
+                    break
+                else:
+                    print("Por favor seleccione una opción válida.")
+
+        print("La evaluación ha finalizado.")
+        return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
+    except EOFError:
+        return realizar_examen(preguntas)    
 
 def primer_corte():
     print("Bienvenido al primer cohorte.")
     print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
-    input("Pulse cualquier tecla para iniciar la evaluación.")
+    input("Pulse enter para iniciar la evaluación.")
 
     preguntas = [
         {
@@ -445,7 +477,7 @@ def primer_corte():
 def segundo_corte ():
     print("Bienvenido al segundo cohorte.")
     print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
-    input("Pulse cualquier tecla para iniciar la evaluación.")
+    input("Pulse enter para iniciar la evaluación.")
 
     preguntas = [
         {
@@ -471,7 +503,7 @@ def segundo_corte ():
 def terecer_corte ():
     print("Bienvenido al tercer cohorte.")
     print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
-    input("Pulse cualquier tecla para iniciar la evaluación.")
+    input("Pulse enter para iniciar la evaluación.")
 
     preguntas = [
         {
@@ -497,7 +529,7 @@ def terecer_corte ():
 def cuarto_corte ():
     print("Bienvenido al cuarto cohorte.")
     print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
-    input("Pulse cualquier tecla para iniciar la evaluación.")
+    input("Pulse enter para iniciar la evaluación.")
 
     preguntas = [
         {
