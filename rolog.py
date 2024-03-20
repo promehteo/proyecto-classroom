@@ -20,3 +20,5 @@ t = threading.Thread(target=temporizador, args=(100,))
 
 # Iniciar el hilo
 t.start()
+
+#termine_el_examen
