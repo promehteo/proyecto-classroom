@@ -18,8 +18,9 @@ from tkinter import messagebox
 import signal
 
 def modal_salir():
+    #crea la base del modal
     window = tk.Tk()
-    window.withdraw()  # Ocultar la ventana principal
+    window.withdraw()
 
     # Crear un cuadro de diálogo modal
     result = messagebox.askokcancel("Finalisar evalucion", "salir de la evaluacion perjudicara tu nota ¿estas seguro que deseas salir?")
@@ -62,18 +63,15 @@ def temporizador(segundos, label, root):
         label.config(text=tiempo_restante)
         time.sleep(1)
         segundos -= 1
-        if segundos == 290:
+        if segundos == 600:
             print("")
-            print("se te esta acabando el tiempo 1")
-        if segundos == 280:
+            print("Faltan 10 minutos para terminar la evaluacion")
+        elif segundos == 300:
             print("")
-            print("se te esta acabando el tiempo 2")
-        if segundos == 270:
+            print("Faltan 5 minutos para terminar la evaluacion")
+        elif segundos == 60:
             print("")
-            print("se te esta acabando el tiempo 3")
-        elif segundos == 10:
-            print("")
-            print("se te esta acabando el tiempo 4")
+            print("Solo falta 1 minuto para terminar la evaluacion")
     root.destroy()
 
 def iniciar_temporizador():
@@ -86,18 +84,10 @@ def iniciar_temporizador():
     label = tk.Label(root, text="", width=10)
     label.pack()
 
-    segundos = 300
+    segundos = 3600
     threading.Thread(target=temporizador, args=(segundos, label, root)).start()
 
     root.mainloop()
-
-threading.Thread(target=iniciar_temporizador).start()
-
-# Crear un hilo para ejecutar el temporizador
-t = threading.Thread(target=temporizador_asyncrono, args=(301,))
-
-# Iniciar el hilo
-t.start()
 
 #validar solo numeros
 def validar_solo_numeros(dato_input):
@@ -163,7 +153,7 @@ def inicio_seccion ():
                 #Con el "while" hacemos los bucles para que se le vuelva a preguntar al usuario por alguno de sus
                 #datos en caso de algún error
                 while validar_nombre_usuario != True:
-                    print("Por favor vuelva a ingresar su nombre, su nombre debe contar con entre 3 a 20 letras ")
+                    print("Su nombre debe contar con entre 3 a 20 caracteres letras ")
                     print("Por favor ingrese nuevamente su nombre (solo primer nombre):")
                     nombre_ususario = input("")
                     validar_nombre_usuario = validar_nombre(nombre_ususario)
@@ -193,7 +183,7 @@ esta seguro que este es su nombre? si/no ''')
                 validar_apellido_usuario = validar_nombre(apellido_usuario)
 
                 while validar_apellido_usuario != True:
-                    print("Por favor vuelva a ingresar su apellido, su apellido debe contar con entre 3 a 20 letras ")
+                    print("Su apellido debe contar con entre 3 a 20 caracteres solo letras ")
                     print("por favor ingrese nuevamene su apellido (solo primer apellido): ")
                     apellido_usuario = input("")
                     validar_apellido_usuario = validar_nombre(apellido_usuario)
@@ -223,7 +213,7 @@ esta seguro que este es su apellido? si/no ''')
                 validar_cedula_usuario = validar_cedula(cedula_ususario)
 
                 while validar_cedula_usuario != True:
-                    print("Por favor vuelva a ingresar su cédula, su cédula debe contar con 8 números ")
+                    print("Su cédula debe contar con 8 caracteres solo números ")
                     print("Por favor ingrese nuevamente su cedula: ")
                     cedula_ususario = input("")
                     validar_cedula_usuario = validar_cedula(cedula_ususario)
@@ -386,11 +376,12 @@ Para cohorte 4, pulse 4 ''')
                         else:
                             print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
                             validar_corte = "no"
-                    print("Por favor selecione una opción válida ")
+                else:
+                    print("Opcion no valida,intentelo nuevamente")
                 #Se le da a escoger al usuario qué cohorte va a presentar, se le hace que valide por si se equivoca
                 #y lo manda a corregir si no selecciona ninguno
             else:
-                print("solo se permiten numeros")
+                print("Solo se permiten numeros,intentelo nuevamente")
     except EOFError:
         return menu_principal()
             
@@ -414,52 +405,51 @@ def validar_respuesta(opciones):
             print("Por favor, ingrese un número válido.")
 
 def realizar_examen(preguntas):
-    respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
+    try:
+        respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
 
-    for pregunta in preguntas:
-        borrar_pantalla()
-        presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
-        
-        if pregunta["opciones"]:
-            # Pregunta de opción múltiple
-            while True:
+        for pregunta in preguntas:
+            borrar_pantalla()
+            presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
+            
+            if pregunta["opciones"]:
+                # Pregunta de opción múltiple
                 respuesta = validar_respuesta(pregunta["opciones"])
                 print(f"Su respuesta fue: {pregunta['opciones'][respuesta - 1]}")  # Mostrar la respuesta seleccionada
+            else:
+                # Pregunta práctica
+                print("Esta es una pregunta práctica. Por favor, responda en el espacio proporcionado.")
+                respuesta = input("Ingrese su respuesta: ")
+                print(f"Su respuesta fue: {respuesta}")
 
-                # Confirmación de la respuesta
+            while True:
                 confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
-                while confirmacion not in ["si", "no"]:
-                    print("Por favor, seleccione una opción válida.")
-                    confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
-
                 if confirmacion == "si":
-                    respuestas_examen.append(pregunta['opciones'][respuesta - 1])  # Agregar la respuesta a la lista de respuestas
-                    break  # Salir del bucle si el usuario confirma su respuesta
+                    respuestas_examen.append(respuesta)  # Agrega la respuesta a la lista de respuestas
+                    break
                 elif confirmacion == "no":
-                    print("Por favor, vuelva a ingresar su respuesta.")
-                    continue  # Repetir la pregunta si el usuario decide cambiar su respuesta
-        else:
-            #Pregunta práctica
-            print ("Pegue su respuesta y luego escriba '#termine_el_examen' para terminar, no escriba nada más ya que puede afectar su código,")
-            print ("en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas líneas en la terminal,")
-            respuesta = input("presione en la opción 'pegar', de lo contrario se modificará el codigo y su nota se verá afectada: ")
-            respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
-            
-            # Permitir al usuario ingresar múltiples líneas hasta que escriba 'fin'
-            while respuesta.strip().lower() != "#termine_el_examen":
-                respuesta = input()  # Pedir la siguiente línea de código
-                respuesta_completa += "\n" + respuesta  # Agregar la nueva línea a la respuesta completa
-            
-            respuestas_examen.append(respuesta_completa)  # Agregar la respuesta completa a la lista de respuestas
+                    print("Por favor, vuelva a seleccionar su respuesta.")
+                    break
+                else:
+                    print("Por favor seleccione una opción válida.")
 
-    print("La evaluación ha finalizado.")
-    return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
-
+        print("La evaluación ha finalizado.")
+        return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
+    except EOFError:
+        return realizar_examen(preguntas)    
 
 def primer_corte():
     print("Bienvenido al primer cohorte.")
-    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+    print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
     input("Pulse enter para iniciar la evaluación.")
+
+    threading.Thread(target=iniciar_temporizador).start()
+
+    # Crear un hilo para ejecutar el temporizador
+    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+
+    # Iniciar el hilo
+    t.start()
 
     preguntas = [
         {
@@ -485,8 +475,16 @@ def primer_corte():
 
 def segundo_corte ():
     print("Bienvenido al segundo cohorte.")
-    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+    print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
     input("Pulse enter para iniciar la evaluación.")
+
+    threading.Thread(target=iniciar_temporizador).start()
+
+    # Crear un hilo para ejecutar el temporizador
+    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+
+    # Iniciar el hilo
+    t.start()
 
     preguntas = [
         {
@@ -511,8 +509,16 @@ def segundo_corte ():
 
 def terecer_corte ():
     print("Bienvenido al tercer cohorte.")
-    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+    print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
     input("Pulse enter para iniciar la evaluación.")
+
+    threading.Thread(target=iniciar_temporizador).start()
+
+    # Crear un hilo para ejecutar el temporizador
+    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+
+    # Iniciar el hilo
+    t.start()
 
     preguntas = [
         {
@@ -537,8 +543,16 @@ def terecer_corte ():
 
 def cuarto_corte ():
     print("Bienvenido al cuarto cohorte.")
-    print("Tiene X tiempo para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+    print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
     input("Pulse enter para iniciar la evaluación.")
+
+    threading.Thread(target=iniciar_temporizador).start()
+
+    # Crear un hilo para ejecutar el temporizador
+    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+
+    # Iniciar el hilo
+    t.start()
 
     preguntas = [
         {
