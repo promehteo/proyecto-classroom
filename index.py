@@ -404,7 +404,7 @@ def presentar_pregunta(enunciado, opciones):
 
 def validar_respuesta(opciones):
     while True:
-        respuesta = input("Seleccione su respuesta (ingrese el número correspondiente o su respuesta): ")
+        respuesta = input("Seleccione su respuesta (ingrese el número correspondiente): ")
         try:
             respuesta_numero = int(respuesta)
             if 1 <= respuesta_numero <= len(opciones):
@@ -416,38 +416,46 @@ def validar_respuesta(opciones):
             print("Por favor, ingrese un número válido.")
 
 def realizar_examen(preguntas):
-    try:
-        respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
+    respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
 
-        for pregunta in preguntas:
-            borrar_pantalla()
-            presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
-            
-            if pregunta["opciones"]:
-                # Pregunta de opción múltiple
+    for pregunta in preguntas:
+        borrar_pantalla()
+        presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
+        
+        if pregunta["opciones"]:
+            # Pregunta de opción múltiple
+            while True:
                 respuesta = validar_respuesta(pregunta["opciones"])
                 print(f"Su respuesta fue: {pregunta['opciones'][respuesta - 1]}")  # Mostrar la respuesta seleccionada
-            else:
-                # Pregunta práctica
-                print("Esta es una pregunta práctica. Por favor, responda en el espacio proporcionado.")
-                respuesta = input("Ingrese su respuesta: ")
-                print(f"Su respuesta fue: {respuesta}")
 
-            while True:
+                # Confirmación de la respuesta
                 confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
-                if confirmacion == "si":
-                    respuestas_examen.append(respuesta)  # Agrega la respuesta a la lista de respuestas
-                    break
-                elif confirmacion == "no":
-                    print("Por favor, vuelva a seleccionar su respuesta.")
-                    break
-                else:
-                    print("Por favor seleccione una opción válida.")
+                while confirmacion not in ["si", "no"]:
+                    print("Por favor, seleccione una opción válida.")
+                    confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
 
-        print("La evaluación ha finalizado.")
-        return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
-    except EOFError:
-        return realizar_examen(preguntas)    
+                if confirmacion == "si":
+                    respuestas_examen.append(pregunta['opciones'][respuesta - 1])  # Agregar la respuesta a la lista de respuestas
+                    break  # Salir del bucle si el usuario confirma su respuesta
+                elif confirmacion == "no":
+                    print("Por favor, vuelva a ingresar su respuesta.")
+                    continue  # Repetir la pregunta si el usuario decide cambiar su respuesta
+        else:
+            #Pregunta práctica
+            print ("Pegue su respuesta y luego escriba '#termine_el_examen' para terminar, no escriba nada más ya que puede afectar su código,")
+            print ("en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas líneas en la terminal,")
+            respuesta = input("presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
+            respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
+            
+            # Permitir al usuario ingresar múltiples líneas hasta que escriba 'fin'
+            while respuesta.strip().lower() != "#termine_el_examen":
+                respuesta = input()  # Pedir la siguiente línea de código
+                respuesta_completa += "\n" + respuesta  # Agregar la nueva línea a la respuesta completa
+            
+            respuestas_examen.append(respuesta_completa)  # Agregar la respuesta completa a la lista de respuestas
+
+    print("La evaluación ha finalizado.")
+    return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
 
 def primer_corte():
     print("Bienvenido al primer cohorte.")
