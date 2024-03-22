@@ -17,6 +17,9 @@ from tkinter import messagebox
 #Libreria empleada para detectar que teclas se precionan
 import signal
 
+corriendo = True
+#mensaje_abierto = True
+
 def modal_salir():
     #crea la base del modal
     window = tk.Tk()
@@ -25,18 +28,27 @@ def modal_salir():
     # Crear un cuadro de diálogo modal
     result = messagebox.askokcancel("Finalisar evalucion", "salir de la evaluacion perjudicara tu nota ¿estas seguro que deseas salir?")
     if result:
+        global corriendo
+        corriendo = False
         salir_programa()
+        #cerrar_mensaje_bienvenida()
 
     window.mainloop()
 
 def mostrar_bienvenida():
-
-    root = tk.Tk()
-    root.protocol("WM_DELETE_WINDOW", lambda: None)
-    boton_bienvenida = tk.Button(root, text="Proyecto classroom",)
+    global mensaje_bienvenida
+    mensaje_bienvenida = tk.Tk()
+    mensaje_bienvenida.geometry("-50+20")
+    mensaje_bienvenida.protocol("WM_DELETE_WINDOW", lambda: None)
+    boton_bienvenida = tk.Button(mensaje_bienvenida, text="Proyecto classroom",)
     boton_bienvenida.pack()
+    mensaje_bienvenida.mainloop()
 
-    root.mainloop()
+#def cerrar_mensaje_bienvenida():
+    #global mensaje_abierto
+    #mensaje_abierto = False
+    #mensaje_bienvenida.destroy()
+    #salir_programa()
 
 threading.Thread(target=mostrar_bienvenida).start()
 
@@ -61,13 +73,15 @@ def salir_programa():
     exit()
 
 def temporizador_asyncrono(segundos):
-    while segundos: 
+    global corriendo
+    while segundos and corriendo: 
         time.sleep(1)
         segundos -= 1
     salir_programa()
 
 def temporizador(segundos, label, root):
-    while segundos: 
+    global corriendo
+    while segundos and corriendo: 
         mins = segundos // 60
         secs = segundos % 60
         tiempo_restante = f'{mins:02d}:{secs:02d}'
@@ -75,18 +89,18 @@ def temporizador(segundos, label, root):
         time.sleep(1)
         segundos -= 1
         if segundos == 600:
-            print("")
             print("Faltan 10 minutos para terminar la evaluacion")
         elif segundos == 300:
-            print("")
             print("Faltan 5 minutos para terminar la evaluacion")
         elif segundos == 60:
-            print("")
             print("Solo falta 1 minuto para terminar la evaluacion")
     root.destroy()
 
 def iniciar_temporizador():
+    global corriendo
+    corriendo = True
     root = tk.Tk()
+    root.geometry("+50+20")
     root.title("Temporizador")
 
     # Deshabilitar el botón de cierre para que el alumno no cierre el cronometro por accidente
@@ -99,6 +113,14 @@ def iniciar_temporizador():
     threading.Thread(target=temporizador, args=(segundos, label, root)).start()
 
     root.mainloop()
+
+# Crear un hilo para ejecutar el temporizador
+t = threading.Thread(target=iniciar_temporizador)
+t.start()
+
+# Para detener el temporizador, llama a la función detener_temporizador
+# detener_temporizador()
+
 
 #validar solo numeros
 def validar_solo_numeros(dato_input):
