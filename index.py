@@ -339,80 +339,90 @@ Para cohorte 3, pulse 3
 Para cohorte 4, pulse 4 ''')
 
         while validar_corte == "no":
-            print("Selecione el cote que va a precentar")
-            corte_selecionado = input("")
-            validar_numeros_corte = validar_solo_numeros(corte_selecionado)
+            print("Seleccione el cohorte que va a presentar")
+            corte_seleccionado = input("")
+            validar_numeros_corte = validar_solo_numeros(corte_seleccionado)
 
             if validar_numeros_corte:
-                corte_procesado = int(corte_selecionado)
+                corte_procesado = int(corte_seleccionado)
                 if corte_procesado == 1:
-                    while True:
-                        print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
-                        validar_corte_info = input("").lower()
-                        validar_corte = unidecode(validar_corte_info)
-                        if validar_corte == "si":
-                            borrar_pantalla()
-                            return primer_corte()  # Devolver las respuestas del examen
+                    contraseña = input("Ingrese la contraseña para el primer cohorte: ")
+                    if contraseña == "helado123":
+                        while True:
+                            print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
+                            validar_corte_info = input("").lower()
+                            validar_corte = unidecode(validar_corte_info)
+                            if validar_corte == "si":
+                                borrar_pantalla()
+                                return primer_corte()  # Devolver las respuestas del examen
 
-                        elif validar_corte == "no":
-                            break
+                            elif validar_corte == "no":
+                                break
 
-                        else:
-                            print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                            validar_corte = "no"
-
-                        
+                            else:
+                                print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
+                                validar_corte = "no"
+                    else:
+                        print("Contraseña incorrecta para el primer cohorte. Inténtelo de nuevo.")
                 elif corte_procesado == 2:
-                    while True:
-                        #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
-                        validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
-                        validar_corte = unidecode(validar_corte_info)
-                        if validar_corte == "si":
-                            borrar_pantalla()
-                            return segundo_corte()  # Devolver las respuestas del examen
+                    contraseña = input("Ingrese la contraseña para el segundo cohorte: ")
+                    if contraseña == "Python321":
+                        while True:
+                            print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
+                            validar_corte_info = input("").lower()
+                            validar_corte = unidecode(validar_corte_info)
+                            if validar_corte == "si":
+                                borrar_pantalla()
+                                return segundo_corte()  # Devolver las respuestas del examen
 
-                        elif validar_corte == "no":
-                            break
+                            elif validar_corte == "no":
+                                break
 
-                        else:
-                            print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                            validar_corte = "no"
-                    
+                            else:
+                                print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
+                                validar_corte = "no"
+                    else:
+                        print("Contraseña incorrecta para el segundo cohorte. Inténtelo de nuevo.")
                 elif corte_procesado == 3:
-                    while True:
-                        #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
-                        validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
-                        validar_corte = unidecode(validar_corte_info)
-                        if validar_corte == "si":
-                            borrar_pantalla()
-                            return terecer_corte()  # Devolver las respuestas del examen
+                    contraseña = input("Ingrese la contraseña para el tercer cohorte: ")
+                    if contraseña == "tortadechocolate":
+                        while True:
+                            print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
+                            validar_corte_info = input("").lower()
+                            validar_corte = unidecode(validar_corte_info)
+                            if validar_corte == "si":
+                                borrar_pantalla()
+                                return terecer_corte()  # Devolver las respuestas del examen
 
-                        elif validar_corte == "no":
-                            break
+                            elif validar_corte == "no":
+                                break
 
-                        else:
-                            print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                            validar_corte = "no"
-                    
+                            else:
+                                print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
+                                validar_corte = "no"
+                    else:
+                        print("Contraseña incorrecta para el tercer cohorte. Inténtelo de nuevo.")
                 elif corte_procesado == 4:
-                    while True:
-                        #Con el ".lower" se asegura que sin importar como escriban el "si/no" sea tomado como bueno igual
-                        validar_corte_info = input("¿Está seguro que este es el cohorte que va a presentar? si/no ").lower()
-                        validar_corte = unidecode(validar_corte_info)
-                        if validar_corte == "si":
-                            borrar_pantalla()
-                            return cuarto_corte()  # Devolver las respuestas del examen
+                    contraseña = input("Ingrese la contraseña para el cuarto cohorte: ")
+                    if contraseña == "casa54321":
+                        while True:
+                            print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
+                            validar_corte_info = input("").lower()
+                            validar_corte = unidecode(validar_corte_info)
+                            if validar_corte == "si":
+                                borrar_pantalla()
+                                return cuarto_corte()  # Devolver las respuestas del examen
 
-                        elif validar_corte == "no":
-                            break
+                            elif validar_corte == "no":
+                                break
 
-                        else:
-                            print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                            validar_corte = "no"
+                            else:
+                                print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
+                                validar_corte = "no"
+                    else:
+                        print("Contraseña incorrecta para el cuarto cohorte. Inténtelo de nuevo.")
                 else:
                     print("Opcion no valida,intentelo nuevamente")
-                #Se le da a escoger al usuario qué cohorte va a presentar, se le hace que valide por si se equivoca
-                #y lo manda a corregir si no selecciona ninguno
             else:
                 print("Solo se permiten numeros,intentelo nuevamente")
     except EOFError:
@@ -464,9 +474,9 @@ def realizar_examen(preguntas):
                     continue  # Repetir la pregunta si el usuario decide cambiar su respuesta
         else:
             #Pregunta práctica
-            print ("Pegue su respuesta y luego escriba '#termine_el_examen' para terminar, no escriba nada más ya que puede afectar su código,")
-            print ("en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas líneas en la terminal,")
-            respuesta = input("presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
+            print ("Pegue su respuesta y luego escriba '#termine_el_examen' y pulse enter para terminar, no escriba nada más ya que puede")
+            print ("afectar su código, en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas líneas en")
+            respuesta = input("la terminal, presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
             respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
             
             # Permitir al usuario ingresar múltiples líneas hasta que escriba 'fin'
