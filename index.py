@@ -17,6 +17,14 @@ from tkinter import messagebox
 #Libreria empleada para detectar que teclas se precionan
 import signal
 
+#Librerias del correo
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+#
+
 corriendo = True
 #mensaje_abierto = True
 
@@ -307,25 +315,35 @@ def encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_
     #Aún hay cosas que cambiar en esta función, debido a que para acabarla necesitamos terminar otras funciones
     #del proyecto
 
-def enviarCorreo ():
-    
-    #Mensaje que se enviará
-    mensaje = 'colocar aqui el mensaje'
+def send_email(subject, message, from_addr, to_addr, password, file_path):
+    msg = MIMEMultipart()
+    msg['From'] = from_addr
+    msg['To'] = to_addr
+    msg['Subject'] = subject
+
+    msg.attach(MIMEText(message, 'plain'))
+
+    # Adjuntar archivo
+    attachment = open(file_path, 'rb')
+
+    part = MIMEBase('application', 'octet-stream')
+    part.set_payload((attachment).read())
+    encoders.encode_base64(part)
+    part.add_header('Content-Disposition', 'attachment; filename= ' + file_path)
+
+    msg.attach(part)
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
+    server.login(from_addr, password)
+    text = msg.as_string()
+    server.sendmail(from_addr, to_addr, text)
+    server.quit()
 
-    #Datos para que la librería pueda acceder a el correo del remitente
-    server.login('correo','contraseña')
+#esta es la llamada a la funcion que manda el correo
+#                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
+#send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', 'alejandrofenomeno72@gmail.com', 'msht ekje bofg aplb', 'relog2.py')
 
-    #Remitente, destinatario, mensaje
-    server.send_message('correo del remitente','correo del destinatario',mensaje)
-
-    #Cierra sesión
-    server.quit()  
-    #Mismo caso aquí, aún faltan algunas cosas por cambiar ya que debemos terminar con otras cosas primero, pero como
-    #resumen rápido, esta función hará que cada que un alumno termine un examen, sus respuestas junto con sus datos
-    #personales lleguen a su correo (al de usted)
 
 #Aquí empezamos con el menú de los exámenes
 def menu_principal():
