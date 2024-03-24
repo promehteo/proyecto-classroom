@@ -122,12 +122,6 @@ def iniciar_temporizador():
 
     root.mainloop()
 
-# Crear un hilo para ejecutar el temporizador
-t = threading.Thread(target=iniciar_temporizador)
-x = threading.Thread(target=temporizador_asyncrono, args=(31,))
-x.start()
-t.start()
-
 # Para detener el temporizador, llama a la función detener_temporizador
 # detener_temporizador()
 
@@ -518,7 +512,7 @@ def primer_corte():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(31,))
 
     # Iniciar el hilo
     t.start()
@@ -553,7 +547,7 @@ def segundo_corte ():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(31,))
 
     # Iniciar el hilo
     t.start()
@@ -621,7 +615,7 @@ def cuarto_corte ():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(31,))
 
     # Iniciar el hilo
     t.start()
