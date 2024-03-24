@@ -117,13 +117,15 @@ def iniciar_temporizador():
     label = tk.Label(root, text="", width=10)
     label.pack()
 
-    segundos = 3600
+    segundos = 30
     threading.Thread(target=temporizador, args=(segundos, label, root)).start()
 
     root.mainloop()
 
 # Crear un hilo para ejecutar el temporizador
 t = threading.Thread(target=iniciar_temporizador)
+x = threading.Thread(target=temporizador_asyncrono, args=(31,))
+x.start()
 t.start()
 
 # Para detener el temporizador, llama a la función detener_temporizador
@@ -585,7 +587,7 @@ def terecer_corte ():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(31,))
 
     # Iniciar el hilo
     t.start()
