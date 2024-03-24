@@ -308,12 +308,13 @@ def encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_
         contraseña_profesor = b"profemirtha123"
         zf.setpassword(contraseña_profesor)
         
-        # Escribe el archivo de texto en el archivo ZIP
-        zf.write(nombre_archivo_txt)
+        # Escribe solo las preguntas respondidas en el archivo ZIP
+        for i, respuesta in enumerate(respuestas_examen, start=1):
+            pregunta = preguntas[i-1]
+            zf.writestr(f"Pregunta_{i}.txt", f"Pregunta: {pregunta['enunciado']}\nRespuesta: {respuesta}")
 
-    os.remove(nombre_archivo_txt)  # Borra el txt para que sea inaccesible para el alumno
-    #Aún hay cosas que cambiar en esta función, debido a que para acabarla necesitamos terminar otras funciones
-    #del proyecto
+    # Elimina el archivo de texto para que sea inaccesible para el alumno
+    os.remove(nombre_archivo_txt)
 
 def send_email(subject, message, from_addr, to_addr, password, file_path):
     msg = MIMEMultipart()
@@ -497,7 +498,7 @@ def realizar_examen(preguntas):
             respuesta = input("la terminal, presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
             respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
             
-            # Permitir al usuario ingresar múltiples líneas hasta que escriba 'fin'
+            # Permitir al usuario ingresar múltiples líneas hasta que escriba '#termine_el_examen'
             while respuesta.strip().lower() != "#termine_el_examen":
                 respuesta = input()  # Pedir la siguiente línea de código
                 respuesta_completa += "\n" + respuesta  # Agregar la nueva línea a la respuesta completa
