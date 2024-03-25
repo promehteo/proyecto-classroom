@@ -25,6 +25,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 #
 
+examen_iniciado = False
 corriendo = True
 #mensaje_abierto = True
 
@@ -76,6 +77,11 @@ def borrar_pantalla():
         os.system('cls')
 
 def salir_programa():
+    if examen_iniciado:
+        print("funciona")
+        nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
+        encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
+        print("funciona")
     borrar_pantalla()
     print("Terminando el programa...")
     exit()
@@ -179,6 +185,7 @@ def inicio_seccion ():
     def inicio_seccion_nombre():
         try:
             borrar_pantalla()
+            print(respuestas_examen)
             print('''Bienvenido al PROYECTO CLASSROOM, para iniciar primero inserte sus datos''')
 
             #Esta parte del codigo es la encargada de pedirle los datos personales al usuario y hacerlo CERTIFICAR
@@ -463,8 +470,9 @@ def validar_respuesta(opciones):
             print("Por favor, ingrese un número válido.")
 
 def realizar_examen(preguntas):
+    global examen_iniciado
     respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
-
+    examen_iniciado = True
     for pregunta in preguntas:
         borrar_pantalla()
         presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
