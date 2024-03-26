@@ -57,4 +57,6 @@ def encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_
     # Elimina el archivo de texto para que sea inaccesible para el alumno
     os.remove(nombre_archivo_txt)
 
- encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
+respuestas_examen =[]
+
+encriptacion("nombre_ususario", "apellido_usuario", "cedula_ususario", respuestas_examen)

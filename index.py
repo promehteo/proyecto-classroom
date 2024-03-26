@@ -474,48 +474,60 @@ def realizar_examen(preguntas):
     respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
     examen_iniciado = True
     for pregunta in preguntas:
-        borrar_pantalla()
-        presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
-        
-        if pregunta["opciones"]:
-            # Pregunta de opción múltiple
-            while True:
-                respuesta = validar_respuesta(pregunta["opciones"])
-                print(f"Su respuesta fue: {pregunta['opciones'][respuesta - 1]}")  # Mostrar la respuesta seleccionada
 
-                # Confirmación de la respuesta
-                confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
-                while confirmacion not in ["si", "no"]:
-                    print("Por favor, seleccione una opción válida.")
-                    confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
+        def en_evaluacion():
+            try:
+                borrar_pantalla()
+                presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
+                
+                if pregunta["opciones"]:
+                    # Pregunta de opción múltiple
+                    while True:
+                        respuesta = validar_respuesta(pregunta["opciones"])
+                        print(f"Su respuesta fue: {pregunta['opciones'][respuesta - 1]}")  # Mostrar la respuesta seleccionada
 
-                if confirmacion == "si":
-                    respuestas_examen.append(pregunta['opciones'][respuesta - 1])  # Agregar la respuesta a la lista de respuestas
-                    break  # Salir del bucle si el usuario confirma su respuesta
-                elif confirmacion == "no":
-                    print("Por favor, vuelva a ingresar su respuesta.")
-                    continue  # Repetir la pregunta si el usuario decide cambiar su respuesta
-        else:
-            #Pregunta práctica
-            print ("Pegue su respuesta y luego escriba '#termine_el_examen' y pulse enter para terminar, no escriba nada más ya que puede")
-            print ("afectar su código, en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas líneas en")
-            respuesta = input("la terminal, presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
-            respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
-            
-            # Permitir al usuario ingresar múltiples líneas hasta que escriba '#termine_el_examen'
-            while respuesta.strip().lower() != "#termine_el_examen":
-                respuesta = input()  # Pedir la siguiente línea de código
-                respuesta_completa += "\n" + respuesta  # Agregar la nueva línea a la respuesta completa
-            
-            respuestas_examen.append(respuesta_completa)  # Agregar la respuesta completa a la lista de respuestas
+                        # Confirmación de la respuesta
+                        confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
+                        while confirmacion not in ["si", "no"]:
+                            print("Por favor, seleccione una opción válida.")
+                            confirmacion = input("¿Está seguro de su respuesta? (si/no): ").lower()
+
+                        if confirmacion == "si":
+                            respuestas_examen.append(pregunta['opciones'][respuesta - 1])  # Agregar la respuesta a la lista de respuestas
+                            break  # Salir del bucle si el usuario confirma su respuesta
+                        elif confirmacion == "no":
+                            print("Por favor, vuelva a ingresar su respuesta.")
+                            continue  # Repetir la pregunta si el usuario decide cambiar su respuesta
+                else:
+                    #Pregunta práctica
+                    print ("Pegue su respuesta y luego escriba '#termine_el_examen' y pulse enter para terminar, no escriba nada más ya que puede")
+                    print ("afectar su código, en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas líneas en")
+                    respuesta = input("la terminal, presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
+                    respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
+                    
+                    # Permitir al usuario ingresar múltiples líneas hasta que escriba '#termine_el_examen'
+                    while respuesta.strip().lower() != "#termine_el_examen":
+                        respuesta = input()  # Pedir la siguiente línea de código
+                        respuesta_completa += "\n" + respuesta  # Agregar la nueva línea a la respuesta completa
+                    
+                    respuestas_examen.append(respuesta_completa)  # Agregar la respuesta completa a la lista de respuestas
+            except EOFError:
+                return en_evaluacion()
+        en_evaluacion()
 
     print("La evaluación ha finalizado.")
     return respuestas_examen  # Devuelve todas las respuestas al finalizar el examen
 
 def primer_corte():
-    print("Bienvenido al primer cohorte.")
-    print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
-    input("Pulse enter para iniciar la evaluación.")
+    def texto_antes_evalucion():
+        try:
+            borrar_pantalla()
+            print("Bienvenido al primer cohorte.")
+            print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+            input("Pulse enter para iniciar la evaluación.")
+        except EOFError:
+            return texto_antes_evalucion()
+    texto_antes_evalucion()
 
     threading.Thread(target=iniciar_temporizador).start()
 
