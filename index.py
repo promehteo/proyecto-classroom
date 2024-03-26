@@ -77,11 +77,11 @@ def borrar_pantalla():
         os.system('cls')
 
 def salir_programa():
-    if examen_iniciado:
-        print("funciona")
-        nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
-        encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
-        print("funciona")
+    #if examen_iniciado:
+        #print("funciona")
+        #nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
+        #encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
+        #print("funciona")
     borrar_pantalla()
     print("Terminando el programa...")
     exit()
