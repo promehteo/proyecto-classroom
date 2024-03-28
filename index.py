@@ -27,6 +27,7 @@ from email import encoders
 
 examen_iniciado = False
 corriendo = True
+usuario = []
 #mensaje_abierto = True
 
 def modal_salir():
@@ -77,11 +78,29 @@ def borrar_pantalla():
         os.system('cls')
 
 def salir_programa():
-    #if examen_iniciado:
-        #print("funciona")
-        #nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
-        #encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
-        #print("funciona")
+    if examen_iniciado:
+        print("funciona1111111")
+        nombre_ususario = 'nada'
+        print(nombre_ususario)
+        apellido_usuario = 'nada'
+        print(apellido_usuario)
+        cedula_ususario = 'nada'
+        print(cedula_ususario)
+        respuestas_examen = 'nada'
+        print(respuestas_examen)
+        
+
+        nombre_ususario = usuario[0]
+        apellido_usuario = usuario[1]
+        cedula_ususario = usuario[2]
+        
+        print("funciona2222222")
+        print(nombre_ususario)
+        print(apellido_usuario)
+        print(cedula_ususario)
+        print(respuestas_examen)
+        encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
+        print("funciona3333333")
     borrar_pantalla()
     print("Terminando el programa...")
     exit()
@@ -666,8 +685,12 @@ def cuarto_corte ():
 respuestas_examen = []
 def main():
 
+    global usuario
+
     #obtiene los datos personales del usuario
     nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
+
+    usuario = [nombre_ususario, apellido_usuario , cedula_ususario]
 
     #lleva al usuario a seleccionar el cohorte a presentar
     respuestas_examen = menu_principal()

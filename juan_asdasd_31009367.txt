@@ -1,0 +1,4 @@
+Pregunta 1: n
+Pregunta 2: a
+Pregunta 3: d
+Pregunta 4: a
