@@ -23,11 +23,12 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-#
 
+preguntas = ["Pregunta 1", "Pregunta 2", "Pregunta 3", "Pregunta 4", "Pregunta 5", "Pregunta 6", "Pregunta 7", "Pregunta 8", "Pregunta 9", "Pregunta 10"]
 examen_iniciado = False
 corriendo = True
 usuario = []
+respuestas_examen = []
 #mensaje_abierto = True
 
 def modal_salir():
@@ -36,7 +37,7 @@ def modal_salir():
     window.withdraw()
 
     # Crear un cuadro de diálogo modal
-    result = messagebox.askokcancel("Finalisar evalucion", "salir de la evaluacion perjudicara tu nota ¿estas seguro que deseas salir?")
+    result = messagebox.askokcancel("Finalizar evalucion", "salir de la evaluación perjudicará tu nota ¿Estás seguro que deseas salir?")
     if result:
         global corriendo
         corriendo = False
@@ -78,29 +79,12 @@ def borrar_pantalla():
         os.system('cls')
 
 def salir_programa():
+    global respuestas_examen
     if examen_iniciado:
-        print("funciona1111111")
-        nombre_ususario = 'nada'
-        print(nombre_ususario)
-        apellido_usuario = 'nada'
-        print(apellido_usuario)
-        cedula_ususario = 'nada'
-        print(cedula_ususario)
-        respuestas_examen = 'nada'
-        print(respuestas_examen)
-        
-
         nombre_ususario = usuario[0]
         apellido_usuario = usuario[1]
         cedula_ususario = usuario[2]
-        
-        print("funciona2222222")
-        print(nombre_ususario)
-        print(apellido_usuario)
-        print(cedula_ususario)
-        print(respuestas_examen)
         encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
-        print("funciona3333333")
     borrar_pantalla()
     print("Terminando el programa...")
     exit()
@@ -197,14 +181,11 @@ def validar_cedula(dato_input):
             dato_valido_input = True
             return dato_valido_input
 
-#############!!!!!!!!!!!!!!!!!!!
-
 def inicio_seccion ():
 
     def inicio_seccion_nombre():
         try:
             borrar_pantalla()
-            print(respuestas_examen)
             print('''Bienvenido al PROYECTO CLASSROOM, para iniciar primero inserte sus datos''')
 
             #Esta parte del codigo es la encargada de pedirle los datos personales al usuario y hacerlo CERTIFICAR
@@ -213,8 +194,6 @@ def inicio_seccion ():
                 print("Por favor ingrese su nombre (solo primer nombre): ")
                 nombre_ususario = input('')
                 validar_nombre_usuario = validar_nombre(nombre_ususario)
-                #Con el "while" hacemos los bucles para que se le vuelva a preguntar al usuario por alguno de sus
-                #datos en caso de algún error
                 while validar_nombre_usuario != True:
                     print("Su nombre debe contar con entre 3 a 20 caracteres letras ")
                     print("Por favor ingrese nuevamente su nombre (solo primer nombre):")
@@ -307,35 +286,24 @@ esta seguro que este es su cedula? si/no ''')
     #en la siguiente función
 
 
-def encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen, preguntas=None):
-    # Se crea el nombre del archivo .txt
-    nombre_archivo_txt = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.txt"
-    # Se crea el nombre del archivo .zip
-    nombre_archivo_zip = f"{nombre_ususario}_{apellido_usuario}_{cedula_ususario}.zip"
+def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas_examen):
+    # Crear el nombre del archivo ZIP
+    nombre_archivo_zip = "{}_{}_{}.zip".format(nombre_ususario, apellido_ususario, cedula_ususario)
 
-    # Guarda las respuestas en el archivo de texto
-    with open(nombre_archivo_txt, 'w') as archivo_txt:
-        for i, respuesta in enumerate(respuestas_examen, start=1):
-            archivo_txt.write(f"Pregunta {i}: {respuesta}\n")
+    # Crear el nombre del archivo de texto
+    nombre_archivo_txt = nombre_archivo_zip[:-4] + ".txt"
 
-        # Verificar si hay una respuesta para la pregunta práctica
-        if preguntas is not None:
-            if len(respuestas_examen) > len(preguntas) - 1:
-                archivo_txt.write("\nRespuesta a la pregunta práctica:\n")
-                archivo_txt.write(respuestas_examen[-1])  # Agregar la respuesta práctica al archivo de texto
+    # Escribir las respuestas en el archivo de texto
+    with open(nombre_archivo_txt, "w") as archivo_txt:
+        for pregunta, respuesta in zip(preguntas, respuestas_examen):
+            archivo_txt.write("{}: {}\n".format(pregunta, respuesta))
 
-    # Guarda el archivo de texto en un archivo ZIP con contraseña
-    with pyzipper.AESZipFile(nombre_archivo_zip, 'w', compression=pyzipper.ZIP_LZMA, encryption=pyzipper.WZ_AES) as zf:
-        # Contraseña del archivo ZIP (se puede cambiar)
-        contraseña_profesor = b"profemirtha123"
-        zf.setpassword(contraseña_profesor)
-        
-        # Escribe solo las preguntas respondidas en el archivo ZIP
-        for i, respuesta in enumerate(respuestas_examen, start=1):
-            pregunta = preguntas[i-1]
-            zf.writestr(f"Pregunta_{i}.txt", f"Pregunta: {pregunta['enunciado']}\nRespuesta: {respuesta}")
+    # Crear un archivo ZIP encriptado con contraseña
+    with pyzipper.AESZipFile(nombre_archivo_zip, "w", compression=pyzipper.ZIP_DEFLATED, encryption=pyzipper.WZ_AES) as archivo_zip:
+        archivo_zip.setpassword(b"profemirtha123")  # Establecer la contraseña
+        archivo_zip.write(nombre_archivo_txt)
 
-    # Elimina el archivo de texto para que sea inaccesible para el alumno
+    # Eliminar el archivo de texto
     os.remove(nombre_archivo_txt)
 
 def send_email(subject, message, from_addr, to_addr, password, file_path):
@@ -490,6 +458,7 @@ def validar_respuesta(opciones):
 
 def realizar_examen(preguntas):
     global examen_iniciado
+    global respuestas_examen
     respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
     examen_iniciado = True
     for pregunta in preguntas:
@@ -679,12 +648,10 @@ def cuarto_corte ():
         }
     ]
     return realizar_examen(preguntas)
-#En esta función (menu_principal ()) estarán definidos los 4 cohortes/examenes que podrán presentar los alumnos,
-#esta parte aún no está terminada así que es probable que tenga errores, así como también puede estar
-#sujeta a cambios, actualmente es en esta función en la que estamos trabajando
-respuestas_examen = []
+
 def main():
 
+    #Hace global la variable en donde se almacenan los datos del usuario para que cualquier funcion pueda acceder a ellos
     global usuario
 
     #obtiene los datos personales del usuario
