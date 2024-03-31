@@ -28,6 +28,7 @@ preguntas = ["Pregunta 1", "Pregunta 2", "Pregunta 3", "Pregunta 4", "Pregunta 5
 examen_iniciado = False
 corriendo = True
 usuario = []
+seguro_crito = True
 respuestas_examen = []
 #mensaje_abierto = True
 
@@ -80,12 +81,20 @@ def borrar_pantalla():
 
 def salir_programa():
     global respuestas_examen
-    if examen_iniciado:
+    global seguro_crito
+    global corriendo
+    
+    borrar_pantalla()
+    if examen_iniciado and seguro_crito:
         nombre_ususario = usuario[0]
         apellido_usuario = usuario[1]
         cedula_ususario = usuario[2]
         encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
-    borrar_pantalla()
+        seguro_crito = False
+        corriendo = False
+        borrar_pantalla()
+        print("Evaluacion finalisada")
+
     print("Terminando el programa...")
     exit()
 
@@ -324,12 +333,16 @@ def send_email(subject, message, from_addr, to_addr, password, file_path):
 
     msg.attach(part)
 
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(from_addr, password)
-    text = msg.as_string()
-    server.sendmail(from_addr, to_addr, text)
-    server.quit()
+    try:
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(from_addr, password)
+        text = msg.as_string()
+        server.sendmail(from_addr, to_addr, text)
+        server.quit()
+        print("Correo con su evaluacion enviado exitosamente")
+    except:
+        print("No se ha podido enviar su evaluación, por favor hágalo usted mismo")
 
 #esta es la llamada a la funcion que manda el correo
 #                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
@@ -663,7 +676,7 @@ def main():
     respuestas_examen = menu_principal()
 
     #Comprime/encripta los datos
-    encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
+    salir_programa()
 
 if __name__ == "__main__":
      main()
