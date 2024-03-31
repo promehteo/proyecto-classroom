@@ -93,7 +93,7 @@ def salir_programa():
         seguro_crito = False
         corriendo = False
         borrar_pantalla()
-        print("Evaluacion finalisada")
+        print("Evaluación finalizada")
 
     print("Terminando el programa...")
     exit()
@@ -115,11 +115,11 @@ def temporizador(segundos, label, root):
         time.sleep(1)
         segundos -= 1
         if segundos == 600:
-            print("Faltan 10 minutos para terminar la evaluacion")
+            print("Faltan 10 minutos para terminar la evaluación")
         elif segundos == 300:
-            print("Faltan 5 minutos para terminar la evaluacion")
+            print("Faltan 5 minutos para terminar la evaluación")
         elif segundos == 60:
-            print("Solo falta 1 minuto para terminar la evaluacion")
+            print("Solo falta 1 minuto para terminar la evaluación")
     root.destroy()
 
 def iniciar_temporizador():
@@ -501,9 +501,9 @@ def realizar_examen(preguntas):
                             continue  # Repetir la pregunta si el usuario decide cambiar su respuesta
                 else:
                     #Pregunta práctica
-                    print ("Pegue su respuesta y luego escriba '#termine_el_examen' y pulse enter para terminar, no escriba nada más ya que puede")
-                    print ("afectar su código, en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas líneas en")
-                    respuesta = input("la terminal, presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
+                    print ("Pegue su respuesta, presione 'enter', luego escriba '#termine_el_examen' y vuelva a pulsar 'enter' para terminar, no escriba")
+                    print ("nada más ya que puede afectar su código, en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas")
+                    respuesta = input("líneas en la terminal, presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
                     respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
                     
                     # Permitir al usuario ingresar múltiples líneas hasta que escriba '#termine_el_examen'
