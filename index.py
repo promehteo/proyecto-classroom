@@ -115,11 +115,11 @@ def temporizador(segundos, label, root):
         time.sleep(1)
         segundos -= 1
         if segundos == 600:
-            print("Faltan 10 minutos para terminar la evaluación")
-        elif segundos == 300:
-            print("Faltan 5 minutos para terminar la evaluación")
-        elif segundos == 60:
-            print("Solo falta 1 minuto para terminar la evaluación")
+            tk.messagebox.showinfo("Alerta de tiempo", "Te faltan 10 minutos")
+        elif segundos == 300:  
+            tk.messagebox.showinfo("Alerta de tiempo", "Te faltan 5 minutos")
+        elif segundos == 60: 
+            tk.messagebox.showinfo("Alerta de tiempo", "Te faltan 1 minuto!!")
     root.destroy()
 
 def iniciar_temporizador():
