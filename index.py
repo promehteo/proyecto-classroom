@@ -1,4 +1,4 @@
-#Librería para comprimir los datos con contraseña (similiar a la encriptacion)
+#Librería para comprimir los datos con contraseña (similiar a la encriptación)
 import pyzipper
 #Librería que se usará para controlar el tiempo
 import time
@@ -6,24 +6,25 @@ import time
 import smtplib
 #Librería para quitar los acentos
 from unidecode import unidecode
-#Libreria empleada para interactuar con el sistema opertivo a nivel de consola
+#Librería empleada para interactuar con el sistema opertivo a nivel de consola
 import os
-#Libreria que nos ayuda a crear el modal del temporizador
+#Librería que nos ayuda a crear el modal del temporizador
 import tkinter as tk
-#Libreria que nos permitio integrar el relog al codigo, permite que el relog se ejecute "aparte" del menu
+#Librería que nos permitió integrar el reloj al código, permite que el reloj se ejecute "aparte" del menú
 import threading
-#Libreria usada para crear el modal de cerrar seccion
+#Libreria usada para crear el modal de cerrar sesión
 from tkinter import messagebox
 #Libreria empleada para detectar que teclas se precionan
 import signal
 
-#Librerias del correo
+#Librerías del correo
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 
+#variables globales
 preguntas = ["Pregunta 1", "Pregunta 2", "Pregunta 3", "Pregunta 4", "Pregunta 5", "Pregunta 6", "Pregunta 7", "Pregunta 8", "Pregunta 9", "Pregunta 10"]
 examen_iniciado = False
 corriendo = True
@@ -47,10 +48,15 @@ def modal_salir():
 
     window.mainloop()
 
+#Esta función muestra una ventana emergente con un mensaje de bienvenida al usuario. La ventana se mantiene abierta
+#hasta que el usuario la cierra.
 def mostrar_bienvenida():
     global mensaje_bienvenida
+    #Se crea una nueva ventana utilizando la clase tk.Tk()
     mensaje_bienvenida = tk.Tk()
+    #Se configura la geometría de la ventana a una posición específica (-50, 20) en la pantalla.
     mensaje_bienvenida.geometry("-50+20")
+    #Se define un protocolo para que la ventana no se cierre cuando el usuario haga clic en la X.
     mensaje_bienvenida.protocol("WM_DELETE_WINDOW", lambda: None)
     boton_bienvenida = tk.Button(mensaje_bienvenida, text="Proyecto classroom",)
     boton_bienvenida.pack()
@@ -64,19 +70,28 @@ def mostrar_bienvenida():
 
 threading.Thread(target=mostrar_bienvenida).start()
 
+#Define la función signal_handler que se encargará de manejar la señal SIGINT
 def signal_handler(sig, frame):
     print("")
+    #Crea un nuevo hilo (t) y le asigna la función modal_salir como objetivo e inicia la ejecución del hilo "t" para que la
+    #función modal_salir se ejecute en segundo plano, permitiendo la gestión adecuada del cierre sin bloquear la respuesta a la señal.
     t = threading.Thread(target=modal_salir)
     t.start()
 
+#Asigna la función signal_handler como la encargada de manejar la señal SIGINT. De esta forma, cuando se
+#presione CTRL+C, se ejecutará la función signal_handler en lugar de finalizar el programa directamente
 signal.signal(signal.SIGINT, signal_handler)
 
 def borrar_pantalla():
+    #La función define una variable llamada sistema_operativo para almacenar el nombre del sistema operativo actual
     sistema_operativo = os.name
 
+    #Se utiliza una instrucción if para verificar el nombre del sistema operativo
     if sistema_operativo == 'posix':
+        #Si el sistema operativo es POSIX (Linux, macOS), se ejecuta el comando clear para limpiar la pantalla
         os.system('clear')
     elif sistema_operativo == 'nt':
+        #Si el sistema operativo es Windows, se ejecuta el comando cls para limpiar la pantalla
         os.system('cls')
 
 def salir_programa():
@@ -84,13 +99,19 @@ def salir_programa():
     global seguro_crito
     global corriendo
     
+    #borra la pantalla
     borrar_pantalla()
+    #Comprueba si el examen se inició (examen_iniciado) y si las respuestas se guardaron de forma segura (seguro_escrito)
     if examen_iniciado and seguro_crito:
+        #Extrae el nombre, apellido y cédula del usuario del arreglo usuario
         nombre_ususario = usuario[0]
         apellido_usuario = usuario[1]
         cedula_ususario = usuario[2]
+        #llama a encriptación
         encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
+        #Actualiza la variable seguro_escrito a False para indicar que ya no hay necesidad de guardar las respuestas.
         seguro_crito = False
+        #Actualiza la variable corriendo a False para indicar que el programa debe finalizar
         corriendo = False
         borrar_pantalla()
         print("Evaluación finalizada")
@@ -99,14 +120,22 @@ def salir_programa():
     exit()
 
 def temporizador_asyncrono(segundos):
+    #La función define una variable global corriendo como accesible dentro de la función.
     global corriendo
-    while segundos and corriendo: 
+    #Se inicia un bucle while que se ejecuta mientras la variable segundos sea mayor que 0 y la variable corriendo sea True.
+    while segundos and corriendo:
+        #Se utiliza la función time.sleep(1) para suspender la ejecución del programa durante un segundo.
+        #Se decrementa la variable segundos en 1. 
         time.sleep(1)
+        #Al final del bucle, se comprueba si la variable segundos es menor o igual a 0.
+        #Si es así, se ejecuta la función salir_programa para finalizar el programa de forma segura.
         segundos -= 1
     salir_programa()
 
 def temporizador(segundos, label, root):
+    #La función define una variable global corriendo como accesible dentro de la función.
     global corriendo
+    #Se inicia un bucle while que se ejecuta mientras la variable segundos sea mayor que 0 y la variable corriendo sea True.
     while segundos and corriendo: 
         mins = segundos // 60
         secs = segundos % 60
@@ -124,8 +153,11 @@ def temporizador(segundos, label, root):
 
 def iniciar_temporizador():
     global corriendo
+    #Se establece la variable corriendo a True para indicar que el programa está en ejecución.
     corriendo = True
+    #Se crea una ventana emergente usando la biblioteca tkinter
     root = tk.Tk()
+    #Se configura la ventana emergente con la posición, tamaño y título.
     root.geometry("+50+20")
     root.title("Temporizador")
 
@@ -136,8 +168,13 @@ def iniciar_temporizador():
     label.pack()
 
     segundos = 30
+    #Se crea un hilo nuevo usando la función threading.Thread para ejecutar la función temporizador en segundo plano.
+    #Se le pasa a la función temporizador como argumentos la cantidad de segundos, la etiqueta label y la ventana root.
+    #Se inicia la ejecución del hilo llamando a start().
     threading.Thread(target=temporizador, args=(segundos, label, root)).start()
 
+    #Se inicia el bucle principal de la ventana emergente (root.mainloop()) para mostrar la ventana y esperar a
+    #que el usuario interactúe con ella.
     root.mainloop()
 
 # Para detener el temporizador, llama a la función detener_temporizador
@@ -192,13 +229,12 @@ def validar_cedula(dato_input):
 
 def inicio_seccion ():
 
+    #Esta parte del codigo es la encargada de pedirle los datos personales al usuario y hacerlo CERTIFICAR
+    #que estén correctos (Alejandro escribe mal la variables a proposito para que se vean más originales)
     def inicio_seccion_nombre():
         try:
             borrar_pantalla()
             print('''Bienvenido al PROYECTO CLASSROOM, para iniciar primero inserte sus datos''')
-
-            #Esta parte del codigo es la encargada de pedirle los datos personales al usuario y hacerlo CERTIFICAR
-            #que estén correctos (Alejandro escribe mal la variables a proposito para que se vean más originales)
             while True:
                 print("Por favor ingrese su nombre (solo primer nombre): ")
                 nombre_ususario = input('')
@@ -316,11 +352,17 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
     os.remove(nombre_archivo_txt)
 
 def send_email(subject, message, from_addr, to_addr, password, file_path):
+    #La función crea un mensaje MIME multiparte (MIMEMultipart) utilizando la biblioteca email.
     msg = MIMEMultipart()
+    #Se establecen los encabezados del mensaje:
+    #From: Dirección del remitente.
+    #To: Dirección del destinatario.
+    #Subject: Asunto del correo electrónico.
     msg['From'] = from_addr
     msg['To'] = to_addr
     msg['Subject'] = subject
 
+    #Se agrega el cuerpo del mensaje como texto plano (MIMEText) al mensaje principal.
     msg.attach(MIMEText(message, 'plain'))
 
     # Adjuntar archivo
@@ -512,6 +554,8 @@ def realizar_examen(preguntas):
                         respuesta_completa += "\n" + respuesta  # Agregar la nueva línea a la respuesta completa
                     
                     respuestas_examen.append(respuesta_completa)  # Agregar la respuesta completa a la lista de respuestas
+            #Si se produce un error EOFError (se presiona Ctrl+D), se vuelve a llamar a la función en_evaluacion para reiniciar el proceso.
+            #Se llama a la función en_evaluacion de forma recursiva para continuar con la siguiente pregunta (si la hay).
             except EOFError:
                 return en_evaluacion()
         en_evaluacion()
@@ -530,6 +574,7 @@ def primer_corte():
             return texto_antes_evalucion()
     texto_antes_evalucion()
 
+    #crea un hilo nuevo para ejecutar la función iniciar_temporizador en segundo plano.
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
@@ -565,6 +610,7 @@ def segundo_corte ():
     print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
     input("Pulse enter para iniciar la evaluación.")
 
+    #crea un hilo nuevo para ejecutar la función iniciar_temporizador en segundo plano.
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
@@ -599,6 +645,7 @@ def terecer_corte ():
     print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
     input("Pulse enter para iniciar la evaluación.")
 
+    #crea un hilo nuevo para ejecutar la función iniciar_temporizador en segundo plano.
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
@@ -633,6 +680,7 @@ def cuarto_corte ():
     print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
     input("Pulse enter para iniciar la evaluación.")
 
+    #crea un hilo nuevo para ejecutar la función iniciar_temporizador en segundo plano.
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
@@ -670,6 +718,7 @@ def main():
     #obtiene los datos personales del usuario
     nombre_ususario, apellido_usuario, cedula_ususario = inicio_seccion()
 
+    #Hace una lista con los datos del usuario 
     usuario = [nombre_ususario, apellido_usuario , cedula_ususario]
 
     #lleva al usuario a seleccionar el cohorte a presentar
