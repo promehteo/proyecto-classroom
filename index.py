@@ -143,6 +143,7 @@ def temporizador(segundos, label, root):
         label.config(text=tiempo_restante)
         time.sleep(1)
         segundos -= 1
+        #se crean alertas simples para que el alumno se percate de cuando se le esta acabando el tiempo
         if segundos == 600:
             tk.messagebox.showinfo("Alerta de tiempo", "Te faltan 10 minutos")
         elif segundos == 300:  
@@ -376,6 +377,7 @@ def send_email(subject, message, from_addr, to_addr, password, file_path):
     msg.attach(part)
 
     try:
+        # Iniciar sesión en el servidor de correo y enviar el correo, se usa una excepciónen caso de que el envio falle 
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login(from_addr, password)
