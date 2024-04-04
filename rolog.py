@@ -1,24 +1,16 @@
-import time
-import threading
+import random
+import string
 
-def temporizador(segundos):
-    while segundos: 
-        mins = segundos // 60
-        secs = segundos % 60
-        tiempo_restante = f'{mins: 02d}:{secs:02d}'
-        print(tiempo_restante, end='\r')
-        time.sleep(1)
-        segundos -= 1
-        if segundos == 80:
-            print("se te esta acabando el tiempo")
+def generar_usuario():
+    usuario = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+    return usuario
 
-        elif segundos == 60:
-            print("se te esta acabando el tiempo")
+def solicitar_contrasena():
+    contrasena = input("Por favor ingresa una contraseña con al menos 8 caracteres, incluyendo letras, dígitos y caracteres especiales: ")
+    return contrasena
 
-# Crear un hilo para ejecutar el temporizador
-t = threading.Thread(target=temporizador, args=(100,))
+nuevo_usuario = generar_usuario()
+nueva_contrasena = solicitar_contrasena()
 
-# Iniciar el hilo
-t.start()
-
-#termine_el_examen
+print("Nuevo usuario creado:", nuevo_usuario)
+print("Contraseña ingresada:", nueva_contrasena)

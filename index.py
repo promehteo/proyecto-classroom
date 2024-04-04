@@ -168,7 +168,7 @@ def iniciar_temporizador():
     label = tk.Label(root, text="", width=10)
     label.pack()
 
-    segundos = 30
+    segundos = 3600
     #Se crea un hilo nuevo usando la función threading.Thread para ejecutar la función temporizador en segundo plano.
     #Se le pasa a la función temporizador como argumentos la cantidad de segundos, la etiqueta label y la ventana root.
     #Se inicia la ejecución del hilo llamando a start().
@@ -352,45 +352,45 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
     # Eliminar el archivo de texto
     os.remove(nombre_archivo_txt)
 
-def send_email(subject, message, from_addr, to_addr, password, file_path):
-    #La función crea un mensaje MIME multiparte (MIMEMultipart) utilizando la biblioteca email.
-    msg = MIMEMultipart()
-    #Se establecen los encabezados del mensaje:
-    #From: Dirección del remitente.
-    #To: Dirección del destinatario.
-    #Subject: Asunto del correo electrónico.
-    msg['From'] = from_addr
-    msg['To'] = to_addr
-    msg['Subject'] = subject
+    def send_email(subject, message, from_addr, to_addr, password, file_path):
+        #La función crea un mensaje MIME multiparte (MIMEMultipart) utilizando la biblioteca email.
+        msg = MIMEMultipart()
+        #Se establecen los encabezados del mensaje:
+        #From: Dirección del remitente.
+        #To: Dirección del destinatario.
+        #Subject: Asunto del correo electrónico.
+        msg['From'] = from_addr
+        msg['To'] = to_addr
+        msg['Subject'] = subject
 
-    #Se agrega el cuerpo del mensaje como texto plano (MIMEText) al mensaje principal.
-    msg.attach(MIMEText(message, 'plain'))
+        #Se agrega el cuerpo del mensaje como texto plano (MIMEText) al mensaje principal.
+        msg.attach(MIMEText(message, 'plain'))
 
-    # Adjuntar archivo
-    attachment = open(file_path, 'rb')
+        # Adjuntar archivo
+        attachment = open(file_path, 'rb')
 
-    part = MIMEBase('application', 'octet-stream')
-    part.set_payload((attachment).read())
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', 'attachment; filename= ' + file_path)
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload((attachment).read())
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition', 'attachment; filename= ' + file_path)
 
-    msg.attach(part)
+        msg.attach(part)
 
-    try:
-        # Iniciar sesión en el servidor de correo y enviar el correo, se usa una excepciónen caso de que el envio falle 
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(from_addr, password)
-        text = msg.as_string()
-        server.sendmail(from_addr, to_addr, text)
-        server.quit()
-        print("Correo con su evaluacion enviado exitosamente")
-    except:
-        print("No se ha podido enviar su evaluación, por favor hágalo usted mismo")
+        try:
+            # Iniciar sesión en el servidor de correo y enviar el correo, se usa una excepciónen caso de que el envio falle 
+            server = smtplib.SMTP('smtp.gmail.com', 587)
+            server.starttls()
+            server.login(from_addr, password)
+            text = msg.as_string()
+            server.sendmail(from_addr, to_addr, text)
+            server.quit()
+            print("Correo con su evaluacion enviado exitosamente")
+        except:
+            print("No se ha podido enviar su evaluación, por favor hágalo usted mismo")
 
-#esta es la llamada a la funcion que manda el correo
-#                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
-#send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', 'alejandrofenomeno72@gmail.com', 'msht ekje bofg aplb', 'relog2.py')
+    #esta es la llamada a la funcion que manda el correo
+    #                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
+    send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', 'alejandrofenomeno72@gmail.com', 'msht ekje bofg aplb', nombre_archivo_zip)
 
 
 #Aquí empezamos con el menú de los exámenes
@@ -580,7 +580,7 @@ def primer_corte():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(31,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
 
     # Iniciar el hilo
     t.start()
@@ -616,7 +616,7 @@ def segundo_corte ():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(31,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
 
     # Iniciar el hilo
     t.start()
@@ -651,7 +651,7 @@ def terecer_corte ():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(31,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
 
     # Iniciar el hilo
     t.start()
@@ -686,7 +686,7 @@ def cuarto_corte ():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(31,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
 
     # Iniciar el hilo
     t.start()
