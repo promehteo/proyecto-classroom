@@ -384,13 +384,13 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
             text = msg.as_string()
             server.sendmail(from_addr, to_addr, text)
             server.quit()
-            print("Correo con su evaluacion enviado exitosamente")
+            print("Su evaluación fue enviada al correo de la profesora exitosamente")
         except:
-            print("No se ha podido enviar su evaluación, por favor hágalo usted mismo")
+            print("No se ha podido enviar su evaluación, por favor hágalo usted mismo al correo de la profesora")
 
     #esta es la llamada a la funcion que manda el correo
     #                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
-    send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', 'alejandrofenomeno72@gmail.com', 'msht ekje bofg aplb', nombre_archivo_zip)
+    send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', 'mirthaapariciocortez@gmail.com', 'msht ekje bofg aplb', nombre_archivo_zip)
 
 
 #Aquí empezamos con el menú de los exámenes
@@ -587,16 +587,16 @@ def primer_corte():
 
     preguntas = [
         {
-            "enunciado": "pregunta 1, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Cuál de las siguientes opciones es una palabra reservada en Python?",
+            "opciones": ["var", "Let", "const", "for"]
         },
         {
-            "enunciado": "pregunta 2, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Qué función se utiliza para obtener la longitud de una lista en Python?",
+            "opciones": ["longitud()", "len()", "tamaño ()", "length()"]
         },
         {
-            "enunciado": "pregunta 3, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Cuál de las siguientes opciones muestra la forma correcta de comentar un bloque de código en Python?",
+            "opciones": ["# Comentario de una línea", "// Comentario de una línea", "/* Comentario de una línea */", "''' Comentario de una línea '''"]
         },
         # Agregar más preguntas de opción múltiple aquí
         {
