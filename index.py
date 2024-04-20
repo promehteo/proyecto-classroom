@@ -31,6 +31,7 @@ corriendo = True
 usuario = []
 seguro_crito = True
 respuestas_examen = []
+seguro_print = False
 #mensaje_abierto = True
 
 def modal_salir():
@@ -99,24 +100,25 @@ def salir_programa():
     global seguro_crito
     global corriendo
     
-    #borra la pantalla
-    borrar_pantalla()
     #Comprueba si el examen se inició (examen_iniciado) y si las respuestas se guardaron de forma segura (seguro_escrito)
     if examen_iniciado and seguro_crito:
+        #Borra la pantalla
+        borrar_pantalla()
         #Extrae el nombre, apellido y cédula del usuario del arreglo usuario
         nombre_ususario = usuario[0]
         apellido_usuario = usuario[1]
         cedula_ususario = usuario[2]
         #llama a encriptación
+        print("Evaluación finalizada")
         encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
         #Actualiza la variable seguro_escrito a False para indicar que ya no hay necesidad de guardar las respuestas.
         seguro_crito = False
         #Actualiza la variable corriendo a False para indicar que el programa debe finalizar
         corriendo = False
-        borrar_pantalla()
-        print("Evaluación finalizada")
 
-    print("Terminando el programa...")
+    if seguro_print == False:
+        print("Terminando el programa...")
+        seguro_crito = True
     exit()
 
 def temporizador_asyncrono(segundos):
@@ -386,7 +388,7 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
             server.quit()
             print("Su evaluación fue enviada al correo de la profesora exitosamente")
         except:
-            print("No se ha podido enviar su evaluación, por favor hágalo usted mismo al correo de la profesora")
+            print("No se ha podido enviar su evaluación, por favor envielo usted mismo al correo de la profesora")
 
     #esta es la llamada a la funcion que manda el correo
     #                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
@@ -658,20 +660,20 @@ def terecer_corte ():
 
     preguntas = [
         {
-            "enunciado": "pregunta 1, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Cuál de los siguientes métodos se utiliza para buscar un elemento específico en un arreglo? ",
+            "opciones": ["Búsqueda binaria", "Ordenamiento por selección", "Búsqueda secuencial", "Ordenamiento por inserción"]
         },
         {
-            "enunciado": "pregunta 2, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Cómo se conocen comúnmente los arreglos en programación?",
+            "opciones": ["Listas", "Matrices", "Vectores", "Arrays"]
         },
         {
-            "enunciado": "pregunta 3, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Qué es un arreglo en programación?",
+            "opciones": ["Una colección de variables del mismo tipo accesibles con un índice", "Una función especializada en la búsqueda de elementos", "Un tipo de bucle utilizado para iterar sobre colecciones", "Una estructura de datos que almacena información en pares clave-valor"]
         },
         # Agregar más preguntas de opción múltiple aquí
         {
-            "enunciado": "Pregunta práctica: Haz una calculadora usando Python y pega el código aquí",
+            "enunciado": "Pregunta práctica: Implementa una función en lenguaje Python que reciba como entrada un arreglo de números enteros y determine si existe un par de elementos en el arreglo cuya suma sea igual a un valor objetivo dado. Si se encuentra dicho par, la función debe devolver los índices de los elementos. Si no se encuentra ningún par, la función debe retornar un mensaje indicando que no existe tal par",
             "opciones": []  # No hay opciones para esta pregunta
         }
     ]
@@ -693,16 +695,16 @@ def cuarto_corte ():
 
     preguntas = [
         {
-            "enunciado": "pregunta 1, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Qué es un archivo en el contexto de la informática?",
+            "opciones": ["Un programa de software", "Una unidad de almacenamiento", "Una colección de datos almacenados y accesibles digitalmente", "Un tipo de hardware"]
         },
         {
-            "enunciado": "pregunta 2, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Cuál de las siguientes opciones describe mejor la estructura de un archivo de texto?",
+            "opciones": ["Secuencia de bytes sin formato específico", "Secuencia de caracteres organizados generalmente en líneas", "Conjunto de imágenes y gráficos", "Bloques de datos cifrados"]
         },
         {
-            "enunciado": "pregunta 3, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Qué tipo de archivo está diseñado principalmente para ser interpretado por un programa en lugar de ser leído directamente por un humano?",
+            "opciones": ["Archivo de texto", "Archivo de datos", "Archivo de imagen", "Archivo de audio"]
         },
         # Agregar más preguntas de opción múltiple aquí
         {
