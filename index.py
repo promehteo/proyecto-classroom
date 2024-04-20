@@ -708,7 +708,7 @@ def cuarto_corte ():
         },
         # Agregar más preguntas de opción múltiple aquí
         {
-            "enunciado": "Pregunta práctica: Haz una calculadora usando Python y pega el código aquí",
+            "enunciado": "Pregunta práctica: En el contexto de una aplicación de gestión de biblioteca, se requiere implementar una funcionalidad que permita registrar la información de nuevos libros y recuperar los datos cuando sea necesario. Escribe un script en Python que realice las siguientes tareas: Creación de un archivo de texto llamado `libros.txt` que almacenará los datos de los libros, Función para agregar libros: Define una función `agregar_libro(titulo, autor, año)` que reciba el título, el autor y el año de publicación de un libro y lo guarde en el archivo `libros.txt`. Cada libro debe registrarse en una nueva línea y los datos deben estar separados por comas, Función para leer libros: Define una función `leer_libros()` que lea el archivo `libros.txt` y muestre en consola la lista de libros registrados, cada uno con su respectivo título, autor y año de publicación.",
             "opciones": []  # No hay opciones para esta pregunta
         }
     ]
