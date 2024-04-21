@@ -589,20 +589,24 @@ def primer_corte():
 
     preguntas = [
         {
-            "enunciado": "¿Cuál de las siguientes opciones es una palabra reservada en Python?",
-            "opciones": ["var", "Let", "const", "for"]
+            "enunciado": "¿Cuál de los siguientes es un estándar de calidad comúnmente utilizado en el diseño de algoritmos y programas?",
+            "opciones": ["ISO 9001", "IEEE 754", "ANSI C", "PEP 8"]
         },
         {
-            "enunciado": "¿Qué función se utiliza para obtener la longitud de una lista en Python?",
-            "opciones": ["longitud()", "len()", "tamaño ()", "length()"]
+            "enunciado": "¿Qué tipo de estructura de control se utiliza para ejecutar un bloque de código repetidamente hasta que se cumple una condición?",
+            "opciones": ["Estructura condicional", "Ciclo Mientras", "Ciclo Para", "Selección múltiple"]
         },
         {
-            "enunciado": "¿Cuál de las siguientes opciones muestra la forma correcta de comentar un bloque de código en Python?",
-            "opciones": ["# Comentario de una línea", "// Comentario de una línea", "/* Comentario de una línea */", "''' Comentario de una línea '''"]
+            "enunciado": "¿Cuál de las siguientes opciones describe mejor la documentación de algoritmos y programas?",
+            "opciones": ["Comentarios detallados en el código fuente", "Notas escritas a mano al final del documento", "Ninguna documentación es necesaria", "Publicación en un blog personal"]
+        },
+        {
+            "enunciado": "¿Qué tipo de estructura de control se utiliza para realizar una acción si se cumple una condición o una acción diferente si no se cumple?",
+            "opciones": ["Estructura de control iterativa", "Ciclo Para", "Estructura condicional doble", "Ciclo Repetir"]
         },
         # Agregar más preguntas de opción múltiple aquí
         {
-            "enunciado": "Pregunta práctica: Haz una calculadora usando Python y pega el código aquí",
+            "enunciado": "Pregunta práctica: Diseña un algoritmo en pseudocódigo que calcule el promedio de tres números ingresados por el usuario y muestra el resultado",
             "opciones": []  # No hay opciones para esta pregunta
         }
     ]
@@ -625,20 +629,24 @@ def segundo_corte ():
 
     preguntas = [
         {
-            "enunciado": "pregunta 1, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "Cuál de las siguientes opciones describe mejor una función en programación?",
+            "opciones": ["Una secuencia de comandos que se ejecuta automáticamente cuando se inicia un programa.", "Un bloque de código reutilizable que realiza una tarea específica.", "Una estructura de datos que almacena información sobre un objeto.", "Un tipo de variable que almacena una colección de valores."]
         },
         {
-            "enunciado": "pregunta 2, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Cuál es la diferencia principal entre una variable local y una variable global en un programa?",
+            "opciones": ["Las variables locales solo se pueden utilizar en una función específica, mientras que las globales se pueden usar en todo el programa.", "Las variables locales se pueden modificar en cualquier parte del programa, mientras que las globales no se pueden modificar.", "Las variables globales solo se pueden utilizar en una función específica, mientras que las locales se pueden usar en todo el programa.", "No hay diferencia, los términos se utilizan indistintamente."]
         },
         {
-            "enunciado": "pregunta 3, ¿Cuál de las siguientes opciones es la correcta?",
-            "opciones": ["Respuesta 1", "Respuesta 2", "Respuesta 3", "Respuesta 4"]
+            "enunciado": "¿Cuál es la función utilizada para obtener la longitud de una cadena en Python?",
+            "opciones": ["length()", "len()", "size()", "count()"]
+        },
+        {
+            "enunciado": "¿Cuál de las siguientes operaciones no se puede realizar con cadenas de caracteres en Python?",
+            "opciones": ["Concatenación", "División", "Búsqueda de subcadenas", "Extracción de caracteres por índice"]
         },
         # Agregar más preguntas de opción múltiple aquí
         {
-            "enunciado": "Pregunta práctica: Haz una calculadora usando Python y pega el código aquí",
+            "enunciado": "Pregunta práctica: Escribe una función en Python llamada “reverso_cadena” que tome una cadena como argumento y devuelva la cadena invertida. Por ejemplo, si la cadena de entrada es 'hola', la función debería devolver 'aloh'.",
             "opciones": []  # No hay opciones para esta pregunta
         }
     ]
