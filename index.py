@@ -668,16 +668,20 @@ def terecer_corte ():
 
     preguntas = [
         {
-            "enunciado": "¿Cuál de los siguientes métodos se utiliza para buscar un elemento específico en un arreglo? ",
-            "opciones": ["Búsqueda binaria", "Ordenamiento por selección", "Búsqueda secuencial", "Ordenamiento por inserción"]
+            "enunciado": "¿Qué es un arreglo en Python?",
+            "opciones": ["Una función que organiza datos", "Una estructura de datos que almacena elementos del mismo tipo de forma contigua en la memoria", "Una variable que puede contener múltiples valores", "Un método para ordenar datos de manera eficiente"]
         },
         {
-            "enunciado": "¿Cómo se conocen comúnmente los arreglos en programación?",
-            "opciones": ["Listas", "Matrices", "Vectores", "Arrays"]
+            "enunciado": "¿Cuál de las siguientes operaciones NO es básica en los arreglos?",
+            "opciones": ["Acceder a un elemento por su índice", "Insertar un nuevo elemento al inicio del arreglo", "Eliminar un elemento por su valor", "Modificar el valor de un elemento dado su índice"]
         },
         {
-            "enunciado": "¿Qué es un arreglo en programación?",
-            "opciones": ["Una colección de variables del mismo tipo accesibles con un índice", "Una función especializada en la búsqueda de elementos", "Un tipo de bucle utilizado para iterar sobre colecciones", "Una estructura de datos que almacena información en pares clave-valor"]
+            "enunciado": "¿Qué método de ordenamiento es especialmente eficiente para arreglos pequeños o casi ordenados?",
+            "opciones": ["Merge Sort", "Quick Sort", "Bubble Sort", "Insertion Sort"]
+        },
+        {
+            "enunciado": "¿Qué es una estructura de registros en Python?",
+            "opciones": ["Una lista que contiene diferentes tipos de datos", "Una función que organiza datos en un diccionario", "Una colección de variables agrupadas bajo un solo nombre", "Una combinación de datos heterogéneos agrupados bajo una sola estructura"]
         },
         # Agregar más preguntas de opción múltiple aquí
         {
@@ -703,16 +707,20 @@ def cuarto_corte ():
 
     preguntas = [
         {
-            "enunciado": "¿Qué es un archivo en el contexto de la informática?",
-            "opciones": ["Un programa de software", "Una unidad de almacenamiento", "Una colección de datos almacenados y accesibles digitalmente", "Un tipo de hardware"]
+            "enunciado": "¿Qué es un archivo en Python?",
+            "opciones": ["Una estructura de datos que almacena información en la memoria RAM", "Un conjunto de instrucciones que realiza operaciones de lectura y escritura en la pantalla", "Una secuencia de caracteres utilizada para representar datos", "Una entidad que almacena datos de forma persistente en un dispositivo de almacenamiento"]
         },
         {
-            "enunciado": "¿Cuál de las siguientes opciones describe mejor la estructura de un archivo de texto?",
-            "opciones": ["Secuencia de bytes sin formato específico", "Secuencia de caracteres organizados generalmente en líneas", "Conjunto de imágenes y gráficos", "Bloques de datos cifrados"]
+            "enunciado": "¿Cuál es la diferencia principal entre un archivo de datos y un archivo de texto?",
+            "opciones": ["Los archivos de datos son binarios, mientras que los archivos de texto contienen caracteres legibles", "Los archivos de texto son binarios, mientras que los archivos de datos contienen caracteres legibles", "Los archivos de datos contienen solo números, mientras que los archivos de texto pueden contener cualquier tipo de información", "No hay diferencia, ambos términos se utilizan indistintamente para referirse al mismo tipo de archivo"]
         },
         {
-            "enunciado": "¿Qué tipo de archivo está diseñado principalmente para ser interpretado por un programa en lugar de ser leído directamente por un humano?",
-            "opciones": ["Archivo de texto", "Archivo de datos", "Archivo de imagen", "Archivo de audio"]
+            "enunciado": "¿Cuál de los siguientes métodos NO se utiliza para realizar la gestión de archivos en Python?",
+            "opciones": ["open()", "read()", "write()", "close()"]
+        },
+        {
+            "enunciado": "¿Qué hace el método close() en Python en relación con los archivos?",
+            "opciones": ["Abre un archivo para lectura", "Cierra un archivo después de realizar operaciones de lectura o escritura", "Escribe datos en un archivo", "Lee datos desde un archivo"]
         },
         # Agregar más preguntas de opción múltiple aquí
         {
