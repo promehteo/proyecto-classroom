@@ -237,7 +237,7 @@ def inicio_seccion ():
     def inicio_seccion_nombre():
         try:
             borrar_pantalla()
-            print('''Bienvenido al PROYECTO CLASSROOM, para iniciar primero inserte sus datos''')
+            print('''Bienvenido al PROYECTO CLASSROOM ALUMNO, para iniciar primero inserte sus datos''')
             while True:
                 print("Por favor ingrese su nombre (solo primer nombre): ")
                 nombre_ususario = input('')
