@@ -16,6 +16,8 @@ import threading
 from tkinter import messagebox
 #Libreria empleada para detectar que teclas se precionan
 import signal
+#Librería para leer el csv
+import csv
 
 #Librerías del correo
 import smtplib
@@ -33,6 +35,18 @@ seguro_crito = True
 respuestas_examen = []
 seguro_print = False
 #mensaje_abierto = True
+
+def leer_contrasena():
+    variables = {}
+    with open("mi_archivo.csv", "r") as archivo_csv:
+        lector_csv = csv.reader(archivo_csv)
+        # Leer la primera línea como nombres de variables
+        nombres_variables = next(lector_csv)
+        for linea in lector_csv:
+            for i, nombre_variable in enumerate(nombres_variables):
+                variables[nombre_variable] = linea[i]
+    return variables
+
 
 def modal_salir():
     #crea la base del modal
@@ -346,9 +360,13 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
         for pregunta, respuesta in zip(preguntas, respuestas_examen):
             archivo_txt.write("{}: {}\n".format(pregunta, respuesta))
 
+    variables = leer_contrasena()
+
+    contrasena_zip = variables["contrasena zip"]
+
     # Crear un archivo ZIP encriptado con contraseña
     with pyzipper.AESZipFile(nombre_archivo_zip, "w", compression=pyzipper.ZIP_DEFLATED, encryption=pyzipper.WZ_AES) as archivo_zip:
-        archivo_zip.setpassword(b"profemirtha123")  # Establecer la contraseña
+        archivo_zip.setpassword(contrasena_zip.encode('utf-8'))
         archivo_zip.write(nombre_archivo_txt)
 
     # Eliminar el archivo de texto
@@ -392,7 +410,7 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
 
     #esta es la llamada a la funcion que manda el correo
     #                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
-    send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', 'mirthaapariciocortez@gmail.com', 'msht ekje bofg aplb', nombre_archivo_zip)
+    #send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', 'mirthaapariciocortez@gmail.com', 'msht ekje bofg aplb', nombre_archivo_zip)
 
 
 #Aquí empezamos con el menú de los exámenes

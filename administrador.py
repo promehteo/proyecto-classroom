@@ -3,7 +3,7 @@ from unidecode import unidecode
 import os
 
 # Define los nombres de las columnas
-column_names = ['tiempo', 'contraseña']
+column_names = ['tiempo', 'contrasena', 'contrasena zip']
 
 def borrar_pantalla():
     #La función define una variable llamada sistema_operativo para almacenar el nombre del sistema operativo actual
@@ -28,7 +28,7 @@ def validacion (tipo,valor,min,max):
     #solo letras
     elif valor.isalpha():
         tipo = 3
-    else: print('A ingresado un valor incorrecto')
+    else: print('Ha ingresado un valor incorrecto')
 
     if valor_logitud > min and valor_logitud < max:
         return tipo
@@ -44,11 +44,13 @@ def menu_administrador():
     print('''Bienvenido al PROYECTO CLASSROOM DOCENTE, para iniciar primero inserte la contraseña''')
     contraseña_usuario = input_modificado()
     if validacion (2,contraseña_usuario,4,10):
-        print("bien venido, aqui podra asignar las pautas para su examen")
+        print("bienvenido, aqui podra asignar las pautas para su examen")
         print("limite de tiempo")
         limite_tiempo = input_modificado()
         print("contraseña")
         contraseña_corte = input_modificado()
+        print("contraseña del zip?")
+        contraseña_zip = input_modificado()
 
         # Abre el archivo CSV en modo escritura
         with open('mi_archivo.csv', 'w', newline='') as csvfile:
@@ -61,7 +63,7 @@ def menu_administrador():
             writer.writerow(column_names)
 
             # Puedes agregar filas de datos aquí
-            writer.writerow([limite_tiempo, contraseña_corte])
+            writer.writerow([limite_tiempo, contraseña_corte, contraseña_zip])
 
 
 def main():
