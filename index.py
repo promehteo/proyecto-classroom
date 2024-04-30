@@ -36,7 +36,7 @@ respuestas_examen = []
 seguro_print = False
 #mensaje_abierto = True
 
-def leer_contrasena():
+def leer_csv():
     variables = {}
     with open("mi_archivo.csv", "r") as archivo_csv:
         lector_csv = csv.reader(archivo_csv)
@@ -47,6 +47,7 @@ def leer_contrasena():
                 variables[nombre_variable] = linea[i]
     return variables
 
+datos_evaluacion = leer_csv()
 
 def modal_salir():
     #crea la base del modal
@@ -153,9 +154,10 @@ def temporizador(segundos, label, root):
     global corriendo
     #Se inicia un bucle while que se ejecuta mientras la variable segundos sea mayor que 0 y la variable corriendo sea True.
     while segundos and corriendo: 
-        mins = segundos // 60
+        hors = segundos // 3600
+        mins = (segundos % 3600) // 60
         secs = segundos % 60
-        tiempo_restante = f'{mins:02d}:{secs:02d}'
+        tiempo_restante = f'{hors:02d}:{mins:02d}:{secs:02d}'
         label.config(text=tiempo_restante)
         time.sleep(1)
         segundos -= 1
@@ -184,7 +186,7 @@ def iniciar_temporizador():
     label = tk.Label(root, text="", width=10)
     label.pack()
 
-    segundos = 3600
+    segundos = int(datos_evaluacion ['tiempo'])
     #Se crea un hilo nuevo usando la función threading.Thread para ejecutar la función temporizador en segundo plano.
     #Se le pasa a la función temporizador como argumentos la cantidad de segundos, la etiqueta label y la ventana root.
     #Se inicia la ejecución del hilo llamando a start().
@@ -254,6 +256,7 @@ def inicio_seccion ():
             print('''Bienvenido al PROYECTO CLASSROOM ALUMNO, para iniciar primero inserte sus datos''')
             while True:
                 print("Por favor ingrese su nombre (solo primer nombre): ")
+                print(datos_evaluacion)
                 nombre_ususario = input('')
                 validar_nombre_usuario = validar_nombre(nombre_ususario)
                 while validar_nombre_usuario != True:
@@ -360,9 +363,7 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
         for pregunta, respuesta in zip(preguntas, respuestas_examen):
             archivo_txt.write("{}: {}\n".format(pregunta, respuesta))
 
-    variables = leer_contrasena()
-
-    contrasena_zip = variables["contrasena zip"]
+    contrasena_zip = datos_evaluacion["contrasena zip"]
 
     # Crear un archivo ZIP encriptado con contraseña
     with pyzipper.AESZipFile(nombre_archivo_zip, "w", compression=pyzipper.ZIP_DEFLATED, encryption=pyzipper.WZ_AES) as archivo_zip:
@@ -408,7 +409,7 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
         except:
             print("No se ha podido enviar su evaluación, por favor envielo usted mismo al correo de la profesora")
 
-    correo_electronico_profesor = leer_contrasena()["correo electronico"]
+    correo_electronico_profesor = datos_evaluacion["correo"]
 
     #esta es la llamada a la funcion que manda el correo
     #                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
@@ -430,10 +431,10 @@ Para cohorte 4, pulse 4 ''')
             print("Seleccione el cohorte que va a presentar")
             corte_seleccionado = input("")
             validar_numeros_corte = validar_solo_numeros(corte_seleccionado)
-
+ 
             if validar_numeros_corte:
                 corte_procesado = int(corte_seleccionado)
-                if corte_procesado == 1:
+                if corte_procesado == 1 and corte_procesado == int(datos_evaluacion["corte"]):
                     contraseña = input("Ingrese la contraseña para el primer cohorte: ")
                     if contraseña == "helado123":
                         while True:
@@ -452,7 +453,7 @@ Para cohorte 4, pulse 4 ''')
                                 validar_corte = "no"
                     else:
                         print("Contraseña incorrecta para el primer cohorte. Inténtelo de nuevo.")
-                elif corte_procesado == 2:
+                elif corte_procesado == 2 and corte_procesado == int(datos_evaluacion["corte"]):
                     contraseña = input("Ingrese la contraseña para el segundo cohorte: ")
                     if contraseña == "Python321":
                         while True:
@@ -471,7 +472,7 @@ Para cohorte 4, pulse 4 ''')
                                 validar_corte = "no"
                     else:
                         print("Contraseña incorrecta para el segundo cohorte. Inténtelo de nuevo.")
-                elif corte_procesado == 3:
+                elif corte_procesado == 3 and corte_procesado == int(datos_evaluacion["corte"]):
                     contraseña = input("Ingrese la contraseña para el tercer cohorte: ")
                     if contraseña == "tortadechocolate":
                         while True:
@@ -490,7 +491,7 @@ Para cohorte 4, pulse 4 ''')
                                 validar_corte = "no"
                     else:
                         print("Contraseña incorrecta para el tercer cohorte. Inténtelo de nuevo.")
-                elif corte_procesado == 4:
+                elif corte_procesado == 4 and corte_procesado == int(datos_evaluacion["corte"]):
                     contraseña = input("Ingrese la contraseña para el cuarto cohorte: ")
                     if contraseña == "casa54321":
                         while True:
@@ -510,7 +511,7 @@ Para cohorte 4, pulse 4 ''')
                     else:
                         print("Contraseña incorrecta para el cuarto cohorte. Inténtelo de nuevo.")
                 else:
-                    print("Opcion no valida,intentelo nuevamente")
+                    print("Opcion no disponible,reintentelo con una opcion disponible")
             else:
                 print("Solo se permiten numeros,intentelo nuevamente")
     except EOFError:
@@ -602,7 +603,7 @@ def primer_corte():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(int(datos_evaluacion['tiempo']),))
 
     # Iniciar el hilo
     t.start()
@@ -642,7 +643,7 @@ def segundo_corte ():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(int(datos_evaluacion['tiempo']),))
 
     # Iniciar el hilo
     t.start()
@@ -681,7 +682,7 @@ def terecer_corte ():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(int(datos_evaluacion['tiempo']),))
 
     # Iniciar el hilo
     t.start()
@@ -720,7 +721,7 @@ def cuarto_corte ():
     threading.Thread(target=iniciar_temporizador).start()
 
     # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(3601,))
+    t = threading.Thread(target=temporizador_asyncrono, args=(int(datos_evaluacion['tiempo']),))
 
     # Iniciar el hilo
     t.start()
