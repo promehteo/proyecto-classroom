@@ -413,107 +413,24 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
 
     #esta es la llamada a la funcion que manda el correo
     #                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
-    send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', correo_electronico_profesor, 'msht ekje bofg aplb', nombre_archivo_zip)
+    #send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', correo_electronico_profesor, 'msht ekje bofg aplb', nombre_archivo_zip)
 
 
 #Aquí empezamos con el menú de los exámenes
 def menu_principal():
     try:
-        validar_corte = "no"
+        
         borrar_pantalla()
-        print("!COHORTES DISPONIBLES!")
-        print('''Para cohorte 1, pulse 1
-Para cohorte 2, pulse 2
-Para cohorte 3, pulse 3
-Para cohorte 4, pulse 4 ''')
+        contrasena_csv = datos_evaluacion["contrasena"]
+        contrasena = input("Ingrese la contraseña para el examen: ")
+        
+        #Validacion de la contraseña
+        if contrasena == contrasena_csv:
+            return primer_corte()  #Llama a la funcion del examen
+        else:
+            print("Contraseña incorrecta. Inténtelo de nuevo.")
+            return menu_principal()  #Devuelve al menu
 
-        while validar_corte == "no":
-            print("Seleccione el cohorte que va a presentar")
-            corte_seleccionado = input("")
-            validar_numeros_corte = validar_solo_numeros(corte_seleccionado)
- 
-            if validar_numeros_corte:
-                corte_procesado = int(corte_seleccionado)
-                if corte_procesado == 1 and corte_procesado == int(datos_evaluacion["corte"]):
-                    contraseña = input("Ingrese la contraseña para el primer cohorte: ")
-                    if contraseña == "helado123":
-                        while True:
-                            print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
-                            validar_corte_info = input("").lower()
-                            validar_corte = unidecode(validar_corte_info)
-                            if validar_corte == "si":
-                                borrar_pantalla()
-                                return primer_corte()  # Devolver las respuestas del examen
-
-                            elif validar_corte == "no":
-                                break
-
-                            else:
-                                print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                                validar_corte = "no"
-                    else:
-                        print("Contraseña incorrecta para el primer cohorte. Inténtelo de nuevo.")
-                elif corte_procesado == 2 and corte_procesado == int(datos_evaluacion["corte"]):
-                    contraseña = input("Ingrese la contraseña para el segundo cohorte: ")
-                    if contraseña == "Python321":
-                        while True:
-                            print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
-                            validar_corte_info = input("").lower()
-                            validar_corte = unidecode(validar_corte_info)
-                            if validar_corte == "si":
-                                borrar_pantalla()
-                                return segundo_corte()  # Devolver las respuestas del examen
-
-                            elif validar_corte == "no":
-                                break
-
-                            else:
-                                print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                                validar_corte = "no"
-                    else:
-                        print("Contraseña incorrecta para el segundo cohorte. Inténtelo de nuevo.")
-                elif corte_procesado == 3 and corte_procesado == int(datos_evaluacion["corte"]):
-                    contraseña = input("Ingrese la contraseña para el tercer cohorte: ")
-                    if contraseña == "tortadechocolate":
-                        while True:
-                            print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
-                            validar_corte_info = input("").lower()
-                            validar_corte = unidecode(validar_corte_info)
-                            if validar_corte == "si":
-                                borrar_pantalla()
-                                return terecer_corte()  # Devolver las respuestas del examen
-
-                            elif validar_corte == "no":
-                                break
-
-                            else:
-                                print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                                validar_corte = "no"
-                    else:
-                        print("Contraseña incorrecta para el tercer cohorte. Inténtelo de nuevo.")
-                elif corte_procesado == 4 and corte_procesado == int(datos_evaluacion["corte"]):
-                    contraseña = input("Ingrese la contraseña para el cuarto cohorte: ")
-                    if contraseña == "casa54321":
-                        while True:
-                            print("¿Está seguro que este es el cohorte que va a presentar? si/no ")
-                            validar_corte_info = input("").lower()
-                            validar_corte = unidecode(validar_corte_info)
-                            if validar_corte == "si":
-                                borrar_pantalla()
-                                return cuarto_corte()  # Devolver las respuestas del examen
-
-                            elif validar_corte == "no":
-                                break
-
-                            else:
-                                print('''Por favor seleccione una opción válida, solo se permite "si" o "no" ''')
-                                validar_corte = "no"
-                    else:
-                        print("Contraseña incorrecta para el cuarto cohorte. Inténtelo de nuevo.")
-                else:
-                    print("Opcion no disponible,reintentelo con una opcion disponible")
-            else:
-                print("Solo se permiten numeros,intentelo nuevamente")
     except EOFError:
         return menu_principal()
             
@@ -592,8 +509,8 @@ def primer_corte():
     def texto_antes_evalucion():
         try:
             borrar_pantalla()
-            print("Bienvenido al primer cohorte.")
-            print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
+            print("Bienvenido a la evaluación.")
+            print("Si sale del programa antes de finalizar, su nota será perjudicada.")
             input("Pulse enter para iniciar la evaluación.")
         except EOFError:
             return texto_antes_evalucion()
@@ -632,123 +549,6 @@ def primer_corte():
         }
     ]
 
-    return realizar_examen(preguntas)
-
-def segundo_corte ():
-    print("Bienvenido al segundo cohorte.")
-    print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
-    input("Pulse enter para iniciar la evaluación.")
-
-    #crea un hilo nuevo para ejecutar la función iniciar_temporizador en segundo plano.
-    threading.Thread(target=iniciar_temporizador).start()
-
-    # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(int(datos_evaluacion['tiempo']),))
-
-    # Iniciar el hilo
-    t.start()
-
-    preguntas = [
-        {
-            "enunciado": "Cuál de las siguientes opciones describe mejor una función en programación?",
-            "opciones": ["Una secuencia de comandos que se ejecuta automáticamente cuando se inicia un programa.", "Un bloque de código reutilizable que realiza una tarea específica.", "Una estructura de datos que almacena información sobre un objeto.", "Un tipo de variable que almacena una colección de valores."]
-        },
-        {
-            "enunciado": "¿Cuál es la diferencia principal entre una variable local y una variable global en un programa?",
-            "opciones": ["Las variables locales solo se pueden utilizar en una función específica, mientras que las globales se pueden usar en todo el programa.", "Las variables locales se pueden modificar en cualquier parte del programa, mientras que las globales no se pueden modificar.", "Las variables globales solo se pueden utilizar en una función específica, mientras que las locales se pueden usar en todo el programa.", "No hay diferencia, los términos se utilizan indistintamente."]
-        },
-        {
-            "enunciado": "¿Cuál es la función utilizada para obtener la longitud de una cadena en Python?",
-            "opciones": ["length()", "len()", "size()", "count()"]
-        },
-        {
-            "enunciado": "¿Cuál de las siguientes operaciones no se puede realizar con cadenas de caracteres en Python?",
-            "opciones": ["Concatenación", "División", "Búsqueda de subcadenas", "Extracción de caracteres por índice"]
-        },
-        # Agregar más preguntas de opción múltiple aquí
-        {
-            "enunciado": "Pregunta práctica: Escribe una función en Python llamada “reverso_cadena” que tome una cadena como argumento y devuelva la cadena invertida. Por ejemplo, si la cadena de entrada es 'hola', la función debería devolver 'aloh'.",
-            "opciones": []  # No hay opciones para esta pregunta
-        }
-    ]
-    return realizar_examen(preguntas)
-
-def terecer_corte ():
-    print("Bienvenido al tercer cohorte.")
-    print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
-    input("Pulse enter para iniciar la evaluación.")
-
-    #crea un hilo nuevo para ejecutar la función iniciar_temporizador en segundo plano.
-    threading.Thread(target=iniciar_temporizador).start()
-
-    # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(int(datos_evaluacion['tiempo']),))
-
-    # Iniciar el hilo
-    t.start()
-
-    preguntas = [
-        {
-            "enunciado": "¿Qué es un arreglo en Python?",
-            "opciones": ["Una función que organiza datos", "Una estructura de datos que almacena elementos del mismo tipo de forma contigua en la memoria", "Una variable que puede contener múltiples valores", "Un método para ordenar datos de manera eficiente"]
-        },
-        {
-            "enunciado": "¿Cuál de las siguientes operaciones NO es básica en los arreglos?",
-            "opciones": ["Acceder a un elemento por su índice", "Insertar un nuevo elemento al inicio del arreglo", "Eliminar un elemento por su valor", "Modificar el valor de un elemento dado su índice"]
-        },
-        {
-            "enunciado": "¿Qué método de ordenamiento es especialmente eficiente para arreglos pequeños o casi ordenados?",
-            "opciones": ["Merge Sort", "Quick Sort", "Bubble Sort", "Insertion Sort"]
-        },
-        {
-            "enunciado": "¿Qué es una estructura de registros en Python?",
-            "opciones": ["Una lista que contiene diferentes tipos de datos", "Una función que organiza datos en un diccionario", "Una colección de variables agrupadas bajo un solo nombre", "Una combinación de datos heterogéneos agrupados bajo una sola estructura"]
-        },
-        # Agregar más preguntas de opción múltiple aquí
-        {
-            "enunciado": "Pregunta práctica: Implementa una función en lenguaje Python que reciba como entrada un arreglo de números enteros y determine si existe un par de elementos en el arreglo cuya suma sea igual a un valor objetivo dado. Si se encuentra dicho par, la función debe devolver los índices de los elementos. Si no se encuentra ningún par, la función debe retornar un mensaje indicando que no existe tal par",
-            "opciones": []  # No hay opciones para esta pregunta
-        }
-    ]
-    return realizar_examen(preguntas)
-
-def cuarto_corte ():
-    print("Bienvenido al cuarto cohorte.")
-    print("Tiene 1 hora para terminar esta prueba. Si sale del programa antes de finalizar, su nota será perjudicada.")
-    input("Pulse enter para iniciar la evaluación.")
-
-    #crea un hilo nuevo para ejecutar la función iniciar_temporizador en segundo plano.
-    threading.Thread(target=iniciar_temporizador).start()
-
-    # Crear un hilo para ejecutar el temporizador
-    t = threading.Thread(target=temporizador_asyncrono, args=(int(datos_evaluacion['tiempo']),))
-
-    # Iniciar el hilo
-    t.start()
-
-    preguntas = [
-        {
-            "enunciado": "¿Qué es un archivo en Python?",
-            "opciones": ["Una estructura de datos que almacena información en la memoria RAM", "Un conjunto de instrucciones que realiza operaciones de lectura y escritura en la pantalla", "Una secuencia de caracteres utilizada para representar datos", "Una entidad que almacena datos de forma persistente en un dispositivo de almacenamiento"]
-        },
-        {
-            "enunciado": "¿Cuál es la diferencia principal entre un archivo de datos y un archivo de texto?",
-            "opciones": ["Los archivos de datos son binarios, mientras que los archivos de texto contienen caracteres legibles", "Los archivos de texto son binarios, mientras que los archivos de datos contienen caracteres legibles", "Los archivos de datos contienen solo números, mientras que los archivos de texto pueden contener cualquier tipo de información", "No hay diferencia, ambos términos se utilizan indistintamente para referirse al mismo tipo de archivo"]
-        },
-        {
-            "enunciado": "¿Cuál de los siguientes métodos NO se utiliza para realizar la gestión de archivos en Python?",
-            "opciones": ["open()", "read()", "write()", "close()"]
-        },
-        {
-            "enunciado": "¿Qué hace el método close() en Python en relación con los archivos?",
-            "opciones": ["Abre un archivo para lectura", "Cierra un archivo después de realizar operaciones de lectura o escritura", "Escribe datos en un archivo", "Lee datos desde un archivo"]
-        },
-        # Agregar más preguntas de opción múltiple aquí
-        {
-            "enunciado": "Pregunta práctica: En el contexto de una aplicación de gestión de biblioteca, se requiere implementar una funcionalidad que permita registrar la información de nuevos libros y recuperar los datos cuando sea necesario. Escribe un script en Python que realice las siguientes tareas: Creación de un archivo de texto llamado `libros.txt` que almacenará los datos de los libros, Función para agregar libros: Define una función `agregar_libro(titulo, autor, año)` que reciba el título, el autor y el año de publicación de un libro y lo guarde en el archivo `libros.txt`. Cada libro debe registrarse en una nueva línea y los datos deben estar separados por comas, Función para leer libros: Define una función `leer_libros()` que lea el archivo `libros.txt` y muestre en consola la lista de libros registrados, cada uno con su respectivo título, autor y año de publicación.",
-            "opciones": []  # No hay opciones para esta pregunta
-        }
-    ]
     return realizar_examen(preguntas)
 
 def main():

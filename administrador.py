@@ -43,11 +43,39 @@ def validacion (tipo,valor,min,max):
     if valor_logitud > min and valor_logitud < max:
         return tipo
 
-def input_modificado ():
+def input_modificado(prompt="", allowed_characters=""):
+    """Captures user input, normalizes it, and validates against allowed characters.
 
-    valor = input("").lower()
-    valor = unidecode(valor)
-    return valor
+    Args:
+        prompt (str, optional): The prompt message to display to the user. Defaults to an empty string.
+        allowed_characters (str, optional): A string containing the allowed characters for input. Defaults to an empty string (no restrictions).
+
+    Returns:
+        str: The normalized and validated user input.
+    """
+
+    while True:
+        try:
+            # Capture user input
+            user_input = input(prompt).lower()
+
+            # Normalize using unidecode
+            normalized_input = unidecode(user_input)
+
+            # Validate against allowed characters
+            if allowed_characters:
+                for char in normalized_input:
+                    if char not in allowed_characters:
+                        raise ValueError(f"Invalid character: '{char}'")
+
+            # Return valid input
+            return normalized_input
+
+        except ValueError as e:
+            print(f"Error: {e}")
+            # Provide guidance to the user about allowed characters if applicable
+            if allowed_characters:
+                print(f"Allowed characters: {allowed_characters}")
 
 def imprimir_csv(datos_examen):
     # Abre el archivo CSV en modo escritura
@@ -76,7 +104,7 @@ def menu_administrador():
     3.- Contraseña del corte que sera presentado por los alumno
     4.- Contraseña del zip que sera enviado al correo
     5.- Correo al que se enviara el zip
-    6.- preguntas teoricas
+    6.- Editar preguntas
     7.- Ver(en esta opcion podra ver todos los datos que a ingresado asta el momento)
     8.- Imprimir(genera el archivo csv que contiene los parametros para la evalucion)''')
             selecion_usuario= int(input_modificado())
@@ -112,39 +140,119 @@ def menu_administrador():
 
             elif selecion_usuario == 6:
                 borrar_pantalla()
-                print("Selecione cual de las preguntas teoricas va a modificar")
-                print("1.-Pregunta 1")
-                print("2.-Pregunta 2")
-                print("3.-Pregunta 3")
-                print("4.-Pregunta 4")
-                pregunta_modificar = input_modificado()
+                while True:
+                    print("Elija la acción que desea realizar:")
+                    print("1.- Agregar nueva pregunta")
+                    print("2.- Modificar pregunta existente")
+                    print("3.- Volver al menú principal")
 
-                if int(pregunta_modificar) == 1:
-                    print("Pregunta 1")
-                    print("Ingrese la pregunta")
-                    datos_examen[5] = input_modificado()
-                    print("ingrese la opcion 1")
-                    teoria_pregunta1 = input_modificado()
-                    datos_examen[6].append(teoria_pregunta1)
-                    print("ingrese la opcion 2")
-                    teoria_pregunta2 = input_modificado()
-                    datos_examen[6].append(teoria_pregunta2)
-                    print("ingrese la opcion 3")
-                    teoria_pregunta3 = input_modificado()
-                    datos_examen[6].append(teoria_pregunta3)
-                    print("ingrese la opcion 4")
-                    teoria_pregunta4 = input_modificado()
-                    datos_examen[6].append(teoria_pregunta4)
+                    accion_pregunta = input_modificado()
 
-                elif pregunta_modificar == 2:
-                    print("Pregunta 2")
-                    print("Ingrese la pregunta")
-                elif pregunta_modificar == 3:
-                    print("Pregunta 3")
-                    print("Ingrese la pregunta")
-                elif pregunta_modificar == 4:
-                    print("Pregunta 4")
-                    print("Ingrese la pregunta")
+                    if accion_pregunta == "1":
+                        # Add new question logic
+                        tipo_pregunta = input_modificado("Seleccione el tipo de pregunta (múltiple o teórico/práctico): ")
+                        if tipo_pregunta.lower() == "multiple":
+                            pregunta_enunciado = input_modificado("Ingrese el enunciado de la pregunta: ")
+
+                            opciones = []
+                            while True:
+                                nueva_opcion = input_modificado("Ingrese una opción (presione Enter luego de escribir una opcion para guardarla y tambien presione enter cuando ya no quiera agregar más preguntas para finalizar): ")
+                                if nueva_opcion.strip():
+                                    opciones.append(nueva_opcion)
+                                else:
+                                    break
+
+                            if len(opciones) < 2:
+                                print("Se necesitan al menos dos opciones para una pregunta de opción múltiple.")
+                                continue
+
+                            respuesta_correcta = input_modificado("Ingrese la opción correcta (copiela y peguela de nuevo aqui exactamente igual a como la escribió en las opciones): ")
+                            if respuesta_correcta not in opciones:
+                                print("La opción correcta debe ser una de las opciones disponibles.")
+                                continue
+
+                            puntos_respuesta_correcta = int(input_modificado("Ingrese los puntos por responder correctamente: "))
+
+                            # Add the question to the datos_examen list
+                            datos_examen[5].append({
+                                "tipo": "múltiple",
+                                "enunciado": pregunta_enunciado,
+                                "opciones": opciones,
+                                "respuesta_correcta": respuesta_correcta,
+                                "puntos_respuesta_correcta": puntos_respuesta_correcta
+                            })
+
+                        elif tipo_pregunta.lower() in ["teórico", "práctico"]:
+                            pregunta_enunciado = input_modificado("Ingrese el enunciado de la pregunta: ")
+                            print("La pregunta se almacenará como una pregunta teórica/práctica sin opciones.")
+
+                            # Add the question to the datos_examen list
+                            datos_examen[5].append({
+                                "tipo": "teórico/práctico",
+                                "enunciado": pregunta_enunciado
+                            })
+
+                        imprimir_csv(datos_examen)
+
+                        continuar_agregando_preguntas = input_modificado("¿Desea agregar otra pregunta?")
+
+
+                    elif accion_pregunta == "2":
+                         print("Selecione cual de las preguntas teoricas va a modificar")
+                         print("1.-Pregunta 1")
+                         print("2.-Pregunta 2")
+                         print("3.-Pregunta 3")
+                         print("4.-Pregunta 4")
+                         pregunta_modificar = input_modificado()
+
+                         if int(pregunta_modificar) == 1:
+                            # Modificar pregunta 1
+                            pregunta_1 = datos_examen[5][0]
+                            if pregunta_1["tipo"] == "múltiple":
+                                # Modificar pregunta de opción múltiple
+                                print("Enunciado actual:", pregunta_1["enunciado"])
+                                nuevo_enunciado = input_modificado("Ingrese el nuevo enunciado (o presione Enter para mantener el actual): ")
+                                if nuevo_enunciado:
+                                    pregunta_1["enunciado"] = nuevo_enunciado
+
+                                print("Opciones actuales:")
+                                for i, opcion in enumerate(pregunta_1["opciones"]):
+                                    print(f"{i + 1}. {opcion}")
+
+                                opcion_modificar = input_modificado("Ingrese el número de la opción que desea modificar (o presione Enter para no modificar): ")
+                                if opcion_modificar:
+                                    try:
+                                        indice_opcion = int(opcion_modificar) - 1
+                                        if 0 <= indice_opcion < len(pregunta_1["opciones"]):
+                                            nueva_opcion = input_modificado("Ingrese la nueva opción: ")
+                                            pregunta_1["opciones"][indice_opcion] = nueva_opcion
+                                        else:
+                                            print("Número de opción inválido.")
+                                    except ValueError:
+                                        print("El número de opción debe ser un número entero.")
+
+                                respuesta_correcta_actual = pregunta_1["respuesta_correcta"]
+                                nueva_respuesta_correcta = input_modificado(f"Respuesta correcta actual: {respuesta_correcta_actual}.\nIngrese la nueva respuesta correcta (o presione Enter para mantener la actual): ")
+                                if nueva_respuesta_correcta:
+                                    if nueva_respuesta_correcta not in pregunta_1["opciones"]:
+                                        print("La nueva respuesta correcta debe ser una de las opciones disponibles.")
+                                    else:
+                                        pregunta_1["respuesta_correcta"] = nueva_respuesta_correcta
+
+                                puntos_respuesta_correcta_actual = pregunta_1["puntos_respuesta_correcta"]
+                                try:
+                                    nuevos_puntos_respuesta_correcta = int(input_modificado(f"Puntos por responder correctamente actuales: {puntos_respuesta_correcta_actual}.\nIngrese los nuevos puntos (o presione Enter para mantener los actuales): "))
+                                    pregunta_1["puntos_respuesta_correcta"] = nuevos_puntos_respuesta_correcta
+                                except ValueError:
+                                    print("El número de puntos debe ser un número entero.")
+
+                            elif pregunta_1["tipo"] == "teórico/práctico":
+                            # Modificar pregunta teórica/práctica
+                                print("Enunciado actual:", pregunta_1)
+                    elif accion_pregunta == "3":
+                        break
+                    else:
+                        print("Opción inválida. Intente nuevamente.")
 
 
             elif selecion_usuario == 7:
