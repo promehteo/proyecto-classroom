@@ -5,16 +5,15 @@ import os
 passwort = "empanada"
 
 # Define los nombres de las columnas
-column_names = ['tiempo', 'corte', 'contrasena','contrasena zip','correo','pregunta base','preguntas teoricas']
+column_names = ['tiempo', 'contrasena','contrasena zip','correo','preguntas teoricas']
 tiempo_evaluacion = None
-corte_evaluacion = None
 contrasena_corte = None
 contrasena_zip = None
 correo_zip = None
 base_pregunta = None
 preguntas_teoricas = []
 
-datos_examen = [tiempo_evaluacion, corte_evaluacion, contrasena_corte, contrasena_zip, correo_zip, base_pregunta ,preguntas_teoricas]
+datos_examen = [tiempo_evaluacion, contrasena_corte, contrasena_zip, correo_zip ,preguntas_teoricas]
 def borrar_pantalla():
     #La función define una variable llamada sistema_operativo para almacenar el nombre del sistema operativo actual
     sistema_operativo = os.name
@@ -93,185 +92,306 @@ def imprimir_csv(datos_examen):
 def menu_administrador():
     borrar_pantalla()
     print('''Bienvenido al PROYECTO CLASSROOM DOCENTE, para iniciar primero inserte la contraseña''')
-    contrasena_usuario = input_modificado()
-    if contrasena_usuario == passwort:
-        while True:
-            print("MENU")
-            print("Acontinuacion podra modificar los parametros de su evaluacion, tenga en cuenta que debe rellenar todos los parametros para su evaluacion presentados a continuacion y que deben ser rellenados correctamente o de lo contrario podria surgir fallos a la hora de la precentacion de la evaluacion")
-            print('''
-    1.- Duracion de la evalucion
-    2.- Corte que precentaran los alumnos
-    3.- Contraseña del corte que sera presentado por los alumno
-    4.- Contraseña del zip que sera enviado al correo
-    5.- Correo al que se enviara el zip
-    6.- Editar preguntas
-    7.- Ver(en esta opcion podra ver todos los datos que a ingresado asta el momento)
-    8.- Imprimir(genera el archivo csv que contiene los parametros para la evalucion)''')
-            selecion_usuario= int(input_modificado())
-
-            if selecion_usuario == 1:
+    while True:
+        contrasena_usuario = input_modificado()
+        if contrasena_usuario.strip() == passwort:
+            while True:
                 borrar_pantalla()
-                print("Ingrese en minutos la duracion de la evalucion. Por ejemplo: 300")
-                minutos = int(input_modificado())
-                segundo_minutos = minutos * 60
-                datos_examen[0] = segundo_minutos
+                print("MENU")
+                print("Acontinuacion podra modificar los parametros de su evaluacion, tenga en cuenta que debe rellenar todos los parametros para su evaluacion presentados a continuacion y que deben ser rellenados correctamente o de lo contrario podria surgir fallos a la hora de la precentacion de la evaluacion")
+                print('''
+        1.- Duracion de la evalucion
+        2.- Contraseña del corte que sera presentado por los alumno
+        3.- Contraseña del zip que sera enviado al correo
+        4.- Correo al que se enviara el zip
+        5.- Editar preguntas
+        6.- Ver(en esta opcion podra ver todos los datos que a ingresado asta el momento)
+        7.- Imprimir(genera el archivo csv que contiene los parametros para la evalucion)''')
+                selecion_usuario= int(input_modificado())
 
-            elif selecion_usuario == 2:
-                borrar_pantalla()
-                print("ingrese cual de los 4 cortes presentaran los alumnos. Por ejemplo: 3")
-                datos_examen[1] = int(input_modificado())
+                if selecion_usuario == 1:
+                    borrar_pantalla()
+                    print("Ingrese en minutos la duracion de la evalucion. Por ejemplo: 300")
 
-            elif selecion_usuario == 3:
-                borrar_pantalla()
-                print("Ingrese la contraseña del corte que presentaran sus alumnos. Por ejemplo: Asdrubal2767")
-                datos_examen[2] = input_modificado()
+                    while True:
+                        minutos = input_modificado()
+                        minutos_procesados = validacion(1,minutos,1,4)
+                        segundo_minutos = int(minutos) * 60
+                        datos_examen[0] = segundo_minutos
 
-            ##
+                        print(minutos_procesados)
 
-            elif selecion_usuario == 4:
-                borrar_pantalla()
-                print("Ingrese la contraseña del zip que se enviara a su correo. Por ejemplo: corte3matematicas")
-                datos_examen[3] = input_modificado()
+                        if minutos_procesados:
+                            print("El tiempo que a ingresado es de: ", datos_examen[0] / 60 ," minutos")
+                            print("Esta seguro que de que esa sera la duracion para el examen? si/no")
 
-            elif selecion_usuario == 5:
-                borrar_pantalla()
-                print("Ingrese el correo al cual se enviara el zip. Por ejemplo: profealex9@gmail.com")
-                datos_examen[4] = input_modificado()
-
-            elif selecion_usuario == 6:
-                borrar_pantalla()
-                while True:
-                    print("Elija la acción que desea realizar:")
-                    print("1.- Agregar nueva pregunta")
-                    print("2.- Modificar pregunta existente")
-                    print("3.- Volver al menú principal")
-
-                    accion_pregunta = input_modificado()
-
-                    if accion_pregunta == "1":
-                        # Add new question logic
-                        tipo_pregunta = input_modificado("Seleccione el tipo de pregunta (múltiple o teórico/práctico): ")
-                        if tipo_pregunta.lower() == "multiple":
-                            pregunta_enunciado = input_modificado("Ingrese el enunciado de la pregunta: ")
-
-                            opciones = []
                             while True:
-                                nueva_opcion = input_modificado("Ingrese una opción (presione Enter luego de escribir una opcion para guardarla y tambien presione enter cuando ya no quiera agregar más preguntas para finalizar): ")
-                                if nueva_opcion.strip():
-                                    opciones.append(nueva_opcion)
-                                else:
+
+                                respues_examen_usuario = input_modificado()
+
+                                if respues_examen_usuario == "si":
                                     break
+                                elif respues_examen_usuario == "no":
+                                    print("Por favor reingrese el tiempo para el corte")
+                                    break
+                                else:
+                                    print("por favor elija una opcion valida")
 
-                            if len(opciones) < 2:
-                                print("Se necesitan al menos dos opciones para una pregunta de opción múltiple.")
-                                continue
+                            if respues_examen_usuario == "si":
+                                break
 
-                            respuesta_correcta = input_modificado("Ingrese la opción correcta (copiela y peguela de nuevo aqui exactamente igual a como la escribió en las opciones): ")
-                            if respuesta_correcta not in opciones:
-                                print("La opción correcta debe ser una de las opciones disponibles.")
-                                continue
+                        else:
+                            print("El dato que a ingresado es invalido, solo se perminten letras con minimo 1 y maximo 4 caracteres")
 
-                            puntos_respuesta_correcta = int(input_modificado("Ingrese los puntos por responder correctamente: "))
+                elif selecion_usuario == 2:
 
-                            # Add the question to the datos_examen list
-                            datos_examen[5].append({
-                                "tipo": "múltiple",
-                                "enunciado": pregunta_enunciado,
-                                "opciones": opciones,
-                                "respuesta_correcta": respuesta_correcta,
-                                "puntos_respuesta_correcta": puntos_respuesta_correcta
-                            })
+                    borrar_pantalla()
+                    print("Ingrese la contraseña del corte que presentaran sus alumnos. Por ejemplo: Asdrubal2767")
 
-                        elif tipo_pregunta.lower() in ["teórico", "práctico"]:
-                            pregunta_enunciado = input_modificado("Ingrese el enunciado de la pregunta: ")
-                            print("La pregunta se almacenará como una pregunta teórica/práctica sin opciones.")
+                    while True:
+                        datos_examen[1] = input_modificado()
 
-                            # Add the question to the datos_examen list
-                            datos_examen[5].append({
-                                "tipo": "teórico/práctico",
-                                "enunciado": pregunta_enunciado
-                            })
+                        contrasena_procesada = validacion(2,datos_examen[1],1,10)
 
-                        imprimir_csv(datos_examen)
+                        if contrasena_procesada:
+                            print("La contraseña del corte que a ingresado es: ", datos_examen[1])
+                            print("Esta seguro que de que esa sera la contraseña para el corte? si/no")
 
-                        continuar_agregando_preguntas = input_modificado("¿Desea agregar otra pregunta?")
+                            while True:
+
+                                contrasena_examen_usuario = input_modificado()
+
+                                if contrasena_examen_usuario == "si":
+                                    break
+                                elif contrasena_examen_usuario == "no":
+                                    print("Por favor reingrese la contraseña del corte")
+                                    break
+                                else:
+                                    print("por favor elija una opcion valida")
+
+                            if  contrasena_examen_usuario == "si":
+                                break
+
+                        else:
+                            print("El dato que a ingresado es invalido, solo se perminten letras y numeros con minimo 1 y maximo 10 caracteres")
+                ##
+
+                elif selecion_usuario == 3:
+                        
+                    borrar_pantalla()
+                    print("Ingrese la contraseña del zip que se enviara a su correo. Por ejemplo: corte3matematicas")
+
+                    while True:
+                        datos_examen[2] = input_modificado()
+
+                        procesada_contraseña_zip = validacion(2,datos_examen[2],1,10)
+
+                        if procesada_contraseña_zip:
+                            print("La contraseña del zip que a ingresado es: ", datos_examen[2])
+                            print("Esta seguro que de que esa sera la contraseña del zip que contendra la evaluacion? si/no")
+
+                            while True:
+
+                                contrasena_zip_examen_usuario = input_modificado()
+
+                                if contrasena_zip_examen_usuario == "si":
+                                    break
+                                elif contrasena_zip_examen_usuario == "no":
+                                    print("Por favor reingrese la contraseña del zip")
+                                    break
+                                else:
+                                    print("por favor elija una opcion valida")
+
+                            if  contrasena_zip_examen_usuario == "si":
+                                break
+
+                        else:
+                            print("El dato que a ingresado es invalido, solo se perminten letras y numeros con minimo 1 y maximo 10 caracteres")
 
 
-                    elif accion_pregunta == "2":
-                         print("Selecione cual de las preguntas teoricas va a modificar")
-                         print("1.-Pregunta 1")
-                         print("2.-Pregunta 2")
-                         print("3.-Pregunta 3")
-                         print("4.-Pregunta 4")
-                         pregunta_modificar = input_modificado()
+                elif selecion_usuario == 4:
 
-                         if int(pregunta_modificar) == 1:
-                            # Modificar pregunta 1
-                            pregunta_1 = datos_examen[5][0]
-                            if pregunta_1["tipo"] == "múltiple":
-                                # Modificar pregunta de opción múltiple
-                                print("Enunciado actual:", pregunta_1["enunciado"])
-                                nuevo_enunciado = input_modificado("Ingrese el nuevo enunciado (o presione Enter para mantener el actual): ")
-                                if nuevo_enunciado:
-                                    pregunta_1["enunciado"] = nuevo_enunciado
+                    borrar_pantalla()
+                    print("Ingrese el correo al cual se enviara el zip. Por ejemplo: profealex9@gmail.com")
+                    
+                    while True:
+                        datos_examen[3] = input_modificado()
 
-                                print("Opciones actuales:")
-                                for i, opcion in enumerate(pregunta_1["opciones"]):
-                                    print(f"{i + 1}. {opcion}")
+                        procesada_correo = validacion(2,datos_examen[3],1,10)
 
-                                opcion_modificar = input_modificado("Ingrese el número de la opción que desea modificar (o presione Enter para no modificar): ")
-                                if opcion_modificar:
-                                    try:
-                                        indice_opcion = int(opcion_modificar) - 1
-                                        if 0 <= indice_opcion < len(pregunta_1["opciones"]):
-                                            nueva_opcion = input_modificado("Ingrese la nueva opción: ")
-                                            pregunta_1["opciones"][indice_opcion] = nueva_opcion
-                                        else:
-                                            print("Número de opción inválido.")
-                                    except ValueError:
-                                        print("El número de opción debe ser un número entero.")
+                        if procesada_correo :
+                            print("El correo que a ingresado es: ",datos_examen[3])
+                            print("Esta seguro que de que esa sera el correo al cual se enviara el zip que contiene la contraseña? si/no")
 
-                                respuesta_correcta_actual = pregunta_1["respuesta_correcta"]
-                                nueva_respuesta_correcta = input_modificado(f"Respuesta correcta actual: {respuesta_correcta_actual}.\nIngrese la nueva respuesta correcta (o presione Enter para mantener la actual): ")
-                                if nueva_respuesta_correcta:
-                                    if nueva_respuesta_correcta not in pregunta_1["opciones"]:
-                                        print("La nueva respuesta correcta debe ser una de las opciones disponibles.")
+
+                            while True:
+                                    
+                                correo_examen_usuario = input_modificado()
+
+                                if correo_examen_usuario == "si":
+                                    break
+                                elif correo_examen_usuario == "no":
+                                    print("Por favor reingrese el correo al cual se enviara el zip")
+                                    break
+                                else:
+                                    print("por favor elija una opcion valida")
+
+                            if  contrasena_examen_usuario == "si":
+                                break
+
+                        else:
+                            print("El dato que a ingresado es invalido, solo se perminten letras y numeros con minimo 1 y maximo 10 caracteres")
+
+
+                elif selecion_usuario == 5:
+                    borrar_pantalla()
+                    while True:
+                        print("Elija la acción que desea realizar:")
+                        print("1.- Agregar nueva pregunta")
+                        print("2.- Modificar pregunta existente")
+                        print("3.- Volver al menú principal")
+
+                        accion_pregunta = input_modificado()
+
+                        if accion_pregunta == "1":
+                            # Add new question logic
+                            print("Seleccione el tipo de pregunta múltiple(1) o teórico/práctico(2): ")
+                            tipo_pregunta = input_modificado()
+                            if int(tipo_pregunta) == 1:
+                                print("Ingrese el enunciado de la pregunta: ")
+                                pregunta_enunciado = input_modificado()
+
+                                opciones = []
+                                while True:
+                                    print("Ingrese una opción (presione Enter luego de escribir una opcion para guardarla o presione enter sin escribir nada cuando ya no quiera agregar más preguntas para finalizar): ")
+                                    nueva_opcion = input_modificado()
+                                    if nueva_opcion.strip():
+                                        opciones.append(nueva_opcion)
                                     else:
-                                        pregunta_1["respuesta_correcta"] = nueva_respuesta_correcta
+                                        break
 
-                                puntos_respuesta_correcta_actual = pregunta_1["puntos_respuesta_correcta"]
-                                try:
-                                    nuevos_puntos_respuesta_correcta = int(input_modificado(f"Puntos por responder correctamente actuales: {puntos_respuesta_correcta_actual}.\nIngrese los nuevos puntos (o presione Enter para mantener los actuales): "))
-                                    pregunta_1["puntos_respuesta_correcta"] = nuevos_puntos_respuesta_correcta
-                                except ValueError:
-                                    print("El número de puntos debe ser un número entero.")
+                                if len(opciones) < 2:
+                                    print("Se necesitan al menos dos opciones para una pregunta de opción múltiple.")
+                                    continue
 
-                            elif pregunta_1["tipo"] == "teórico/práctico":
-                            # Modificar pregunta teórica/práctica
-                                print("Enunciado actual:", pregunta_1)
-                    elif accion_pregunta == "3":
-                        break
-                    else:
-                        print("Opción inválida. Intente nuevamente.")
+                                print("Ingrese la opción correcta (copiela y peguela de nuevo aqui exactamente igual a como la escribió en las opciones): ")
+                                respuesta_correcta = input_modificado()
+                                if respuesta_correcta not in opciones:
+                                    print("La opción correcta debe ser una de las opciones disponibles.")
+                                    continue
+
+                                print("Ingrese los puntos por responder correctamente: ")
+                                puntos_respuesta_correcta = int(input_modificado())
+
+                                # Add the question to the datos_examen list
+                                datos_examen[4].append({
+                                    "tipo": "múltiple",
+                                    "enunciado": pregunta_enunciado,
+                                    "opciones": opciones,
+                                    "respuesta_correcta": respuesta_correcta,
+                                    "puntos_respuesta_correcta": puntos_respuesta_correcta
+                                })
+
+                            elif int(tipo_pregunta) == 2:
+                                print("Ingrese el enunciado de la pregunta: ")
+                                pregunta_enunciado = input_modificado()
+                                print("La pregunta se almacenará como una pregunta teórica/práctica sin opciones.")
+
+                                # Add the question to the datos_examen list
+                                datos_examen[4].append({
+                                    "tipo": "teórico/práctico",
+                                    "enunciado": pregunta_enunciado
+                                })
+
+                            imprimir_csv(datos_examen)
+
+                            print("¿Desea agregar otra pregunta? si/no")
+                            continuar_agregando_preguntas = input_modificado()
 
 
-            elif selecion_usuario == 7:
-                borrar_pantalla()
-                imprimir_preguntas_teoricas = datos_examen[6]
-                print(f"El tiempo de evaluación no está especificado." if datos_examen[0] is None else f"Duración de la evaluación: {datos_examen[0] / 60} minutos")
-                print(f"El corte que precentaran los alumnos no esta especificado." if datos_examen[1] is None else f"Corte que precentaran los alumnos: {datos_examen[1]}")
-                print(f"La contraseña del corte que sera presentado por los alumno no esta especificada." if datos_examen[2] is None else f"Contraseña del corte que sera presentado por los alumno: {datos_examen[2]}")
-                print(f"La contraseña del zip no esta especificada." if datos_examen[3] is None else f"Contraseña del zip: {datos_examen[3]}")
-                print(f"El correo al cual se enviara el zip no esta especificado." if datos_examen[4] is None else f"Correo al que se enviara el zip: {datos_examen[4]}")
-                print(f"Preguntas teoricas: {imprimir_preguntas_teoricas[0]}, {imprimir_preguntas_teoricas[1]}, {imprimir_preguntas_teoricas[2]}, {imprimir_preguntas_teoricas[3]}")
+                        elif accion_pregunta == "2":
+                            print("Selecione cual de las preguntas teoricas va a modificar")
+                            print("1.-Pregunta 1")
+                            print("2.-Pregunta 2")
+                            print("3.-Pregunta 3")
+                            print("4.-Pregunta 4")
+                            pregunta_modificar = input_modificado()
 
-            elif selecion_usuario == 8:
-                borrar_pantalla()
-                imprimir_csv(datos_examen)
+                            if int(pregunta_modificar) == 1:
+                                # Modificar pregunta 1
+                                pregunta_1 = datos_examen[4][0]
+                                if pregunta_1["tipo"] == "múltiple":
+                                    # Modificar pregunta de opción múltiple
+                                    print("Enunciado actual:", pregunta_1["enunciado"])
+                                    print("Ingrese el nuevo enunciado (o presione Enter para mantener el actual): ")
+                                    nuevo_enunciado = input_modificado()
+                                    if nuevo_enunciado:
+                                        pregunta_1["enunciado"] = nuevo_enunciado
 
-            else: print("Selecione una opcion valida")
+                                    print("Opciones actuales:")
+                                    for i, opcion in enumerate(pregunta_1["opciones"]):
+                                        print(f"{i + 1}. {opcion}")
 
-    else: print("Contraseña incorrecta")
+                                    print("Ingrese el número de la opción que desea modificar (o presione Enter para no modificar): ")
+                                    opcion_modificar = input_modificado()
+                                    if opcion_modificar:
+                                        try:
+                                            indice_opcion = int(opcion_modificar) - 1
+                                            if 0 <= indice_opcion < len(pregunta_1["opciones"]):
+                                                print("Ingrese la nueva opción: ")
+                                                nueva_opcion = input_modificado()
+                                                pregunta_1["opciones"][indice_opcion] = nueva_opcion
+                                            else:
+                                                print("Número de opción inválido.")
+                                        except ValueError:
+                                            print("El número de opción debe ser un número entero.")
+
+                                    respuesta_correcta_actual = pregunta_1["respuesta_correcta"]
+                                    print(f"Respuesta correcta actual: {respuesta_correcta_actual}.\nIngrese la nueva respuesta correcta (o presione Enter para mantener la actual): ")
+                                    nueva_respuesta_correcta = input_modificado()
+                                    if nueva_respuesta_correcta:
+                                        if nueva_respuesta_correcta not in pregunta_1["opciones"]:
+                                            print("La nueva respuesta correcta debe ser una de las opciones disponibles.")
+                                        else:
+                                            pregunta_1["respuesta_correcta"] = nueva_respuesta_correcta
+
+                                    puntos_respuesta_correcta_actual = pregunta_1["puntos_respuesta_correcta"]
+                                    try:
+                                        print(f"Puntos por responder correctamente actuales: {puntos_respuesta_correcta_actual}.\nIngrese los nuevos puntos (o presione Enter para mantener los actuales): ")
+                                        nuevos_puntos_respuesta_correcta = int(input_modificado())
+                                        pregunta_1["puntos_respuesta_correcta"] = nuevos_puntos_respuesta_correcta
+                                    except ValueError:
+                                        print("El número de puntos debe ser un número entero.")
+
+                                elif pregunta_1["tipo"] == "teórico/práctico":
+                                # Modificar pregunta teórica/práctica
+                                    print("Enunciado actual:", pregunta_1)
+                        elif accion_pregunta == "3":
+                            break
+                        else:
+                            print("Opción inválida. Intente nuevamente.")
+
+
+                elif selecion_usuario == 6:
+                    borrar_pantalla()
+                    imprimir_preguntas_teoricas = datos_examen[4]
+                    print(f"El tiempo de evaluación no está especificado." if datos_examen[0] is None else f"Duración de la evaluación: {datos_examen[0] / 60} minutos")
+                    print(f"La contraseña del corte que sera presentado por los alumno no esta especificada." if datos_examen[1] is None else f"Contraseña del corte que sera presentado por los alumno: {datos_examen[1]}")
+                    print(f"La contraseña del zip no esta especificada." if datos_examen[2] is None else f"Contraseña del zip: {datos_examen[2]}")
+                    print(f"El correo al cual se enviara el zip no esta especificado." if datos_examen[3] is None else f"Correo al que se enviara el zip: {datos_examen[3]}")
+                    print(f"Preguntas teoricas: {datos_examen[4]}")
+                    input("Pulse enter para regresar al menu")
+
+                elif selecion_usuario == 7:
+                    borrar_pantalla()
+                    imprimir_csv(datos_examen)
+                    print("Archivo csv con los datos de la evaluacion impreso correctamente")
+                    input("Pulse enter para regresar al menu")
+
+                else: print("Selecione una opcion valida")
+
+        else: 
+            print("Contraseña incorrecta,por favor reingrese la contraseña")
 
 
 
