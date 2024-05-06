@@ -27,13 +27,13 @@ from email.mime.base import MIMEBase
 from email import encoders
 
 #variables globales
-preguntas = ["Pregunta 1", "Pregunta 2", "Pregunta 3", "Pregunta 4", "Pregunta 5", "Pregunta 6", "Pregunta 7", "Pregunta 8", "Pregunta 9", "Pregunta 10"]
 examen_iniciado = False
 corriendo = True
 usuario = []
 seguro_crito = True
 respuestas_examen = []
 seguro_print = False
+preguntas_examen = None
 #mensaje_abierto = True
 
 def leer_csv():
@@ -111,10 +111,11 @@ def borrar_pantalla():
         os.system('cls')
 
 def salir_programa():
+    global preguntas_examen
     global respuestas_examen
     global seguro_crito
     global corriendo
-    
+
     #Comprueba si el examen se inició (examen_iniciado) y si las respuestas se guardaron de forma segura (seguro_escrito)
     if examen_iniciado and seguro_crito:
         #Borra la pantalla
@@ -125,7 +126,7 @@ def salir_programa():
         cedula_ususario = usuario[2]
         #llama a encriptación
         print("Evaluación finalizada")
-        encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen)
+        encriptacion(nombre_ususario, apellido_usuario, cedula_ususario, respuestas_examen, preguntas_examen)
         #Actualiza la variable seguro_escrito a False para indicar que ya no hay necesidad de guardar las respuestas.
         seguro_crito = False
         #Actualiza la variable corriendo a False para indicar que el programa debe finalizar
@@ -351,17 +352,24 @@ esta seguro que este es su cedula? si/no ''')
     #en la siguiente función
 
 
-def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas_examen):
+def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas_examen, preguntas_examen):
     # Crear el nombre del archivo ZIP
     nombre_archivo_zip = "{}_{}_{}.zip".format(nombre_ususario, apellido_ususario, cedula_ususario)
 
     # Crear el nombre del archivo de texto
     nombre_archivo_txt = nombre_archivo_zip[:-4] + ".txt"
 
-    # Escribir las respuestas en el archivo de texto
+    # Escribir las puntuaciones o respuestas en el archivo de texto
     with open(nombre_archivo_txt, "w") as archivo_txt:
-        for pregunta, respuesta in zip(preguntas, respuestas_examen):
-            archivo_txt.write("{}: {}\n".format(pregunta, respuesta))
+        for pregunta, respuesta in zip(preguntas_examen, respuestas_examen):
+            if pregunta.get("opciones"):  # Si la pregunta tiene opciones, es de opción múltiple
+                if respuesta == pregunta["respuesta_correcta"]:
+                    contenido = "{} puntos".format(pregunta["puntos_respuesta_correcta"])
+                else:
+                    contenido = "0 puntos"
+            else:  # Si la pregunta no tiene opciones, es práctica
+                contenido = respuesta
+            archivo_txt.write("{}: {}\n".format(pregunta["enunciado"], contenido))
 
     contrasena_zip = datos_evaluacion["contrasena zip"]
 
@@ -372,6 +380,7 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
 
     # Eliminar el archivo de texto
     os.remove(nombre_archivo_txt)
+
 
     def send_email(subject, message, from_addr, to_addr, password, file_path):
         #La función crea un mensaje MIME multiparte (MIMEMultipart) utilizando la biblioteca email.
@@ -453,12 +462,12 @@ def validar_respuesta(opciones):
             # Si la conversión a entero falla, la respuesta no es un número
             print("Por favor, ingrese un número válido.")
 
-def realizar_examen(preguntas):
+def realizar_examen(preguntas_examen):
     global examen_iniciado
     global respuestas_examen
     respuestas_examen = []  # Lista para almacenar todas las respuestas del examen
     examen_iniciado = True
-    for pregunta in preguntas:
+    for pregunta in preguntas_examen:
 
         def en_evaluacion():
             try:
@@ -485,13 +494,13 @@ def realizar_examen(preguntas):
                             continue  # Repetir la pregunta si el usuario decide cambiar su respuesta
                 else:
                     #Pregunta práctica
-                    print ("Pegue su respuesta, presione 'enter', luego escriba '#termine_el_examen' y vuelva a pulsar 'enter' para terminar, no escriba")
+                    print ("Pegue su respuesta, presione 'enter', luego escriba '#termine_la_pregunta' y vuelva a pulsar 'enter' para terminar, no escriba")
                     print ("nada más ya que puede afectar su código, en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas")
                     respuesta = input("líneas en la terminal, presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
                     respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
                     
                     # Permitir al usuario ingresar múltiples líneas hasta que escriba '#termine_el_examen'
-                    while respuesta.strip().lower() != "#termine_el_examen":
+                    while respuesta.strip().lower() != "#termine_la_pregunta":
                         respuesta = input()  # Pedir la siguiente línea de código
                         respuesta_completa += "\n" + respuesta  # Agregar la nueva línea a la respuesta completa
                     
@@ -524,32 +533,9 @@ def primer_corte():
 
     # Iniciar el hilo
     t.start()
-
-    preguntas = [
-        {
-            "enunciado": "¿Cuál de los siguientes es un estándar de calidad comúnmente utilizado en el diseño de algoritmos y programas?",
-            "opciones": ["ISO 9001", "IEEE 754", "ANSI C", "PEP 8"]
-        },
-        {
-            "enunciado": "¿Qué tipo de estructura de control se utiliza para ejecutar un bloque de código repetidamente hasta que se cumple una condición?",
-            "opciones": ["Estructura condicional", "Ciclo Mientras", "Ciclo Para", "Selección múltiple"]
-        },
-        {
-            "enunciado": "¿Cuál de las siguientes opciones describe mejor la documentación de algoritmos y programas?",
-            "opciones": ["Comentarios detallados en el código fuente", "Notas escritas a mano al final del documento", "Ninguna documentación es necesaria", "Publicación en un blog personal"]
-        },
-        {
-            "enunciado": "¿Qué tipo de estructura de control se utiliza para realizar una acción si se cumple una condición o una acción diferente si no se cumple?",
-            "opciones": ["Estructura de control iterativa", "Ciclo Para", "Estructura condicional doble", "Ciclo Repetir"]
-        },
-        # Agregar más preguntas de opción múltiple aquí
-        {
-            "enunciado": "Pregunta práctica: Diseña un algoritmo en pseudocódigo que calcule el promedio de tres números ingresados por el usuario y muestra el resultado",
-            "opciones": []  # No hay opciones para esta pregunta
-        }
-    ]
-
-    return realizar_examen(preguntas)
+    global preguntas_examen
+    preguntas_examen = [{'enunciado': '2+2', 'opciones': ['4', '3', '2', '1'], 'respuesta_correcta': '4', 'puntos_respuesta_correcta': 5}, {'enunciado': 'cuanto es 3 + 5?', 'opciones': []}]
+    return realizar_examen(preguntas_examen)
 
 def main():
 

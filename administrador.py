@@ -86,7 +86,7 @@ def imprimir_csv(datos_examen):
         writer.writerow(column_names)
 
         # Puedes agregar filas de datos aquí
-        writer.writerow([datos_examen[0], datos_examen[1], datos_examen[2], datos_examen[3], datos_examen[4], datos_examen[5], datos_examen[6]])
+        writer.writerow([datos_examen[0], datos_examen[1], datos_examen[2], datos_examen[3], datos_examen[4]])
 
 
 def menu_administrador():
@@ -285,7 +285,6 @@ def menu_administrador():
 
                                 # Add the question to the datos_examen list
                                 datos_examen[4].append({
-                                    "tipo": "múltiple",
                                     "enunciado": pregunta_enunciado,
                                     "opciones": opciones,
                                     "respuesta_correcta": respuesta_correcta,
@@ -299,8 +298,8 @@ def menu_administrador():
 
                                 # Add the question to the datos_examen list
                                 datos_examen[4].append({
-                                    "tipo": "teórico/práctico",
-                                    "enunciado": pregunta_enunciado
+                                    "enunciado": pregunta_enunciado,
+                                    "opciones" : []
                                 })
 
                             imprimir_csv(datos_examen)
@@ -320,7 +319,7 @@ def menu_administrador():
                             if int(pregunta_modificar) == 1:
                                 # Modificar pregunta 1
                                 pregunta_1 = datos_examen[4][0]
-                                if pregunta_1["tipo"] == "múltiple":
+                                if pregunta_1["tipo"] == "multiple":
                                     # Modificar pregunta de opción múltiple
                                     print("Enunciado actual:", pregunta_1["enunciado"])
                                     print("Ingrese el nuevo enunciado (o presione Enter para mantener el actual): ")
@@ -363,7 +362,7 @@ def menu_administrador():
                                     except ValueError:
                                         print("El número de puntos debe ser un número entero.")
 
-                                elif pregunta_1["tipo"] == "teórico/práctico":
+                                elif pregunta_1["tipo"] == "teorico/practico":
                                 # Modificar pregunta teórica/práctica
                                     print("Enunciado actual:", pregunta_1)
                         elif accion_pregunta == "3":
