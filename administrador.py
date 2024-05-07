@@ -29,8 +29,12 @@ def borrar_pantalla():
 def validacion (valor,min,max):
     tipo = False
     valor_logitud = len(valor)
+
+    #peromite todos los tipos de datos
+    if valor and not valor.isdigit() and not valor.isalnum() and not valor.isalpha():
+        tipo = 5
     #solo numeros
-    if valor.isdigit():
+    elif valor.isdigit():
         tipo = 1
     #solo numeros con letras
     elif valor.isalnum():
@@ -42,7 +46,7 @@ def validacion (valor,min,max):
     elif "@gmail.com" in valor or "@hotmail.com" in valor:
         tipo = 4
 
-    if valor_logitud > min and valor_logitud < max and tipo:
+    if valor_logitud >= min and valor_logitud <= max and tipo:
         return tipo
 
 def input_modificado(prompt="", allowed_characters=""):
@@ -277,13 +281,13 @@ def menu_administrador():
                                                 pregunta_enunciado = input_modificado()
                                                 pregunta_enunciado_procesado = validacion(pregunta_enunciado,1,200)
                                                 opciones = []
-                                                if pregunta_enunciado_procesado == 2: 
+                                                if pregunta_enunciado_procesado == 5 or pregunta_enunciado_procesado == 2 or pregunta_enunciado_procesado == 1 or pregunta_enunciado_procesado == 3: 
                                                     while True:
                                                         print("Escriba una opcion, si desea dejar de agregar opciones pulse enter sin escribir nada")
                                                         nueva_opcion = input_modificado()
                                                         nueva_opcion_procesado = validacion(nueva_opcion,1,200)
 
-                                                        if nueva_opcion_procesado == 2 or nueva_opcion == "" or nueva_opcion == " ":
+                                                        if nueva_opcion_procesado == 5 or nueva_opcion_procesado == 2 or nueva_opcion == "" or nueva_opcion == " ":
                                                             if nueva_opcion.strip():
                                                                 opciones.append(nueva_opcion)
                                                             elif len(opciones) < 2:
@@ -336,7 +340,7 @@ def menu_administrador():
                                             while True:
                                                 pregunta_enunciado = input_modificado()
                                                 pregunta_enunciado_procesado = validacion(pregunta_enunciado,1,200)
-                                                if pregunta_enunciado_procesado == 2:
+                                                if pregunta_enunciado_procesado == 5 or pregunta_enunciado_procesado == 2 or pregunta_enunciado == 1 or pregunta_enunciado == 3:
                                                     print("La pregunta se almacenará como una pregunta teórica/práctica sin opciones.")
 
                                                     # Add the question to the datos_examen list
@@ -435,6 +439,9 @@ def menu_administrador():
                                     break
                                 else:
                                     print("Opción inválida. Intente nuevamente.")
+                    
+                            elif accion_pregunta == "3":
+                                break
 
                             else:
                                 print("opcion invalida")
@@ -446,7 +453,18 @@ def menu_administrador():
                         print(f"La contraseña del corte que sera presentado por los alumno no esta especificada." if datos_examen[1] is None else f"Contraseña del corte que sera presentado por los alumno: {datos_examen[1]}")
                         print(f"La contraseña del zip no esta especificada." if datos_examen[2] is None else f"Contraseña del zip: {datos_examen[2]}")
                         print(f"El correo al cual se enviara el zip no esta especificado." if datos_examen[3] is None else f"Correo al que se enviara el zip: {datos_examen[3]}")
-                        print(f"Preguntas teoricas: {datos_examen[4]}")
+                        if not datos_examen[4]:
+                            print(f"No se a ingresado ninguna pregunta")
+                        else:
+                            print("Lista de preguntas \n")
+                            for datos in imprimir_preguntas_teoricas:
+                                print("Enunciado: ", datos['enunciado'])
+                                print("Opciones: ")
+                                for opciones in datos['opciones']:
+                                    print(opciones)
+                                print("Respuesta correcta: ", datos['respuesta_correcta'])
+                                print("Puntos por respuesta correcta: ", datos['puntos_respuesta_correcta'])
+                                print("-------------------------------")
                         input("Pulse enter para regresar al menu")
 
                     elif selecion_usuario == 7:
@@ -455,10 +473,7 @@ def menu_administrador():
                         print("Archivo csv con los datos de la evaluacion impreso correctamente")
                         input("Pulse enter para regresar al menu")
 
-                    else: print("Selecione una opcion valida")
-                
-            else:
-                print("ingrese un numero")
+                else: print("Selecione una opcion valida")
 
         else: 
             print("Contraseña incorrecta,por favor reingrese la contraseña")
