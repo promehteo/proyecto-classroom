@@ -30,8 +30,11 @@ def validacion (valor,min,max):
     tipo = False
     valor_logitud = len(valor)
 
+    #correo 
+    if "@gmail.com" in valor or "@hotmail.com" in valor:
+        tipo = 4
     #peromite todos los tipos de datos
-    if valor and not valor.isdigit() and not valor.isalnum() and not valor.isalpha():
+    elif valor and not valor.isdigit() and not valor.isalnum() and not valor.isalpha():
         tipo = 5
     #solo numeros
     elif valor.isdigit():
@@ -42,9 +45,6 @@ def validacion (valor,min,max):
     #solo letras
     elif valor.isalpha():
         tipo = 3
-    #correo 
-    elif "@gmail.com" in valor or "@hotmail.com" in valor:
-        tipo = 4
 
     if valor_logitud >= min and valor_logitud <= max and tipo:
         return tipo
@@ -226,6 +226,7 @@ def menu_administrador():
                             datos_examen[3] = input_modificado()
 
                             procesada_correo = validacion(datos_examen[3],1,30)
+                            print("numero", procesada_correo)
 
                             if procesada_correo == 4:
                                 print("El correo que a ingresado es: ",datos_examen[3])
@@ -244,7 +245,7 @@ def menu_administrador():
                                     else:
                                         print("por favor elija una opcion valida")
 
-                                if  contrasena_examen_usuario == "si":
+                                if correo_examen_usuario == "si":
                                     break
 
                             else:
@@ -302,6 +303,7 @@ def menu_administrador():
                                                         indice = opciones.index(opciones_buscar)
                                                         print("Indice: ", indice)
                                                         print("Pregunta: ", opciones_buscar)
+                                                        print("-----------------------------")
 
                                                     print("ingrese el indice de la pregunta correcta")
 
@@ -309,17 +311,15 @@ def menu_administrador():
                                                         indice_respuesta_correcta = input_modificado()
 
                                                         indice_respuesta_correcta_validado = validacion(indice_respuesta_correcta,1,2)
-                                                        print(indice_respuesta_correcta_validado)
                                                         if indice_respuesta_correcta_validado == 1:    
 
-                                                            if int(indice_respuesta_correcta) > len(opciones):
+                                                            if int(indice_respuesta_correcta) < len(opciones):
                                                                 respuesta_correcta = opciones[int(indice_respuesta_correcta)]
-                                                                print("La opción correcta debe ser una de las opciones disponibles. Por favor ingrese el indice de la pregunta correcta")
-                                                            else:
                                                                 break
+                                                            else:
+                                                                print("La opción correcta debe ser una de las opciones disponibles. Por favor ingrese el indice de la pregunta correcta")
                                                         else: 
-                                                            print("Introdusca un numero")
-
+                                                            print("Introdusca un numero y un indice valido")
 
                                                         
                                                     print("Ingrese los puntos por responder correctamente: ")
@@ -392,72 +392,12 @@ def menu_administrador():
 
                                     if continuar_agregando_preguntas == "no":
                                         break
-                                print("Selecione cual de las preguntas teoricas va a modificar")
-                                print("1.-Pregunta 1")
-                                print("2.-Pregunta 2")
-                                print("3.-Pregunta 3")
-                                print("4.-Pregunta 4")
-                                pregunta_modificar = input_modificado()
-
-                                if int(pregunta_modificar) == 1:
-                                    # Modificar pregunta 1
-                                    pregunta_1 = datos_examen[4][0]
-                                    if pregunta_1["tipo"] == "multiple":
-                                            # Modificar pregunta de opción múltiple
-                                        print("Enunciado actual:", pregunta_1["enunciado"])
-                                        print("Ingrese el nuevo enunciado (o presione Enter para mantener el actual): ")
-                                        nuevo_enunciado = input_modificado()
-                                        if nuevo_enunciado:
-                                            pregunta_1["enunciado"] = nuevo_enunciado
-
-                                        print("Opciones actuales:")
-                                        for i, opcion in enumerate(pregunta_1["opciones"]):
-                                            print(f"{i + 1}. {opcion}")
-
-                                        print("Ingrese el número de la opción que desea modificar (o presione Enter para no modificar): ")
-                                        opcion_modificar = input_modificado()
-                                        if opcion_modificar:
-                                            try:
-                                                indice_opcion = int(opcion_modificar) - 1
-                                                if 0 <= indice_opcion < len(pregunta_1["opciones"]):
-                                                    print("Ingrese la nueva opción: ")
-                                                    nueva_opcion = input_modificado()
-                                                    pregunta_1["opciones"][indice_opcion] = nueva_opcion
-                                                else:
-                                                    print("Número de opción inválido.")
-                                            except ValueError:
-                                                print("El número de opción debe ser un número entero.")
-
-                                        respuesta_correcta_actual = pregunta_1["respuesta_correcta"]
-                                        print(f"Respuesta correcta actual: {respuesta_correcta_actual}.\nIngrese la nueva respuesta correcta (o presione Enter para mantener la actual): ")
-                                        nueva_respuesta_correcta = input_modificado()
-                                        if nueva_respuesta_correcta:
-                                            if nueva_respuesta_correcta not in pregunta_1["opciones"]:
-                                                print("La nueva respuesta correcta debe ser una de las opciones disponibles.")
-                                            else:
-                                                pregunta_1["respuesta_correcta"] = nueva_respuesta_correcta
-
-                                        puntos_respuesta_correcta_actual = pregunta_1["puntos_respuesta_correcta"]
-                                        try:
-                                            print(f"Puntos por responder correctamente actuales: {puntos_respuesta_correcta_actual}.\nIngrese los nuevos puntos (o presione Enter para mantener los actuales): ")
-                                            nuevos_puntos_respuesta_correcta = int(input_modificado())
-                                            pregunta_1["puntos_respuesta_correcta"] = nuevos_puntos_respuesta_correcta
-                                        except ValueError:
-                                            print("El número de puntos debe ser un número entero.")
-
-                                    elif pregunta_1["tipo"] == "teorico/practico":
-                                        # Modificar pregunta teórica/práctica
-                                        print("Enunciado actual:", pregunta_1)
-                                elif accion_pregunta == "3":
-                                    break
-                                else:
-                                    print("Opción inválida. Intente nuevamente.")
                     
                             elif accion_pregunta == "2":
                                 break
 
                             else:
-                                print("opcion invalida")
+                                print("opcion invalida. Intente nuevamente.")
 
                     elif selecion_usuario == 6:
                         borrar_pantalla()
@@ -467,17 +407,31 @@ def menu_administrador():
                         print(f"La contraseña del zip no esta especificada." if datos_examen[2] is None else f"Contraseña del zip: {datos_examen[2]}")
                         print(f"El correo al cual se enviara el zip no esta especificado." if datos_examen[3] is None else f"Correo al que se enviara el zip: {datos_examen[3]}")
                         if not datos_examen[4]:
-                            print(f"No se a ingresado ninguna pregunta")
+                            print(f"No se a ingresado ninguna pregunta:")
                         else:
                             print("Lista de preguntas \n")
+                            print("PREGUNTAS TEORICAS")
                             for datos in imprimir_preguntas_teoricas:
-                                print("Enunciado: ", datos['enunciado'])
-                                print("Opciones: ")
-                                for opciones in datos['opciones']:
-                                    print(opciones)
-                                print("Respuesta correcta: ", datos['respuesta_correcta'])
-                                print("Puntos por respuesta correcta: ", datos['puntos_respuesta_correcta'])
+                                if 'respuesta_correcta' in datos:
+                                    print("Enunciado: ", datos['enunciado'])
+                                    print("Opciones: ")
+                                    for opciones in datos['opciones']:
+                                        print("")
+                                        print("1.- ",opciones)
+                                        print("")
+                                    print("Respuesta correcta: ", datos['respuesta_correcta'])
+                                    print("Puntos por respuesta correcta: ", datos['puntos_respuesta_correcta'])
+                                    print("-------------------------------")
                                 print("-------------------------------")
+
+                            print("PREGUNTAS PRACTICAS")
+                            for datos in imprimir_preguntas_teoricas:
+                                if not 'respuesta_correcta' in datos:
+                                    print("Enunciado: ", datos['enunciado'])
+                                    print("-------------------------------")
+                                print("-------------------------------")
+                                
+                        print("-------------------------------")
                         input("Pulse enter para regresar al menu")
 
                     elif selecion_usuario == 7:
