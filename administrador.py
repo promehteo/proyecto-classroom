@@ -287,7 +287,7 @@ def menu_administrador():
                                                         nueva_opcion = input_modificado()
                                                         nueva_opcion_procesado = validacion(nueva_opcion,1,200)
 
-                                                        if nueva_opcion_procesado == 5 or nueva_opcion_procesado == 2 or nueva_opcion == "" or nueva_opcion == " ":
+                                                        if nueva_opcion_procesado == 5 or nueva_opcion_procesado == 2 or nueva_opcion_procesado == 1 or nueva_opcion_procesado == 3 or nueva_opcion == "" or nueva_opcion == " ":
                                                             if nueva_opcion.strip():
                                                                 opciones.append(nueva_opcion)
                                                             elif len(opciones) < 2:
@@ -358,7 +358,7 @@ def menu_administrador():
                                             while True:
                                                 pregunta_enunciado = input_modificado()
                                                 pregunta_enunciado_procesado = validacion(pregunta_enunciado,1,200)
-                                                if pregunta_enunciado_procesado == 5 or pregunta_enunciado_procesado == 2 or pregunta_enunciado == 1 or pregunta_enunciado == 3:
+                                                if pregunta_enunciado_procesado == 5 or pregunta_enunciado_procesado == 2 or pregunta_enunciado_procesado == 1 or pregunta_enunciado_procesado == 3:
                                                     print("La pregunta se almacenará como una pregunta teórica/práctica sin opciones.")
 
                                                     # Add the question to the datos_examen list
@@ -430,7 +430,7 @@ def menu_administrador():
                                     print("Enunciado: ", datos['enunciado'])
                                     print("-------------------------------")
                                 print("-------------------------------")
-                                
+
                         print("-------------------------------")
                         input("Pulse enter para regresar al menu")
 
