@@ -256,8 +256,7 @@ def menu_administrador():
                             borrar_pantalla()
                             print("Elija la acción que desea realizar:")
                             print("1.- Agregar nueva pregunta")
-                            print("2.- Modificar pregunta existente")
-                            print("3.- Volver al menú principal")
+                            print("2.- Volver al menú principal")
 
                             accion_pregunta = input_modificado()
 
@@ -298,12 +297,31 @@ def menu_administrador():
                                                             print("El dato que a ingresado es invalido, la opcion del enunciado debe tener minimo 1 caracter y maximo 200 caracteres")
 
 
-                                                    print("Ingrese la opción correcta (copiela y peguela de nuevo aqui exactamente igual a como la escribió en las opciones): ")
-                                                    respuesta_correcta = input_modificado()
-                                                    if respuesta_correcta not in opciones:
-                                                        print("La opción correcta debe ser una de las opciones disponibles.")
-                                                        continue
+                                                    print("Las opciones registradas son las siguientes: ")
+                                                    for opciones_buscar in opciones:
+                                                        indice = opciones.index(opciones_buscar)
+                                                        print("Indice: ", indice)
+                                                        print("Pregunta: ", opciones_buscar)
 
+                                                    print("ingrese el indice de la pregunta correcta")
+
+                                                    while True:
+                                                        indice_respuesta_correcta = input_modificado()
+
+                                                        indice_respuesta_correcta_validado = validacion(indice_respuesta_correcta,1,2)
+                                                        print(indice_respuesta_correcta_validado)
+                                                        if indice_respuesta_correcta_validado == 1:    
+
+                                                            if int(indice_respuesta_correcta) > len(opciones):
+                                                                respuesta_correcta = opciones[int(indice_respuesta_correcta)]
+                                                                print("La opción correcta debe ser una de las opciones disponibles. Por favor ingrese el indice de la pregunta correcta")
+                                                            else:
+                                                                break
+                                                        else: 
+                                                            print("Introdusca un numero")
+
+
+                                                        
                                                     print("Ingrese los puntos por responder correctamente: ")
 
                                                     while True:
@@ -374,11 +392,6 @@ def menu_administrador():
 
                                     if continuar_agregando_preguntas == "no":
                                         break
-
-
-
-                                #####
-                            elif accion_pregunta == "2":
                                 print("Selecione cual de las preguntas teoricas va a modificar")
                                 print("1.-Pregunta 1")
                                 print("2.-Pregunta 2")
@@ -440,7 +453,7 @@ def menu_administrador():
                                 else:
                                     print("Opción inválida. Intente nuevamente.")
                     
-                            elif accion_pregunta == "3":
+                            elif accion_pregunta == "2":
                                 break
 
                             else:
