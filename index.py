@@ -18,6 +18,8 @@ from tkinter import messagebox
 import signal
 #Librería para leer el csv
 import csv
+#Librería para pasar las preguntas sin las dobles comillas ("")
+import json
 
 #Librerías del correo
 import smtplib
@@ -44,8 +46,15 @@ def leer_csv():
         nombres_variables = next(lector_csv)
         for linea in lector_csv:
             for i, nombre_variable in enumerate(nombres_variables):
-                variables[nombre_variable] = linea[i]
+                if nombre_variable == "preguntas teoricas":
+                    # Reemplazar comillas simples por comillas dobles
+                    json_string = linea[i].replace("'", '"')
+                    # Convertir la cadena de texto JSON a un objeto Python
+                    variables[nombre_variable] = json.loads(json_string)
+                else:
+                    variables[nombre_variable] = linea[i]
     return variables
+
 
 datos_evaluacion = leer_csv()
 
@@ -364,9 +373,9 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
         for pregunta, respuesta in zip(preguntas_examen, respuestas_examen):
             if pregunta.get("opciones"):  # Si la pregunta tiene opciones, es de opción múltiple
                 if respuesta == pregunta["respuesta_correcta"]:
-                    contenido = "{} puntos".format(pregunta["puntos_respuesta_correcta"])
+                    contenido = "Respuesta correcta + {} puntos".format(pregunta["puntos_respuesta_correcta"])
                 else:
-                    contenido = "0 puntos"
+                    contenido = "Respuesta incorrecta + 0 puntos"
             else:  # Si la pregunta no tiene opciones, es práctica
                 contenido = respuesta
             archivo_txt.write("{}: {}\n".format(pregunta["enunciado"], contenido))
@@ -534,7 +543,9 @@ def primer_corte():
     # Iniciar el hilo
     t.start()
     global preguntas_examen
-    preguntas_examen = [{'enunciado': '2+2', 'opciones': ['4', '3', '2', '1'], 'respuesta_correcta': '4', 'puntos_respuesta_correcta': 5}, {'enunciado': 'cuanto es 3 + 5?', 'opciones': []}]
+    preguntas = datos_evaluacion["preguntas teoricas"]
+
+    preguntas_examen = preguntas
     return realizar_examen(preguntas_examen)
 
 def main():
