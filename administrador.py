@@ -1,6 +1,7 @@
 import csv
 from unidecode import unidecode
 import os
+import time
 
 passwort = "empanada"
 
@@ -13,7 +14,7 @@ correo_zip = None
 base_pregunta = None
 preguntas_teoricas = []
 
-datos_examen = [tiempo_evaluacion, contrasena_corte, contrasena_zip, correo_zip ,preguntas_teoricas]
+datos_examen = [tiempo_evaluacion, contrasena_corte, contrasena_zip, correo_zip, preguntas_teoricas]
 def borrar_pantalla():
     #La función define una variable llamada sistema_operativo para almacenar el nombre del sistema operativo actual
     sistema_operativo = os.name
@@ -50,38 +51,42 @@ def validacion (valor,min,max):
         return tipo
 
 def input_modificado(prompt="", allowed_characters=""):
-    """Captures user input, normalizes it, and validates against allowed characters.
-
-    Args:
-        prompt (str, optional): The prompt message to display to the user. Defaults to an empty string.
-        allowed_characters (str, optional): A string containing the allowed characters for input. Defaults to an empty string (no restrictions).
-
-    Returns:
-        str: The normalized and validated user input.
-    """
 
     while True:
         try:
-            # Capture user input
+
             user_input = input(prompt).lower()
 
-            # Normalize using unidecode
+
             normalized_input = unidecode(user_input)
 
-            # Validate against allowed characters
             if allowed_characters:
                 for char in normalized_input:
                     if char not in allowed_characters:
-                        raise ValueError(f"Invalid character: '{char}'")
+                        raise ValueError(f"Caracter invalido: '{char}'")
 
-            # Return valid input
             return normalized_input
 
         except ValueError as e:
             print(f"Error: {e}")
-            # Provide guidance to the user about allowed characters if applicable
+
             if allowed_characters:
-                print(f"Allowed characters: {allowed_characters}")
+                print(f"Los caracteres validos son: {allowed_characters}")
+
+def mostrar_preguntas(preguntas):
+    print("Lista de preguntas:")
+    for i, pregunta in enumerate(preguntas):
+        print(f"{i}: {pregunta['enunciado']}")
+        if 'respuesta_correcta' in pregunta:
+            print("  (Pregunta de opción múltiple)")
+            print("  Opciones:")
+            for j, opcion in enumerate(pregunta['opciones']):
+                print(f"    {j + 1}. {opcion}")
+            print(f"  Respuesta correcta: {pregunta['respuesta_correcta']}")
+            print(f"  Puntos por respuesta correcta: {pregunta['puntos_respuesta_correcta']}")
+        else:
+            print("  (Pregunta práctica)")
+        print("-------------------------------")
 
 def imprimir_csv(datos_examen):
     # Abre el archivo CSV en modo escritura
@@ -111,9 +116,9 @@ def menu_administrador():
         2.- Contraseña del corte que sera presentado por los alumno
         3.- Contraseña del zip que sera enviado al correo
         4.- Correo al que se enviara el zip
-        5.- Editar preguntas
-        6.- Ver(en esta opcion podra ver todos los datos que a ingresado asta el momento)
-        7.- Imprimir(genera el archivo csv que contiene los parametros para la evalucion)''')
+        5.- Agregar o eliminar preguntas
+        6.- Ver(en esta opcion podra ver todos los datos que a ingresado hasta el momento)
+        7.- Guardar cambios (SI NO PRESIONA AQUI NO SE GUARDARAN LOS PARAMETROS DEL EXAMEN)''')
                 selecion_usuario = input_modificado()
 
                 if selecion_usuario.isdigit():
@@ -257,7 +262,8 @@ def menu_administrador():
                             borrar_pantalla()
                             print("Elija la acción que desea realizar:")
                             print("1.- Agregar nueva pregunta")
-                            print("2.- Volver al menú principal")
+                            print("2.- Eliminar pregunta")
+                            print("3.- Volver al menú principal")
 
                             accion_pregunta = input_modificado()
 
@@ -302,10 +308,10 @@ def menu_administrador():
                                                     for opciones_buscar in opciones:
                                                         indice = opciones.index(opciones_buscar)
                                                         print("Indice: ", indice)
-                                                        print("Pregunta: ", opciones_buscar)
+                                                        print("Respuesta: ", opciones_buscar)
                                                         print("-----------------------------")
 
-                                                    print("ingrese el indice de la pregunta correcta")
+                                                    print("ingrese el indice de la respuesta correcta")
 
                                                     while True:
                                                         indice_respuesta_correcta = input_modificado()
@@ -331,7 +337,6 @@ def menu_administrador():
 
                                                             puntos_respuesta_correcta = int(puntos_respuesta_correcta)
                                                             
-                                                            # Add the question to the datos_examen list
                                                             datos_examen[4].append({
                                                                 "enunciado": pregunta_enunciado,
                                                                 "opciones": opciones,
@@ -361,7 +366,7 @@ def menu_administrador():
                                                 if pregunta_enunciado_procesado == 5 or pregunta_enunciado_procesado == 2 or pregunta_enunciado_procesado == 1 or pregunta_enunciado_procesado == 3:
                                                     print("La pregunta se almacenará como una pregunta teórica/práctica sin opciones.")
 
-                                                    # Add the question to the datos_examen list
+                                                    #Añade la pregunta a datos_examen
                                                     datos_examen[4].append({
                                                         "enunciado": pregunta_enunciado,
                                                         "opciones" : []
@@ -389,11 +394,39 @@ def menu_administrador():
                                             break
                                         else:
                                             print("Por favor seleciones una opcion valida. si/no")
+                                            continuar_agregando_preguntas = input_modificado()
 
                                     if continuar_agregando_preguntas == "no":
                                         break
+                            
+                            if accion_pregunta == "2": 
+                                if not preguntas_teoricas:
+                                    print("No hay preguntas para eliminar.")
+                                    time.sleep(3)
+                                else:
+                                    while True:
+                                        mostrar_preguntas(preguntas_teoricas)
+                                        print("Ingrese el índice de la pregunta que desea eliminar: ")
+                                        indice_pregunta = input_modificado()
+        
+                                        # Valida que el índice sea un número entero válido
+                                        if indice_pregunta.isdigit():
+                                            indice_pregunta = int(indice_pregunta)
+            
+                                            # Verifica que el índice esté dentro del rango de preguntas existentes
+                                            if 0 <= indice_pregunta < len(preguntas_teoricas):
+                                                # Elimina la pregunta del examen
+                                                del preguntas_teoricas[indice_pregunta]
+                                                print("Pregunta eliminada exitosamente.")
+                                                break
+                                            else:
+                                                print("Índice de pregunta inválido. Por favor, intente de nuevo.")
+                                        else:
+                                            print("Entrada inválida. Por favor, ingrese un número entero.")
+
+
                     
-                            elif accion_pregunta == "2":
+                            elif accion_pregunta == "3":
                                 break
 
                             else:
@@ -407,31 +440,36 @@ def menu_administrador():
                         print(f"La contraseña del zip no esta especificada." if datos_examen[2] is None else f"Contraseña del zip: {datos_examen[2]}")
                         print(f"El correo al cual se enviara el zip no esta especificado." if datos_examen[3] is None else f"Correo al que se enviara el zip: {datos_examen[3]}")
                         if not datos_examen[4]:
-                            print(f"No se a ingresado ninguna pregunta:")
+                            print(f"No se ha ingresado ninguna pregunta:")
                         else:
                             print("Lista de preguntas \n")
-                            print("PREGUNTAS TEORICAS")
+                            print("-------------------------------")
+                            print("PREGUNTAS DE OPCION MULTIPLE")
+
+                            almacen_contador_teoria = 0
+
                             for datos in imprimir_preguntas_teoricas:
                                 if 'respuesta_correcta' in datos:
-                                    print("Enunciado: ", datos['enunciado'])
+                                    almacen_contador_teoria += 1
+                                    print(f"Pregunta {almacen_contador_teoria}.- Enunciado: ", datos['enunciado'])
                                     print("Opciones: ")
-                                    for opciones in datos['opciones']:
-                                        print("")
-                                        print("1.- ",opciones)
-                                        print("")
+                                    for j,opciones in enumerate(datos['opciones']):
+                                        print(f"{j + 1}.- ",opciones)
                                     print("Respuesta correcta: ", datos['respuesta_correcta'])
                                     print("Puntos por respuesta correcta: ", datos['puntos_respuesta_correcta'])
                                     print("-------------------------------")
-                                print("-------------------------------")
 
                             print("PREGUNTAS PRACTICAS")
+                            print("-------------------------------")
+                            almacen_contador_practica = 0
+
                             for datos in imprimir_preguntas_teoricas:
                                 if not 'respuesta_correcta' in datos:
-                                    print("Enunciado: ", datos['enunciado'])
+                                    almacen_contador_practica += 1
+                                    print(f"Pregunta {almacen_contador_practica}.- Enunciado: ", datos['enunciado'])
                                     print("-------------------------------")
-                                print("-------------------------------")
 
-                        print("-------------------------------")
+
                         input("Pulse enter para regresar al menu")
 
                     elif selecion_usuario == 7:
