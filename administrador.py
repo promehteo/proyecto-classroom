@@ -262,7 +262,7 @@ def menu_administrador():
                             borrar_pantalla()
                             print("Elija la acción que desea realizar:")
                             print("1.- Agregar nueva pregunta")
-                            print("2.- Eliminar")
+                            print("2.- Eliminar pregunta")
                             print("3.- Volver al menú principal")
 
                             accion_pregunta = input_modificado()
