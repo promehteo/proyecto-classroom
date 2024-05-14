@@ -266,7 +266,6 @@ def inicio_seccion ():
             print('''Bienvenido al PROYECTO CLASSROOM ALUMNO, para iniciar primero inserte sus datos''')
             while True:
                 print("Por favor ingrese su nombre (solo primer nombre): ")
-                print(datos_evaluacion)
                 nombre_ususario = input('')
                 validar_nombre_usuario = validar_nombre(nombre_ususario)
                 while validar_nombre_usuario != True:
@@ -431,7 +430,7 @@ def encriptacion(nombre_ususario, apellido_ususario, cedula_ususario, respuestas
 
     #esta es la llamada a la funcion que manda el correo
     #                                                      aqui va el corrio del proyecto-  correo de la profesora        -   esto no lo toques  -  el archivo que va a enviar
-    #send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', correo_electronico_profesor, 'msht ekje bofg aplb', nombre_archivo_zip)
+    send_email('Asunto del correo', 'Mensaje del correo', 'proyectoclassroom8@gmail.com', correo_electronico_profesor, 'msht ekje bofg aplb', nombre_archivo_zip)
 
 
 #Aquí empezamos con el menú de los exámenes
@@ -503,13 +502,11 @@ def realizar_examen(preguntas_examen):
                             continue  # Repetir la pregunta si el usuario decide cambiar su respuesta
                 else:
                     #Pregunta práctica
-                    print ("Pegue su respuesta, presione 'enter', luego escriba '#termine_la_pregunta' y vuelva a pulsar 'enter' para terminar, no escriba")
-                    print ("nada más ya que puede afectar su código, en caso de que le salga un recuadro preguntando que si está seguro de pegar tantas")
-                    respuesta = input("líneas en la terminal, presione en la opción 'pegar', de lo contrario se modificará su codigo y su nota se verá afectada: ")
+                    respuesta = input("Adjunte su respuesta, presione 'enter', luego escriba '####' y vuelva a pulsar 'enter' para terminar, en caso de que le salga un recuadro preguntando que si está seguro de pegar/mandar tantas líneas en la terminal, presione en la opción 'pegar', de lo contrario se modificará su respuesta y su nota se verá afectada: ")
                     respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
                     
                     # Permitir al usuario ingresar múltiples líneas hasta que escriba '#termine_el_examen'
-                    while respuesta.strip().lower() != "#termine_la_pregunta":
+                    while respuesta.strip().lower() != "####":
                         respuesta = input()  # Pedir la siguiente línea de código
                         respuesta_completa += "\n" + respuesta  # Agregar la nueva línea a la respuesta completa
                     
