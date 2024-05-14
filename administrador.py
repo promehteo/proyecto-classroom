@@ -113,12 +113,15 @@ def menu_administrador():
                 print("Acontinuacion podra modificar los parametros de su evaluacion, tenga en cuenta que debe rellenar todos los parametros para su evaluacion presentados a continuacion y que deben ser rellenados correctamente o de lo contrario podria surgir fallos a la hora de la precentacion de la evaluacion")
                 print('''
         1.- Duracion de la evalucion
-        2.- Contraseña del corte que sera presentado por los alumno
+        2.- Contraseña del cohorte que sera presentado por los alumno
         3.- Contraseña del zip que sera enviado al correo
         4.- Correo al que se enviara el zip
         5.- Agregar o eliminar preguntas
         6.- Ver(en esta opcion podra ver todos los datos que a ingresado hasta el momento)
-        7.- Guardar cambios (SI NO PRESIONA AQUI NO SE GUARDARAN LOS PARAMETROS DEL EXAMEN)''')
+        7.- Guardar cambios (SI NO PRESIONA AQUI NO SE GUARDARAN LOS PARAMETROS DEL EXAMEN)
+        
+        NOTA: LUEGO DE SALIR DEL PROGRAMA NO PODRÁ MODIFICAR EL EXAMEN YA PARAMETRIZADO, SI QUIERE HACERLO TENDRA QUE ESTABLECER CADA PARAMETRO DE NUEVO DESDE 0.
+        SE RECOMIENDA PULSAR LA OPCION "6" ANTES DE SALIR PARA VERIFICAR QUE TODO ESTÉ BIEN''')
                 selecion_usuario = input_modificado()
 
                 if selecion_usuario.isdigit():
@@ -145,7 +148,7 @@ def menu_administrador():
                                     if respues_examen_usuario == "si":
                                         break
                                     elif respues_examen_usuario == "no":
-                                        print("Por favor reingrese el tiempo para el corte")
+                                        print("Por favor reingrese el tiempo para el cohorte")
                                         break
                                     else:
                                         print("por favor elija una opcion valida")
@@ -159,7 +162,7 @@ def menu_administrador():
                     elif selecion_usuario == 2:
 
                         borrar_pantalla()
-                        print("Ingrese la contraseña del corte que presentaran sus alumnos. Por ejemplo: Asdrubal2767")
+                        print("Ingrese la contraseña del cohorte que presentaran sus alumnos. Por ejemplo: Asdrubal2767")
 
                         while True:
                             datos_examen[1] = input_modificado()
@@ -167,8 +170,8 @@ def menu_administrador():
                             contrasena_procesada = validacion(datos_examen[1],1,20)
 
                             if contrasena_procesada == 2:
-                                print("La contraseña del corte que a ingresado es: ", datos_examen[1])
-                                print("Esta seguro que de que esa sera la contraseña para el corte? si/no")
+                                print("La contraseña del cohorte que a ingresado es: ", datos_examen[1])
+                                print("Esta seguro que de que esa sera la contraseña para el cohorte? si/no")
 
                                 while True:
 
@@ -177,7 +180,7 @@ def menu_administrador():
                                     if contrasena_examen_usuario == "si":
                                         break
                                     elif contrasena_examen_usuario == "no":
-                                        print("Por favor reingrese la contraseña del corte")
+                                        print("Por favor reingrese la contraseña del cohorte")
                                         break
                                     else:
                                         print("por favor elija una opcion valida")
@@ -269,7 +272,7 @@ def menu_administrador():
 
                             if accion_pregunta == "1":
                                 while True:
-                                    print("Seleccione el tipo de pregunta múltiple(1) o teórico/práctico(2): ")
+                                    print("Seleccione el tipo de pregunta múltiple(1) o tpráctica(2): ")
                                     while True:
                                         tipo_pregunta = input_modificado()
                                         if tipo_pregunta == "1" or tipo_pregunta == "2":
@@ -436,7 +439,7 @@ def menu_administrador():
                         borrar_pantalla()
                         imprimir_preguntas_teoricas = datos_examen[4]
                         print(f"El tiempo de evaluación no está especificado." if datos_examen[0] is None else f"Duración de la evaluación: {datos_examen[0] / 60} minutos")
-                        print(f"La contraseña del corte que sera presentado por los alumno no esta especificada." if datos_examen[1] is None else f"Contraseña del corte que sera presentado por los alumno: {datos_examen[1]}")
+                        print(f"La contraseña del cohorte que sera presentado por los alumno no esta especificada." if datos_examen[1] is None else f"Contraseña del cohorte que sera presentado por los alumno: {datos_examen[1]}")
                         print(f"La contraseña del zip no esta especificada." if datos_examen[2] is None else f"Contraseña del zip: {datos_examen[2]}")
                         print(f"El correo al cual se enviara el zip no esta especificado." if datos_examen[3] is None else f"Correo al que se enviara el zip: {datos_examen[3]}")
                         if not datos_examen[4]:
