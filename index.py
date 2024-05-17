@@ -505,7 +505,7 @@ def realizar_examen(preguntas_examen):
                     respuesta = input("Adjunte su respuesta, presione 'enter', luego escriba '####' y vuelva a pulsar 'enter' para terminar, en caso de que le salga un recuadro preguntando que si está seguro de pegar/mandar tantas líneas en la terminal, presione en la opción 'pegar', de lo contrario se modificará su respuesta y su nota se verá afectada: ")
                     respuesta_completa = respuesta  # Inicialmente, la respuesta completa es igual a la primera línea
                     
-                    # Permitir al usuario ingresar múltiples líneas hasta que escriba '#termine_el_examen'
+                    # Permitir al usuario ingresar múltiples líneas hasta que escriba '####'
                     while respuesta.strip().lower() != "####":
                         respuesta = input()  # Pedir la siguiente línea de código
                         respuesta_completa += "\n" + respuesta  # Agregar la nueva línea a la respuesta completa

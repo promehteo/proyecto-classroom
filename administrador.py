@@ -89,16 +89,32 @@ def mostrar_preguntas(preguntas):
         print("-------------------------------")
 
 def imprimir_csv(datos_examen):
-    # Abre el archivo CSV en modo escritura
-    with open('mi_archivo.csv', 'w', newline='') as csvfile:   
-
-        writer = csv.writer(csvfile)
-
-        # Escribe los encabezados en la primera fila
-        writer.writerow(column_names)
-
-        # Puedes agregar filas de datos aquí
-        writer.writerow([datos_examen[0], datos_examen[1], datos_examen[2], datos_examen[3], datos_examen[4]])
+    # Define el límite de filas en el archivo CSV
+    limite_filas = 20
+    
+    if os.path.isfile('mi_archivo.csv'):
+        # Si el archivo CSV ya existe, cargar los datos existentes
+        with open('mi_archivo.csv', 'r', newline='') as csvfile:
+            reader = csv.reader(csvfile)
+            existing_data = list(reader)
+        
+        # Si el número de filas supera el límite, eliminar la fila más antigua
+        if len(existing_data) >= limite_filas:
+            del existing_data[1]  # Elimina la segunda fila (índice 1), que es la fila más antigua
+        
+        # Agregar los nuevos datos al final de la lista
+        existing_data.append(datos_examen)
+        
+        # Escribir los datos actualizados en el archivo CSV
+        with open('mi_archivo.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerows(existing_data)
+    else:
+        # Si el archivo no existe, crear uno nuevo y escribir los datos del examen
+        with open('mi_archivo.csv', 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(column_names)
+            writer.writerow(datos_examen)
 
 
 def menu_administrador():
