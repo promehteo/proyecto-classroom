@@ -42,12 +42,14 @@ def leer_csv():
     variables = {}
     with open("mi_archivo.csv", "r") as archivo_csv:
         lector_csv = csv.reader(archivo_csv)
-        # Leer la primera línea como nombres de variables
+        #Leer la primera línea como nombres de variables
         nombres_variables = next(lector_csv)
         for linea in lector_csv:
+            #revisa el nombre de las variables
             for i, nombre_variable in enumerate(nombres_variables):
+                #si el nombre es "preguntas teoricas"
                 if nombre_variable == "preguntas teoricas":
-                    # Reemplazar comillas simples por comillas dobles
+                    # Reemplaza las comillas simples por dobles
                     json_string = linea[i].replace("'", '"')
                     # Convertir la cadena de texto JSON a un objeto Python
                     variables[nombre_variable] = json.loads(json_string)
@@ -438,6 +440,7 @@ def menu_principal():
     try:
         
         borrar_pantalla()
+        #revisa si la contraseña del examen que ingresó el alumno es la misma que la del csv
         contrasena_csv = datos_evaluacion["contrasena"]
         contrasena = input("Ingrese la contraseña para el examen: ")
         
@@ -483,7 +486,7 @@ def realizar_examen(preguntas_examen):
                 presentar_pregunta(pregunta["enunciado"], pregunta.get("opciones", []))
                 
                 if pregunta["opciones"]:
-                    # Pregunta de opción múltiple
+                    #si tiene opciopnes entonce es pregunta de opción múltiple
                     while True:
                         respuesta = validar_respuesta(pregunta["opciones"])
                         print(f"Su respuesta fue: {pregunta['opciones'][respuesta - 1]}")  # Mostrar la respuesta seleccionada
@@ -496,7 +499,7 @@ def realizar_examen(preguntas_examen):
 
                         if confirmacion == "si":
                             respuestas_examen.append(pregunta['opciones'][respuesta - 1])  # Agregar la respuesta a la lista de respuestas
-                            break  # Salir del bucle si el usuario confirma su respuesta
+                            break #sale del bucle si el usuario confirma su respuesta
                         elif confirmacion == "no":
                             print("Por favor, vuelva a ingresar su respuesta.")
                             continue  # Repetir la pregunta si el usuario decide cambiar su respuesta

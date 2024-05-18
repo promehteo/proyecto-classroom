@@ -1,11 +1,16 @@
+#Librería usada para imprimir los datos en el csv
 import csv
+#Librería utilizada para quitar los acentos
 from unidecode import unidecode
+#Librería empleada para interactuar con el sistema opertivo a nivel de consola
 import os
+#Librería que se usará para controlar el tiempo
 import time
 
-passwort = "empanada"
+#Contraseña del programa
+passwort = "alertaprofesores2024/"
 
-# Define los nombres de las columnas
+#define los nombres de las columnas
 column_names = ['tiempo', 'contrasena','contrasena zip','correo','preguntas teoricas']
 tiempo_evaluacion = None
 contrasena_corte = None
@@ -28,6 +33,7 @@ def borrar_pantalla():
         os.system('cls')
 
 def validacion (valor,min,max):
+    #se definen las validaciones con numeros ya que así es más faciles llamarlas
     tipo = False
     valor_logitud = len(valor)
 
@@ -54,73 +60,72 @@ def input_modificado(prompt="", allowed_characters=""):
 
     while True:
         try:
-
+             #Solicita la entrada del usuario y la convierte a minúsculas
             user_input = input(prompt).lower()
 
-
+             #Normaliza la entrada eliminando caracteres especiales
             normalized_input = unidecode(user_input)
 
+            #Verifica si se han especificado caracteres permitidos
             if allowed_characters:
+
                 for char in normalized_input:
                     if char not in allowed_characters:
+                        # Si el caracter no está en los permitidos lanza un error indicando el caracter inválido
                         raise ValueError(f"Caracter invalido: '{char}'")
 
+            #Si la entrada es válida, la retorna
             return normalized_input
 
+        #Captura los errores de valor
         except ValueError as e:
+            #muestra el mensaje de error
             print(f"Error: {e}")
 
+            # Si se han especificado caracteres permitidos
             if allowed_characters:
+                 #Muestra los caracteres válidos al usuario
                 print(f"Los caracteres validos son: {allowed_characters}")
 
 def mostrar_preguntas(preguntas):
     print("Lista de preguntas:")
+    #obtiene el indice y contenido de cada pregunta
     for i, pregunta in enumerate(preguntas):
+        #muestra el indice y enunciado de la pregunta
         print(f"{i}: {pregunta['enunciado']}")
+        #si la pregunta tiene respuesta correcta entoces es de opcion múltiple
         if 'respuesta_correcta' in pregunta:
             print("  (Pregunta de opción múltiple)")
             print("  Opciones:")
+            #Obtiene el indice y contenido de las opciones y las muestra
             for j, opcion in enumerate(pregunta['opciones']):
                 print(f"    {j + 1}. {opcion}")
+            #muestra la respuesta correcta y el valor si responder bien
             print(f"  Respuesta correcta: {pregunta['respuesta_correcta']}")
             print(f"  Puntos por respuesta correcta: {pregunta['puntos_respuesta_correcta']}")
+        #si la pregunta no tiene opciones entonces de practica
         else:
             print("  (Pregunta práctica)")
         print("-------------------------------")
 
 def imprimir_csv(datos_examen):
-    # Define el límite de filas en el archivo CSV
-    limite_filas = 20
-    
-    if os.path.isfile('mi_archivo.csv'):
-        # Si el archivo CSV ya existe, cargar los datos existentes
-        with open('mi_archivo.csv', 'r', newline='') as csvfile:
-            reader = csv.reader(csvfile)
-            existing_data = list(reader)
-        
-        # Si el número de filas supera el límite, eliminar la fila más antigua
-        if len(existing_data) >= limite_filas:
-            del existing_data[1]  # Elimina la segunda fila (índice 1), que es la fila más antigua
-        
-        # Agregar los nuevos datos al final de la lista
-        existing_data.append(datos_examen)
-        
-        # Escribir los datos actualizados en el archivo CSV
-        with open('mi_archivo.csv', 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerows(existing_data)
-    else:
-        # Si el archivo no existe, crear uno nuevo y escribir los datos del examen
-        with open('mi_archivo.csv', 'w', newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(column_names)
-            writer.writerow(datos_examen)
+    # Abre el archivo CSV en modo escritura
+    with open('mi_archivo.csv', 'w', newline='') as csvfile:   
 
+        #Escribir en el csv
+        writer = csv.writer(csvfile)
+
+        # Escribe los encabezados en la primera fila
+        writer.writerow(column_names)
+
+        #Puedes agregar filas de datos aquí
+        writer.writerow([datos_examen[0], datos_examen[1], datos_examen[2], datos_examen[3], datos_examen[4]])
 
 def menu_administrador():
     borrar_pantalla()
     print('''Bienvenido al PROYECTO CLASSROOM DOCENTE, para iniciar primero inserte la contraseña''')
     while True:
+        #si el input es igual a la contraseña deja pasar
         contrasena_usuario = input_modificado()
         if contrasena_usuario.strip() == passwort:
             while True:
@@ -143,16 +148,21 @@ def menu_administrador():
                 if selecion_usuario.isdigit():
                     selecion_usuario = int(selecion_usuario)
 
+                    #si el usuario presiona 1 lo lleva para acá y así con cada "if selecion_usuario"
                     if selecion_usuario == 1:
                         borrar_pantalla()
                         print("Ingrese en minutos la duracion de la evalucion. Por ejemplo: 300")
 
                         while True:
+                            #le pide los minutos al usurio mediante el input_modificado
                             minutos = input_modificado()
+                            #se verifica que pase la validacion
                             minutos_procesados = validacion(minutos,1,4)
 
                             if minutos_procesados == 1:
+                                #debido a que el tiempo se mide en segundos, entonces el valor que ingrese el profesor se multiplicará por 60 para que sean minutos
                                 segundo_minutos = int(minutos) * 60
+                                #ahora "datos_examen[0]" contiene los minutos
                                 datos_examen[0] = segundo_minutos
                                 print("El tiempo que a ingresado es de: ", datos_examen[0] / 60 ," minutos")
                                 print("Esta seguro que de que esa sera la duracion para el examen? si/no")
@@ -181,8 +191,9 @@ def menu_administrador():
                         print("Ingrese la contraseña del cohorte que presentaran sus alumnos. Por ejemplo: Asdrubal2767")
 
                         while True:
+                            #le pide la contraseña al usurio mediante el input_modificado
                             datos_examen[1] = input_modificado()
-
+                            ##se verifica que pase la validacion
                             contrasena_procesada = validacion(datos_examen[1],1,20)
 
                             if contrasena_procesada == 2:
@@ -214,8 +225,10 @@ def menu_administrador():
                         print("Ingrese la contraseña del zip que se enviara a su correo. Por ejemplo: corte3matematicas")
 
                         while True:
+                            #aqui se le pide al usuario la contraseña
                             datos_examen[2] = input_modificado()
 
+                            #se verifica que pase la validacion
                             procesada_contraseña_zip = validacion(datos_examen[2],1,20)
 
                             if procesada_contraseña_zip == 2:
@@ -247,8 +260,10 @@ def menu_administrador():
                         print("Ingrese el correo al cual se enviara el zip. Por ejemplo: profealex9@gmail.com")
                         
                         while True:
+                            #le pide el correo al profesor y lo almacena en "datos_examen[3]"
                             datos_examen[3] = input_modificado()
 
+                            #lo valida
                             procesada_correo = validacion(datos_examen[3],1,30)
                             print("numero", procesada_correo)
 
@@ -284,9 +299,11 @@ def menu_administrador():
                             print("2.- Eliminar pregunta")
                             print("3.- Volver al menú principal")
 
+                            #pide qué opcion se desea ejecutar
                             accion_pregunta = input_modificado()
 
                             if accion_pregunta == "1":
+                                #aqui se le pide al usuario que escoja el tipo de pregunta que desea guardar
                                 while True:
                                     print("Seleccione el tipo de pregunta múltiple(1) o tpráctica(2): ")
                                     while True:
@@ -300,29 +317,33 @@ def menu_administrador():
                                         
                                         tipo_pregunta = int(tipo_pregunta)
 
+                                        #si escoge una entonces es de opcion multiple
                                         if tipo_pregunta == 1:
                                             while True:
                                                 print("Ingrese el enunciado de la pregunta: ")
+                                                #se le pide enunciado y se valida
                                                 pregunta_enunciado = input_modificado()
-                                                pregunta_enunciado_procesado = validacion(pregunta_enunciado,1,200)
+                                                pregunta_enunciado_procesado = validacion(pregunta_enunciado,1,200) #estos numeros del final indican los caracteres minimos y maximos
+                                                #se empieza con las opciones
                                                 opciones = []
-                                                if pregunta_enunciado_procesado == 5 or pregunta_enunciado_procesado == 2 or pregunta_enunciado_procesado == 1 or pregunta_enunciado_procesado == 3: 
+                                                if pregunta_enunciado_procesado == 5 or pregunta_enunciado_procesado == 2 or pregunta_enunciado_procesado == 1 or pregunta_enunciado_procesado == 3: #la pregunta tiene que pasar las validaciones 1, 2, 3 y 5
                                                     while True:
                                                         print("Escriba una opcion, si desea dejar de agregar opciones pulse enter sin escribir nada")
+                                                        #se solicita una opcion
                                                         nueva_opcion = input_modificado()
                                                         nueva_opcion_procesado = validacion(nueva_opcion,1,200)
 
-                                                        if nueva_opcion_procesado == 5 or nueva_opcion_procesado == 2 or nueva_opcion_procesado == 1 or nueva_opcion_procesado == 3 or nueva_opcion == "" or nueva_opcion == " ":
+                                                        if nueva_opcion_procesado == 5 or nueva_opcion_procesado == 2 or nueva_opcion_procesado == 1 or nueva_opcion_procesado == 3 or nueva_opcion == "" or nueva_opcion == " ": #la opcion tiene que pasar las mismas validaciones con la diferencia de que si está vacia y hay al menos 2 opciones se toma como que ya no habrán más opciones 
                                                             if nueva_opcion.strip():
                                                                 opciones.append(nueva_opcion)
-                                                            elif len(opciones) < 2:
+                                                            elif len(opciones) < 2: #cuenta que haya al menos 2 opciones
                                                                 print("Se necesitan al menos dos opciones para una pregunta de opción múltiple.")
                                                             else: 
                                                                 break
                                                         else:
-                                                            print("El dato que a ingresado es invalido, la opcion del enunciado debe tener minimo 1 caracter y maximo 200 caracteres")
+                                                            print("El dato que ha ingresado es invalido, la opcion del enunciado debe tener minimo 1 caracter y maximo 200 caracteres")
 
-
+                                                    #Aqui se muestran las opciones registradas con su indice
                                                     print("Las opciones registradas son las siguientes: ")
                                                     for opciones_buscar in opciones:
                                                         indice = opciones.index(opciones_buscar)
@@ -333,6 +354,7 @@ def menu_administrador():
                                                     print("ingrese el indice de la respuesta correcta")
 
                                                     while True:
+                                                        #se le pide al usuario el indice de la respuesta correcta, se valida y se revisa que esté en las opciones
                                                         indice_respuesta_correcta = input_modificado()
 
                                                         indice_respuesta_correcta_validado = validacion(indice_respuesta_correcta,1,2)
@@ -350,12 +372,14 @@ def menu_administrador():
                                                     print("Ingrese los puntos por responder correctamente: ")
 
                                                     while True:
+                                                        #se piden los puntos por responder correctamente y se verifica que solo se ingresen numeros
                                                         puntos_respuesta_correcta = input_modificado()
                                                         
                                                         if puntos_respuesta_correcta.isdigit():
 
                                                             puntos_respuesta_correcta = int(puntos_respuesta_correcta)
-                                                            
+
+                                                            #por ultimo se añaden todos los datos a "datos_examen[4]"
                                                             datos_examen[4].append({
                                                                 "enunciado": pregunta_enunciado,
                                                                 "opciones": opciones,
@@ -376,16 +400,17 @@ def menu_administrador():
 
                                             
                                     ####
-
+                                        #si el usuario escoge 2 entonces una pregunta practica (sin opciones)
                                         elif tipo_pregunta == 2:
                                             print("Ingrese el enunciado de la pregunta: ")
                                             while True:
+                                                #De igual forma se guarda el enunciado de la pregunta y se valida
                                                 pregunta_enunciado = input_modificado()
                                                 pregunta_enunciado_procesado = validacion(pregunta_enunciado,1,200)
                                                 if pregunta_enunciado_procesado == 5 or pregunta_enunciado_procesado == 2 or pregunta_enunciado_procesado == 1 or pregunta_enunciado_procesado == 3:
                                                     print("La pregunta se almacenará como una pregunta teórica/práctica sin opciones.")
 
-                                                    #Añade la pregunta a datos_examen
+                                                    #Añade la pregunta a "datos_examen[4]" sin opciones
                                                     datos_examen[4].append({
                                                         "enunciado": pregunta_enunciado,
                                                         "opciones" : []
@@ -402,7 +427,7 @@ def menu_administrador():
                                     else:
                                         print("solo se permiten numeros")
 
-
+                                    #se le pregunta al usuario que si desea agregar otra pregunta
                                     print("¿Desea agregar otra pregunta? si/no")
                                     continuar_agregando_preguntas = input_modificado()
 
@@ -418,23 +443,27 @@ def menu_administrador():
                                     if continuar_agregando_preguntas == "no":
                                         break
                             
+                            #aqui empieza el eliminar pregunta
                             if accion_pregunta == "2": 
+
+                                #primero, si no hay pues no hay, y se le avisa al usuario con un mensaje de 3 segundos y se va para atras
                                 if not preguntas_teoricas:
                                     print("No hay preguntas para eliminar.")
                                     time.sleep(3)
                                 else:
                                     while True:
+                                        #muestra las preguntas con su respectivo indice con la funcion que definimos anteriormente
                                         mostrar_preguntas(preguntas_teoricas)
                                         print("Ingrese el índice de la pregunta que desea eliminar: ")
                                         indice_pregunta = input_modificado()
         
-                                        # Valida que el índice sea un número entero válido
+                                        #valida que el indice sea un número entero válido
                                         if indice_pregunta.isdigit():
                                             indice_pregunta = int(indice_pregunta)
             
-                                            # Verifica que el índice esté dentro del rango de preguntas existentes
+                                            # verifica que el indice esté dentro de las preguntas existentes
                                             if 0 <= indice_pregunta < len(preguntas_teoricas):
-                                                # Elimina la pregunta del examen
+                                                #elimina la pregunta del examen
                                                 del preguntas_teoricas[indice_pregunta]
                                                 print("Pregunta eliminada exitosamente.")
                                                 break
@@ -444,13 +473,14 @@ def menu_administrador():
                                             print("Entrada inválida. Por favor, ingrese un número entero.")
 
 
-                    
+                            #si presiona 3 se va para atras
                             elif accion_pregunta == "3":
                                 break
 
                             else:
                                 print("opcion invalida. Intente nuevamente.")
 
+                    #este es el apartado para ver lo que se ha hecho
                     elif selecion_usuario == 6:
                         borrar_pantalla()
                         imprimir_preguntas_teoricas = datos_examen[4]
@@ -461,15 +491,19 @@ def menu_administrador():
                         if not datos_examen[4]:
                             print(f"No se ha ingresado ninguna pregunta:")
                         else:
+                            #se muestran las preguntas (con lineas para que se vean más bonitas y ordenadas)
                             print("Lista de preguntas \n")
                             print("-------------------------------")
                             print("PREGUNTAS DE OPCION MULTIPLE")
 
+                            #se inicia un contador en 0 con las preguntas teoricas
                             almacen_contador_teoria = 0
 
                             for datos in imprimir_preguntas_teoricas:
+                                #se revisa cuantas preguntas contienen "respuesta_correcta", así se revisa cual es pregunta teorica y cual es practica y se suman al contador
                                 if 'respuesta_correcta' in datos:
                                     almacen_contador_teoria += 1
+                                    #se muestran las preguntas teoricas con su enunciado, opciones enumerdas, opcion correcta y puntuacion por responder correctamente
                                     print(f"Pregunta {almacen_contador_teoria}.- Enunciado: ", datos['enunciado'])
                                     print("Opciones: ")
                                     for j,opciones in enumerate(datos['opciones']):
@@ -481,7 +515,7 @@ def menu_administrador():
                             print("PREGUNTAS PRACTICAS")
                             print("-------------------------------")
                             almacen_contador_practica = 0
-
+                            #aqui se similiar, se inicia el contador en 0 y se revisa si la pregunta tiene "respuesta_correcta" al no tener pasa a ser pregunta practica y aumenta el contador
                             for datos in imprimir_preguntas_teoricas:
                                 if not 'respuesta_correcta' in datos:
                                     almacen_contador_practica += 1
@@ -492,6 +526,7 @@ def menu_administrador():
                         input("Pulse enter para regresar al menu")
 
                     elif selecion_usuario == 7:
+                        #por ultimo, se guardan todos los datos en el csv cuando el usuario escoge la ultima opcion, usando la funcion "imprimir_csv" que definimos al principio
                         borrar_pantalla()
                         imprimir_csv(datos_examen)
                         print("Archivo csv con los datos de la evaluacion impreso correctamente")
